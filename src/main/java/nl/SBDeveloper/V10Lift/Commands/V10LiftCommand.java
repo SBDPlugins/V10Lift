@@ -18,7 +18,6 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
-import javax.xml.crypto.Data;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Map;
@@ -84,8 +83,87 @@ public class V10LiftCommand implements CommandExecutor {
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
             }
+        } else if (args[0].equalsIgnoreCase("offline") && args.length == 2) {
+            //v10lift offline add || v10lift offline del
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return offlineCommand(sender, args);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
+        } else if (args[0].equalsIgnoreCase("rename") && args.length == 2) {
+            //v10lift rename <New name>
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return renameCommand(sender, args);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
         }
         return false;
+    }
+
+    private boolean renameCommand(CommandSender sender, String[] args) {
+        Player p = (Player) sender;
+        if (!DataManager.containsEditPlayer(p.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + "First switch on the editor mode!");
+            return true;
+        }
+
+        String liftName = DataManager.getEditPlayer(p.getUniqueId());
+        if (!DataManager.containsLift(liftName)) {
+            sender.sendMessage(ChatColor.RED + "That lift doesn't exists.");
+            return true;
+        }
+
+        V10LiftPlugin.getAPI().renameLift(liftName, args[1]);
+        sender.sendMessage(ChatColor.GREEN + "Lift successfully renamed!");
+        return true;
+    }
+
+    private boolean offlineCommand(CommandSender sender, String[] args) {
+        Player p = (Player) sender;
+        if (!DataManager.containsEditPlayer(p.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + "First switch on the editor mode!");
+            return true;
+        }
+
+        String liftName = DataManager.getEditPlayer(p.getUniqueId());
+        if (!DataManager.containsLift(liftName)) {
+            sender.sendMessage(ChatColor.RED + "That lift doesn't exists.");
+            return true;
+        }
+
+        Lift lift = DataManager.getLift(liftName);
+        if (args[1].equalsIgnoreCase("add")) {
+            if (DataManager.containsOfflineEditsPlayer(p.getUniqueId()) || DataManager.containsOfflineRemovesPlayer(p.getUniqueId())) {
+                sender.sendMessage(ChatColor.RED + "You are still adjusting an input!");
+                return true;
+            }
+
+            DataManager.addOfflineEditsPlayer(p.getUniqueId());
+            sender.sendMessage(ChatColor.GREEN + "Now right click on the offline input block!");
+        } else if (args[1].equalsIgnoreCase("del")) {
+            if (lift.getOfflineInputs().isEmpty()) {
+                sender.sendMessage(ChatColor.RED + "There is no input to remove!");
+                return true;
+            }
+
+            if (DataManager.containsOfflineEditsPlayer(p.getUniqueId()) || DataManager.containsOfflineRemovesPlayer(p.getUniqueId())) {
+                sender.sendMessage(ChatColor.RED + "You are still adjusting an input!");
+                return true;
+            }
+
+            DataManager.addOfflineRemovesPlayer(p.getUniqueId());
+            sender.sendMessage(ChatColor.GREEN + "Now right click on the offline input block!");
+        } else {
+            return helpCommand(sender);
+        }
+        return true;
     }
 
     private boolean inputCommand(CommandSender sender, String[] args) {

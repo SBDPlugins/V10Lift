@@ -78,6 +78,22 @@ public class V10LiftAPI {
         return true;
     }
 
+    public void renameLift(String liftName, String newName) {
+        if (liftName == null || newName == null || !DataManager.containsLift(liftName)) return;
+
+        Lift lift = DataManager.getLift(liftName);
+        DataManager.removeLift(liftName);
+        DataManager.addLift(newName, lift);
+        for (LiftSign ls : lift.getSigns()) {
+            Block block = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at setDefective").getBlockAt(ls.getX(), ls.getY(), ls.getZ());
+            BlockState bs = block.getState();
+            if (!(bs instanceof Sign)) continue;
+            Sign si = (Sign) bs;
+            si.setLine(1, newName);
+            si.update();
+        }
+    }
+
     /**
      * Add a block to a lift
      * Use {@link nl.SBDeveloper.V10Lift.API.V10LiftAPI#sortLiftBlocks(String liftName)} after!
