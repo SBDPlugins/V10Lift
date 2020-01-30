@@ -1,0 +1,7 @@
+name: V10Lift
+main: nl.SBDeveloper.V10Lift.V10LiftPlugin
+version: "0.5"
+api-version: "1.13"
+commands:
+  v10lift:
+    description: The V10Lift Command
