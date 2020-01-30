@@ -292,7 +292,7 @@ public class V10LiftAPI {
             }
 
             //Update sign
-            Block block = Objects.requireNonNull(Bukkit.getWorld(ls.getBlock().getWorld()), "World is null at setDefective").getBlockAt(ls.getBlock().getX(), ls.getBlock().getY(), ls.getBlock().getZ());
+            Block block = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at setDefective").getBlockAt(ls.getX(), ls.getY(), ls.getZ());
             BlockState bs = block.getState();
             if (!(bs instanceof Sign)) {
                 Bukkit.getLogger().severe("[V10Lift] Wrong sign removed at: " + LocationSerializer.serialize(block.getLocation()));
@@ -322,7 +322,7 @@ public class V10LiftAPI {
             Sign s;
             while (liter.hasNext()) {
                 ls = liter.next();
-                bs = Objects.requireNonNull(Bukkit.getWorld(ls.getBlock().getWorld()), "World is null at setDefective").getBlockAt(ls.getBlock().getX(), ls.getBlock().getY(), ls.getBlock().getZ()).getState();
+                bs = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at setDefective").getBlockAt(ls.getX(), ls.getY(), ls.getZ()).getState();
                 if (!(bs instanceof Sign)) {
                     Bukkit.getLogger().severe("[V10Lift] Wrong sign removed at: " + LocationSerializer.serialize(bs.getBlock().getLocation()));
                     liter.remove();
@@ -406,7 +406,7 @@ public class V10LiftAPI {
 
             while (liter.hasNext()) {
                 LiftSign ls = liter.next();
-                bs = Objects.requireNonNull(Bukkit.getWorld(ls.getBlock().getWorld()), "World is null at setOffline").getBlockAt(ls.getBlock().getX(), ls.getBlock().getY(), ls.getBlock().getZ()).getState();
+                bs = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at setOffline").getBlockAt(ls.getX(), ls.getY(), ls.getZ()).getState();
                 if (!(bs instanceof Sign)) {
                     Bukkit.getLogger().severe("[V10Lift] Wrong sign removed at: " + LocationSerializer.serialize(bs.getBlock().getLocation()));
                     liter.remove();
@@ -431,7 +431,7 @@ public class V10LiftAPI {
 
             while (liter.hasNext()) {
                 LiftSign ls = liter.next();
-                bs = Objects.requireNonNull(Bukkit.getWorld(ls.getBlock().getWorld()), "World is null at setOffline").getBlockAt(ls.getBlock().getX(), ls.getBlock().getY(), ls.getBlock().getZ()).getState();
+                bs = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at setOffline").getBlockAt(ls.getX(), ls.getY(), ls.getZ()).getState();
                 if (!(bs instanceof Sign)) {
                     Bukkit.getLogger().severe("[V10Lift] Wrong sign removed at: " + LocationSerializer.serialize(bs.getBlock().getLocation()));
                     liter.remove();
