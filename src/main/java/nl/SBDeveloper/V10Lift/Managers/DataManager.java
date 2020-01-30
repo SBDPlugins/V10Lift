@@ -11,7 +11,20 @@ public class DataManager {
     /* A manager for general HashMaps */
     private static LinkedHashMap<String, Lift> lifts = new LinkedHashMap<>();
     private static LinkedHashMap<UUID, ArrayList<Block>> builds = new LinkedHashMap<>();
+    private static LinkedHashMap<UUID, String> editors = new LinkedHashMap<>();
+    private static LinkedHashMap<UUID, String> inputEdits = new LinkedHashMap<>();
+    private static ArrayList<UUID> inputRemoves = new ArrayList<>();
+    private static ArrayList<UUID> offlineEdits = new ArrayList<>();
+    private static ArrayList<UUID> offlineRemoves = new ArrayList<>();
+    private static ArrayList<UUID> builder = new ArrayList<>();
+    private static LinkedHashMap<UUID, String> ropeEdits = new LinkedHashMap<>();
+    private static ArrayList<UUID> ropeRemoves = new ArrayList<>();
+    private static ArrayList<UUID> doorEdits = new ArrayList<>();
+    private static ArrayList<UUID> whoisReq = new ArrayList<>();
 
+    /* HashMap methods */
+
+    // //
     public static void addLift(String liftName, Lift lift) {
         lifts.put(liftName, lift);
     }
@@ -28,10 +41,7 @@ public class DataManager {
         return lifts.get(liftName);
     }
 
-    public static LinkedHashMap<String, Lift> getLifts() {
-        return lifts;
-    }
-
+    // //
     public static boolean containsPlayer(UUID player) {
         return builds.containsKey(player);
     }
@@ -46,5 +56,149 @@ public class DataManager {
 
     public static ArrayList<Block> getPlayer(UUID player) {
         return builds.get(player);
+    }
+
+    // //
+    public static boolean containsInputEditsPlayer(UUID player) {
+        return inputEdits.containsKey(player);
+    }
+
+    public static void addInputEditsPlayer(UUID player, String liftName) {
+        inputEdits.put(player, liftName);
+    }
+
+    public static void removeInputEditsPlayer(UUID player) {
+        inputEdits.remove(player);
+    }
+
+    public static String getInputEditsPlayer(UUID player) {
+        return inputEdits.get(player);
+    }
+
+    // //
+    public static boolean containsRopeEditPlayer(UUID player) {
+        return ropeEdits.containsKey(player);
+    }
+
+    public static void addRopeEditPlayer(UUID player, String liftName) {
+        ropeEdits.put(player, liftName);
+    }
+
+    public static void removeRopeEditPlayer(UUID player) {
+        ropeEdits.remove(player);
+    }
+
+    public static String getRopeEditPlayer(UUID player) {
+        return ropeEdits.get(player);
+    }
+
+    // //
+    public static boolean containsEditPlayer(UUID player) {
+        return editors.containsKey(player);
+    }
+
+    public static void addEditPlayer(UUID player, String liftName) {
+        editors.put(player, liftName);
+    }
+
+    public static void removeEditPlayer(UUID player) {
+        editors.remove(player);
+    }
+
+    public static String getEditPlayer(UUID player) {
+        return editors.get(player);
+    }
+
+    /* ArrayList methods */
+
+    // //
+    public static boolean containsOfflineEditsPlayer(UUID player) {
+        return offlineEdits.contains(player);
+    }
+
+    public static void addOfflineEditsPlayer(UUID player) {
+        offlineEdits.add(player);
+    }
+
+    public static void removeOfflineEditsPlayer(UUID player) {
+        offlineEdits.remove(player);
+    }
+
+    // //
+    public static boolean containsOfflineRemovesPlayer(UUID player) {
+        return offlineRemoves.contains(player);
+    }
+
+    public static void addOfflineRemovesPlayer(UUID player) {
+        offlineRemoves.add(player);
+    }
+
+    public static void removeOfflineRemovesPlayer(UUID player) {
+        offlineRemoves.remove(player);
+    }
+
+    // //
+    public static boolean containsBuilderPlayer(UUID player) {
+        return builder.contains(player);
+    }
+
+    public static void addBuilderPlayer(UUID player) {
+        builder.add(player);
+    }
+
+    public static void removeBuilderPlayer(UUID player) {
+        builder.remove(player);
+    }
+
+    // //
+    public static boolean containsRopeRemovesPlayer(UUID player) {
+        return ropeRemoves.contains(player);
+    }
+
+    public static void addRopeRemovesPlayer(UUID player) {
+        ropeRemoves.add(player);
+    }
+
+    public static void removeRopeRemovesPlayer(UUID player) {
+        ropeRemoves.remove(player);
+    }
+
+    // //
+    public static boolean containsDoorEditsPlayer(UUID player) {
+        return doorEdits.contains(player);
+    }
+
+    public static void addDoorEditsPlayer(UUID player) {
+        doorEdits.add(player);
+    }
+
+    public static void removeDoorEditsPlayer(UUID player) {
+        doorEdits.remove(player);
+    }
+
+    // //
+    public static boolean containsInputRemovesPlayer(UUID player) {
+        return inputRemoves.contains(player);
+    }
+
+    public static void addInputRemovesPlayer(UUID player) {
+        inputRemoves.add(player);
+    }
+
+    public static void removeInputRemovesPlayer(UUID player) {
+        inputRemoves.remove(player);
+    }
+
+    // //
+    public static boolean containsWhoisREQPlayer(UUID player) {
+        return whoisReq.contains(player);
+    }
+
+    public static void addWhoisREQPlayer(UUID player) {
+        whoisReq.add(player);
+    }
+
+    public static void removeWhoisREQPlayer(UUID player) {
+        whoisReq.remove(player);
     }
 }

@@ -7,7 +7,6 @@ import nl.SBDeveloper.V10Lift.API.Objects.LiftSign;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
 import nl.SBDeveloper.V10Lift.Managers.ForbiddenBlockManager;
 import nl.SBDeveloper.V10Lift.Utils.LocationSerializer;
-import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.Material;
@@ -18,7 +17,6 @@ import org.bukkit.block.Sign;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class V10LiftAPI {
