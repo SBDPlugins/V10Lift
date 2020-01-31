@@ -3,29 +3,27 @@ package nl.SBDeveloper.V10Lift.API.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
-import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import java.util.LinkedHashMap;
+import java.util.Map;
 
-@Getter @Setter
 public class LiftBlock implements Comparable<LiftBlock> {
 
-    private String world;
-    private int x;
-    private int y;
-    private int z;
+    @Getter @Setter private String world;
+    @Getter @Setter private int x;
+    @Getter @Setter private int y;
+    @Getter @Setter private int z;
 
     //Only used for cabine blocks, because those need caching!
-    private Material mat;
-    private String[] signLines;
+    @Getter @Setter private Material mat;
+    @Getter @Setter private String[] signLines;
 
     //Only used for inputs!
-    private String floor;
-    private boolean active = false;
+    @Getter @Setter private String floor;
+    @Getter @Setter private boolean active = false;
 
     //Only used for chests
-    private LinkedHashMap<Integer, ItemStack> chestContent = new LinkedHashMap<>();
+    public Map<String, Object>[] serializedItemStacks = null;
 
     /**
      * Add lift block with material

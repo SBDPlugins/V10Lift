@@ -4,16 +4,17 @@ import nl.SBDeveloper.V10Lift.API.Objects.Floor;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftSign;
+import nl.SBDeveloper.V10Lift.API.Runnables.DoorCloser;
+import nl.SBDeveloper.V10Lift.Managers.AntiCopyBlockManager;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
 import nl.SBDeveloper.V10Lift.Managers.ForbiddenBlockManager;
 import nl.SBDeveloper.V10Lift.Utils.LocationSerializer;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Material;
-import org.bukkit.World;
+import nl.SBDeveloper.V10Lift.V10LiftPlugin;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
@@ -22,13 +23,19 @@ import java.util.*;
 public class V10LiftAPI {
     /* Load managers... */
     private static ForbiddenBlockManager fbm;
+    private static AntiCopyBlockManager acbm;
 
     public V10LiftAPI() {
         fbm = new ForbiddenBlockManager();
+        acbm = new AntiCopyBlockManager();
     }
 
-    public static ForbiddenBlockManager getFBM() {
+    public ForbiddenBlockManager getFBM() {
         return fbm;
+    }
+
+    public AntiCopyBlockManager getACBM() {
+        return acbm;
     }
 
     /* Private API methods */
@@ -180,7 +187,7 @@ public class V10LiftAPI {
     public void sortLiftBlocks(String liftName) {
         if (liftName != null && DataManager.containsLift(liftName)) {
             Lift lift = DataManager.getLift(liftName);
-            if (lift.getWorldName() == null) lift.setWorldName(lift.getBlocks().get(0).getWorld());
+            if (lift.getWorldName() == null) lift.setWorldName(lift.getBlocks().first().getWorld());
             World world = Bukkit.getWorld(lift.getWorldName());
             if (world == null) return;
             lift.setY(world.getMaxHeight());
@@ -191,6 +198,94 @@ public class V10LiftAPI {
                 }
             }
         }
+    }
+
+    public boolean openDoor(String liftName) {
+        if (liftName == null || !DataManager.containsLift(liftName)) return false;
+
+        Lift lift = DataManager.getLift(liftName);
+
+        if (lift.getQueue() != null) return false;
+
+        Floor f = null;
+        for (Floor fl : lift.getFloors().values()) {
+            if (fl.getY() == lift.getY() && fl.getWorld().equals(lift.getWorldName())) {
+                f = fl;
+                break;
+            }
+        }
+
+        if (f == null) return false;
+
+        if (lift.getDoorOpen() != null && !closeDoor(liftName)) return false;
+
+        for (LiftBlock lb : f.getDoorBlocks()) {
+            Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at openDoor").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
+            block.setType(Material.AIR);
+        }
+
+        lift.setDoorOpen(f);
+
+        if (lift.isRealistic()) {
+            lift.setDoorCloser(new DoorCloser(liftName));
+            //TODO Add defaults (doorclosetime) to config
+            long doorCloseTime = 5 * 20;
+            int pid = Bukkit.getScheduler().scheduleSyncRepeatingTask(V10LiftPlugin.getInstance(), lift.getDoorCloser(), doorCloseTime, doorCloseTime);
+            lift.getDoorCloser().setPid(pid);
+        }
+        return true;
+    }
+
+    /**
+     * Close a lift door
+     *
+     * @param liftName The name of the lift
+     * @return true if door was closed, false if else.
+     */
+    public boolean closeDoor(String liftName) {
+        if (liftName == null || !DataManager.containsLift(liftName)) return false;
+
+        Lift lift = DataManager.getLift(liftName);
+
+        boolean blocked = false;
+        if (lift.getDoorOpen() == null) {
+            return true;
+        }
+
+        if (lift.isRealistic()) {
+            for (LiftBlock lb : lift.getDoorOpen().getDoorBlocks()) {
+                Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at closeDoor").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
+                for (Entity ent : block.getChunk().getEntities()) {
+                    Location loc = ent.getLocation();
+                    if (loc.getBlockX() == lb.getX() && loc.getBlockY() == lb.getY() && loc.getBlockZ() == lb.getZ()) {
+                        blocked = true;
+                        break;
+                    }
+                }
+                if (blocked) break;
+            }
+        }
+
+        if (!blocked) {
+            for (LiftBlock lb : lift.getDoorOpen().getDoorBlocks()) {
+                Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at closeDoor").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
+                block.setType(lb.getMat(), true);
+            }
+            lift.setDoorOpen(null);
+            if (lift.getDoorCloser() != null) lift.getDoorCloser().stop();
+        }
+
+        return !blocked;
+    }
+
+    /**
+     * To check if a lift has an open door.
+     *
+     * @param liftName The name of the lift
+     * @return true if open, false if else
+     */
+    public boolean hasDoorOpen(String liftName) {
+        return (liftName != null && DataManager.containsLift(liftName)) && DataManager.getLift(liftName).getDoorOpen() != null;
     }
 
     /**

@@ -4,6 +4,7 @@ import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import org.bukkit.block.Block;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.UUID;
 
@@ -21,6 +22,7 @@ public class DataManager {
     private static ArrayList<UUID> ropeRemoves = new ArrayList<>();
     private static ArrayList<UUID> doorEdits = new ArrayList<>();
     private static ArrayList<UUID> whoisReq = new ArrayList<>();
+    private static HashMap<String, Integer> movingTasks = new HashMap<>();
 
     /* HashMap methods */
 
@@ -97,6 +99,10 @@ public class DataManager {
         return editors.containsKey(player);
     }
 
+    public static boolean containsEditLift(String liftName) {
+        return editors.containsValue(liftName);
+    }
+
     public static void addEditPlayer(UUID player, String liftName) {
         editors.put(player, liftName);
     }
@@ -107,6 +113,23 @@ public class DataManager {
 
     public static String getEditPlayer(UUID player) {
         return editors.get(player);
+    }
+
+    // //
+    public static void addMovingTask(String liftName, int taskid) {
+        movingTasks.put(liftName, taskid);
+    }
+
+    public static void removeMovingTask(String liftName) {
+        movingTasks.remove(liftName);
+    }
+
+    public static boolean containsMovingTask(String liftName) {
+        return movingTasks.containsKey(liftName);
+    }
+
+    public static int getMovingTask(String liftName) {
+        return movingTasks.get(liftName);
     }
 
     /* ArrayList methods */
