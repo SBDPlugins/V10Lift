@@ -10,11 +10,15 @@ public class LiftSign {
     private int z;
     private int y;
     private String oldText;
+    private final byte type;
+    private byte state;
 
-    public LiftSign(String world, int x, int y, int z) {
+    public LiftSign(String world, int x, int y, int z, byte type, byte state) {
         this.world = world;
         this.x = x;
         this.y = y;
         this.z = z;
+        this.type = type;
+        this.state = state;
     }
 }

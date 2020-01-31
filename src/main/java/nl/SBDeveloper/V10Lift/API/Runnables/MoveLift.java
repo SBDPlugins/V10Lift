@@ -1,14 +1,15 @@
 package nl.SBDeveloper.V10Lift.API.Runnables;
 
-import nl.SBDeveloper.V10Lift.API.Objects.Floor;
-import nl.SBDeveloper.V10Lift.API.Objects.Lift;
-import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
-import nl.SBDeveloper.V10Lift.API.Objects.LiftRope;
+import nl.SBDeveloper.V10Lift.API.Objects.*;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
+import nl.SBDeveloper.V10Lift.Utils.LocationSerializer;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -44,7 +45,26 @@ public class MoveLift implements Runnable {
 
     @Override
     public void run() {
-        Lift lift = DataManager.getLift(liftName);
+        Iterator < LiftBlock > iter;
+        ArrayList < LiftBlock > tb = new ArrayList < LiftBlock > ();
+        Block block;
+        World world;
+        Location loc;
+        BlockState bs;
+        boolean by;
+        int y;
+        Chest c;
+        V10Entity v10ent;
+        Iterator < V10Entity > veiter;
+        Sign sign;
+        LiftBlock lb;
+        Lift lift;
+        LiftSign ls;
+        Inventory inv;
+        ItemStack is;
+        ItemStack[] isa;
+
+        lift = DataManager.getLift(liftName);
         if (lift == null) {
             stopMe();
             return;
@@ -55,21 +75,21 @@ public class MoveLift implements Runnable {
             return;
         }
 
-        if (DataManager.containsEditLift(liftName)) return;
+        if (DataManager.containsEditLift(liftName) || lift.isDefective()) return;
 
         if (lift.getCounter() > 0) {
             lift.setCounter(lift.getCounter() - 1);
             return;
         }
 
-        LiftBlock lb = lift.getBlocks().first();
-        World w = Bukkit.getWorld(lb.getWorld());
-        if (w == null) {
+        lb = lift.getBlocks().first();
+        world = Bukkit.getWorld(lb.getWorld());
+        if (world == null) {
             lift.setCounter(ft);
             return;
         }
 
-        Location loc = new Location(w, lb.getX(), lb.getY(), lb.getZ());
+        loc = new Location(world, lb.getX(), lb.getY(), lb.getZ());
         if (!loc.getChunk().isLoaded()) {
             lift.setCounter(ft);
             return;
@@ -78,7 +98,7 @@ public class MoveLift implements Runnable {
         //TODO Add defaults to config (chanceOfDefect)
         double changeOfDefect = 0.0D;
         if (changeOfDefect > 0.0D) {
-            int y = new Random().nextInt(100);
+            y = new Random().nextInt(100);
             double chance;
             if (y < 100) {
                 long co = new Random().nextLong();
@@ -94,15 +114,12 @@ public class MoveLift implements Runnable {
             }
         }
 
-        ArrayList<LiftBlock> tb = new ArrayList<>();
-
-        Iterator<Map.Entry<String, Floor>> quiter = lift.getQueue().entrySet().iterator();
-        Map.Entry<String, Floor> floor = quiter.next();
+        Iterator < Map.Entry < String, Floor >> quiter = lift.getQueue().entrySet().iterator();
+        Map.Entry < String, Floor > floor = quiter.next();
         Floor to = floor.getValue();
         String fl = floor.getKey();
         boolean up = false;
         boolean down = false;
-
         if (lift.getY() < to.getY()) {
             up = true;
         } else if (lift.getY() > to.getY()) {
@@ -122,34 +139,36 @@ public class MoveLift implements Runnable {
                     quiter.remove();
                     return;
                 }
-                Block block = Objects.requireNonNull(Bukkit.getWorld(rope.getCurrentWorld()), "World is null at MoveLift").getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
+                world = Objects.requireNonNull(Bukkit.getWorld(rope.getCurrentWorld()), "World is null at MoveLift");
+                block = world.getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
                 block.setType(Material.AIR);
                 rope.setCurrently(rope.getCurrently() + 1);
             }
 
-            Iterator<LiftBlock> iter = lift.getBlocks().iterator();
+            iter = lift.getBlocks().iterator();
             while (iter.hasNext()) {
-                LiftBlock lblock = iter.next();
-                if (V10LiftPlugin.getAPI().getACBM().isAntiCopy(lblock.getMat())) {
-                    tb.add(lblock);
+                lb = iter.next();
+                if (V10LiftPlugin.getAPI().getACBM().isAntiCopy(lb.getMat())) {
+                    tb.add(lb);
                     iter.remove();
-                    Block block = Objects.requireNonNull(Bukkit.getWorld(lblock.getWorld()), "World is null at MoveLift").getBlockAt(lblock.getX(), lblock.getY(), lblock.getZ());
+                    block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at MoveLift").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
                     block.setType(Material.AIR);
-                    lblock.setY(lblock.getY() + 1);
+                    lb.setY(lb.getY() + 1);
                 }
             }
 
             boolean wc = false;
             for (LiftBlock lib : lift.getBlocks().descendingSet()) {
-                Block block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
-                if (lib.getMat() == Material.CHEST || lib.getMat() == Material.TRAPPED_CHEST && lib.serializedItemStacks == null) {
-                    Chest c = (Chest) block.getState();
-                    Inventory inv = c.getInventory();
-                    ItemStack[] isa = inv.getContents();
-                    boolean by = false;
+                world = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift");
+                block = world.getBlockAt(lib.getX(), lib.getY(), lib.getZ());
+                if ((lib.getMat() == Material.CHEST || lib.getMat() == Material.TRAPPED_CHEST) && lib.serializedItemStacks == null) {
+                    c = (Chest) block.getState();
+                    inv = c.getInventory();
+                    isa = inv.getContents();
+                    by = false;
                     lib.serializedItemStacks = new Map[isa.length];
                     for (int i = 0; i < isa.length; i++) {
-                        ItemStack is = isa[i];
+                        is = isa[i];
                         if (is != null) {
                             by = true;
                             lib.serializedItemStacks[i] = is.serialize();
@@ -165,9 +184,101 @@ public class MoveLift implements Runnable {
 
                 block.setType(Material.AIR);
                 lib.setY(lib.getY() + 1);
-                Block b = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
-                b.setType(lib.getMat());
+                block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
+                block.setType(lib.getMat());
                 lb = lift.getBlocks().first();
+                for (Entity ent : Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ()).getChunk().getEntities()) {
+                    v10ent = new V10Entity(ent, null, 0);
+                    if (lift.getToMove().contains(v10ent)) continue;
+                    loc = ent.getLocation();
+                    y = loc.getBlockY();
+                    if (y == lib.getY()) {
+                        by = true;
+                    } else if (y + 1 == lib.getY()) {
+                        by = true;
+                        y++;
+                    } else {
+                        by = false;
+                    }
+
+                    if (by && loc.getBlockX() == lib.getX() && loc.getBlockZ() == lib.getZ()) {
+                        loc.setY(loc.getY() + 1);
+                        ent.teleport(loc);
+                    }
+                }
+            }
+            veiter = lift.getToMove().iterator();
+            while (veiter.hasNext()) {
+                v10ent = veiter.next();
+                if (v10ent.getStep() > 0) {
+                    v10ent.moveUp();
+                    if (v10ent.getStep() > 16) {
+                        veiter.remove();
+                    }
+                }
+                v10ent.setStep((short) (v10ent.getStep() + 1));
+            }
+            for (LiftBlock lib : tb) {
+                block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
+                block.setType(lib.getMat(), true);
+                lift.getBlocks().add(lib);
+                if (lib.getSignLines() != null) {
+                    bs = block.getState();
+                    if (bs instanceof Sign) {
+                        sign = (Sign) bs;
+                        for (int i = 0; i < 3; i++) {
+                            sign.setLine(i, lib.getSignLines()[i]);
+                            if (i == 0 && lib.getSignLines()[i].equalsIgnoreCase("[v10lift]") && lib.getSignLines()[1].equals(liftName)) {
+                                sign.setLine(1, liftName);
+                                sign.setLine(3, ChatColor.GOLD + fl);
+                            }
+                        }
+                        sign.update();
+                    }
+                }
+            }
+
+            lift.setY(lift.getY() + 1);
+            Iterator<LiftSign> liter = lift.getSigns().iterator();
+            while (liter.hasNext()) {
+                ls = liter.next();
+                if (ls.getState() == 1) continue;
+                block = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at MoveLift").getBlockAt(ls.getX(), ls.getY(), ls.getZ());
+                bs = block.getState();
+                if (!(bs instanceof Sign)) {
+                    Bukkit.getLogger().severe("[V10Lift] Wrong sign removed at: " + LocationSerializer.serialize(block.getLocation()));
+                    liter.remove();
+                    continue;
+                }
+                sign = (Sign) bs;
+                if (ls.getType() == 0) {
+                    sign.setLine(3, ChatColor.GREEN + "up");
+                } else {
+                    sign.setLine(3, ChatColor.GRAY + ChatColor.stripColor(sign.getLine(3)));
+                }
+                sign.update();
+                ls.setState((byte) 1);
+            }
+        } else if (down) {
+            if (!V10LiftPlugin.getAPI().closeDoor(liftName)) return;
+
+            iter = lift.getBlocks().iterator();
+            while (iter.hasNext()) {
+                lb = iter.next();
+                if (V10LiftPlugin.getAPI().getACBM().isAntiCopy(lb.getMat())) {
+                    tb.add(lb);
+                    iter.remove();
+                    block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at MoveLift").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
+                    block.setType(Material.AIR);
+                    lb.setY(lb.getY() - 1);
+                }
+            }
+
+            for (LiftBlock lib : lift.getBlocks()) {
+                block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
+                if ((lib.getMat() == Material.CHEST || lib.getMat() == Material.TRAPPED_CHEST) && lib.serializedItemStacks == null) {
+
+                }
             }
         }
     }
