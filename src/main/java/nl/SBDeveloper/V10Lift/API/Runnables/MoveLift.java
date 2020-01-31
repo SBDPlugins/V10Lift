@@ -11,7 +11,6 @@ import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
-import org.bukkit.entity.Item;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,12 +19,10 @@ import java.util.*;
 public class MoveLift implements Runnable {
 
     private final String liftName;
-    private final long speed;
     private final int ft;
 
     public MoveLift(String liftName, long speed) {
         this.liftName = liftName;
-        this.speed = speed;
 
         if (speed > 32L) {
             ft = 1;
@@ -46,8 +43,8 @@ public class MoveLift implements Runnable {
 
     @Override
     public void run() {
-        Iterator < LiftBlock > iter;
-        ArrayList < LiftBlock > tb = new ArrayList < LiftBlock > ();
+        Iterator<LiftBlock> iter;
+        ArrayList<LiftBlock> tb = new ArrayList<>();
         Block block = null;
         World world;
         Location loc;
@@ -56,7 +53,7 @@ public class MoveLift implements Runnable {
         int y;
         Chest c;
         V10Entity v10ent;
-        Iterator < V10Entity > veiter;
+        Iterator<V10Entity> veiter;
         Sign sign;
         LiftBlock lb;
         Lift lift;

@@ -20,7 +20,7 @@ public class DataManager {
     private static ArrayList<UUID> builder = new ArrayList<>();
     private static LinkedHashMap<UUID, String> ropeEdits = new LinkedHashMap<>();
     private static ArrayList<UUID> ropeRemoves = new ArrayList<>();
-    private static ArrayList<UUID> doorEdits = new ArrayList<>();
+    private static HashMap<UUID, String> doorEdits = new HashMap<>();
     private static ArrayList<UUID> whoisReq = new ArrayList<>();
     private static HashMap<String, Integer> movingTasks = new HashMap<>();
 
@@ -132,6 +132,23 @@ public class DataManager {
         return movingTasks.get(liftName);
     }
 
+    // //
+    public static boolean containsDoorEditPlayer(UUID player) {
+        return doorEdits.containsKey(player);
+    }
+
+    public static void addDoorEditPlayer(UUID player, String floorName) {
+        doorEdits.put(player, floorName);
+    }
+
+    public static void removeDoorEditPlayer(UUID player) {
+        doorEdits.remove(player);
+    }
+
+    public static String getDoorEditPlayer(UUID player) {
+        return doorEdits.get(player);
+    }
+
     /* ArrayList methods */
 
     // //
@@ -184,19 +201,6 @@ public class DataManager {
 
     public static void removeRopeRemovesPlayer(UUID player) {
         ropeRemoves.remove(player);
-    }
-
-    // //
-    public static boolean containsDoorEditsPlayer(UUID player) {
-        return doorEdits.contains(player);
-    }
-
-    public static void addDoorEditsPlayer(UUID player) {
-        doorEdits.add(player);
-    }
-
-    public static void removeDoorEditsPlayer(UUID player) {
-        doorEdits.remove(player);
     }
 
     // //

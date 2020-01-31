@@ -9,6 +9,7 @@ import nl.SBDeveloper.V10Lift.Utils.LocationSerializer;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
@@ -103,8 +104,124 @@ public class V10LiftCommand implements CommandExecutor {
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
             }
+        } else if (args[0].equalsIgnoreCase("build") && args.length == 1) {
+            //v10lift build
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return buildCommand(sender);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
+        } else if (args[0].equalsIgnoreCase("rope") && args.length == 2) {
+            //v10lift rope add || v10lift rope del
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return ropeCommand(sender, args);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
+        } else if (args[0].equalsIgnoreCase("door") && (args.length == 1 || args.length == 2)) {
+            //v10lift door <Name> || v10lift door
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return doorCommand(sender, args);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
         }
         return false;
+    }
+
+    private boolean doorCommand(CommandSender sender, String[] args) {
+        Player p = (Player) sender;
+        if (!DataManager.containsEditPlayer(p.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + "First switch on the editor mode!");
+            return true;
+        }
+
+        if (DataManager.containsDoorEditPlayer(p.getUniqueId())) {
+            DataManager.removeDoorEditPlayer(p.getUniqueId());
+            sender.sendMessage(ChatColor.RED + "Door editor mode disabled!");
+            return true;
+        }
+
+        Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
+        String floor = null;
+        if (args.length < 2) {
+            Location loc = p.getLocation();
+            Floor f = new Floor(loc.getBlockY() - 1, Objects.requireNonNull(loc.getWorld(), "World was null at doorCommand").getName());
+            if (!lift.getFloors().containsValue(f)) {
+                sender.sendMessage(ChatColor.RED + "Automatic floor detection failed!");
+                return true;
+            }
+            for (Map.Entry<String, Floor> e : lift.getFloors().entrySet()) {
+                Floor fl = e.getValue();
+                if (fl.equals(f)) {
+                    floor = e.getKey();
+                    break;
+                }
+            }
+        } else {
+            floor = args[2];
+            if (!lift.getFloors().containsKey(floor)) {
+                sender.sendMessage(ChatColor.RED + "The floor " + args[2] + " doesn't exists!");
+                return true;
+            }
+        }
+        DataManager.addDoorEditPlayer(p.getUniqueId(), floor);
+        sender.sendMessage(ChatColor.GREEN + "Now right-click on the door blocks!");
+        sender.sendMessage(ChatColor.GREEN + "Then do /v10lift door to save it.");
+        return true;
+    }
+
+    private boolean ropeCommand(CommandSender sender, String[] args) {
+        Player p = (Player) sender;
+        if (!DataManager.containsEditPlayer(p.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + "First switch on the editor mode!");
+            return true;
+        }
+
+        if (args[1].equalsIgnoreCase("add")) {
+            if (DataManager.containsRopeEditPlayer(p.getUniqueId()) || DataManager.containsRopeRemovesPlayer(p.getUniqueId())) {
+                sender.sendMessage(ChatColor.RED + "You're still adjusting the emergency stairs.");
+                return true;
+            }
+            DataManager.addRopeEditPlayer(p.getUniqueId(), null);
+            sender.sendMessage(ChatColor.GREEN + "Now right-click on the beginning and the end of the emergency stairs.");
+        } else if (args[1].equalsIgnoreCase("del")) {
+            if (DataManager.containsRopeEditPlayer(p.getUniqueId()) || DataManager.containsRopeRemovesPlayer(p.getUniqueId())) {
+                sender.sendMessage(ChatColor.RED + "You're still adjusting the emergency stairs.");
+                return true;
+            }
+            DataManager.addRopeRemovesPlayer(p.getUniqueId());
+            sender.sendMessage(ChatColor.GREEN + "Now right-click on the the emergency stairs.");
+        }
+        return true;
+    }
+
+    private boolean buildCommand(CommandSender sender) {
+        Player p = (Player) sender;
+        if (!DataManager.containsEditPlayer(p.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + "First switch on the editor mode!");
+            return true;
+        }
+
+        if (DataManager.containsBuilderPlayer(p.getUniqueId())) {
+            DataManager.removeBuilderPlayer(p.getUniqueId());
+            V10LiftPlugin.getAPI().sortLiftBlocks(DataManager.getEditPlayer(p.getUniqueId()));
+            sender.sendMessage(ChatColor.GREEN + "Construction mode disabled!");
+        } else {
+            DataManager.addBuilderPlayer(p.getUniqueId());
+            sender.sendMessage(ChatColor.GREEN + "Now right-click on the elevator blocks!");
+            sender.sendMessage(ChatColor.GREEN + "Then do /v10lift build to save it!");
+        }
+        return true;
     }
 
     private boolean renameCommand(CommandSender sender, String[] args) {
@@ -316,7 +433,7 @@ public class V10LiftCommand implements CommandExecutor {
                 }
                 DataManager.removeRopeEditPlayer(p.getUniqueId());
                 DataManager.removeRopeRemovesPlayer(p.getUniqueId());
-                DataManager.removeDoorEditsPlayer(p.getUniqueId());
+                DataManager.removeDoorEditPlayer(p.getUniqueId());
 
                 BlockState bs;
                 Sign sign;
