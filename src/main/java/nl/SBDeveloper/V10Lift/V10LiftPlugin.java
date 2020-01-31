@@ -6,8 +6,6 @@ import nl.SBDeveloper.V10Lift.Utils.SBSQLiteDB;
 import nl.SBDeveloper.V10Lift.Utils.SBYamlFile;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.util.Objects;
-
 public class V10LiftPlugin extends JavaPlugin {
 
     private static V10LiftPlugin instance;

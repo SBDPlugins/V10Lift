@@ -236,6 +236,27 @@ public class V10LiftAPI {
         return true;
     }
 
+    public boolean openDoor(Lift lift, String liftName, Floor f) {
+        if (lift == null || liftName == null || f == null) return false;
+        if (lift.getDoorOpen() != null && !closeDoor(liftName)) return false;
+
+        for (LiftBlock lb : f.getDoorBlocks()) {
+            Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at openDoor").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
+            block.setType(Material.AIR);
+        }
+
+        lift.setDoorOpen(f);
+
+        if (lift.isRealistic()) {
+            lift.setDoorCloser(new DoorCloser(liftName));
+            //TODO Add defaults (doorclosetime) to config
+            long doorCloseTime = 5 * 20;
+            int pid = Bukkit.getScheduler().scheduleSyncRepeatingTask(V10LiftPlugin.getInstance(), lift.getDoorCloser(), doorCloseTime, doorCloseTime);
+            lift.getDoorCloser().setPid(pid);
+        }
+        return true;
+    }
+
     /**
      * Close a lift door
      *

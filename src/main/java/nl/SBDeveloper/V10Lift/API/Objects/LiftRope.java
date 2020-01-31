@@ -1,8 +1,8 @@
 package nl.SBDeveloper.V10Lift.API.Objects;
 
-import javafx.scene.paint.Material;
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Material;
 
 @Getter @Setter
 public class LiftRope {
