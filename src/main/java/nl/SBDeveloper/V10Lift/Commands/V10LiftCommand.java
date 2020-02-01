@@ -7,9 +7,7 @@ import nl.SBDeveloper.V10Lift.API.Objects.LiftSign;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
 import nl.SBDeveloper.V10Lift.Utils.LocationSerializer;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
+import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
@@ -17,12 +15,10 @@ import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
+import java.util.*;
 
 public class V10LiftCommand implements CommandExecutor {
 
@@ -38,6 +34,7 @@ public class V10LiftCommand implements CommandExecutor {
             //v10lift create || v10lift create <Name>
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return createCommand(sender, args);
@@ -48,6 +45,7 @@ public class V10LiftCommand implements CommandExecutor {
             //v10lift delete <Name>
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return deleteCommand(sender, args);
@@ -58,6 +56,7 @@ public class V10LiftCommand implements CommandExecutor {
             //v10lift edit <Name>
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return editCommand(sender, args);
@@ -68,6 +67,7 @@ public class V10LiftCommand implements CommandExecutor {
             //v10lift floor add <Name> || v10lift floor del <Name> || v10lift floor rename <Old> <New>
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return floorCommand(sender, args);
@@ -78,6 +78,7 @@ public class V10LiftCommand implements CommandExecutor {
             //v10lift input add <Floor name> || v10lift input del
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return inputCommand(sender, args);
@@ -88,6 +89,7 @@ public class V10LiftCommand implements CommandExecutor {
             //v10lift offline add || v10lift offline del
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return offlineCommand(sender, args);
@@ -98,6 +100,7 @@ public class V10LiftCommand implements CommandExecutor {
             //v10lift rename <New name>
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return renameCommand(sender, args);
@@ -108,6 +111,7 @@ public class V10LiftCommand implements CommandExecutor {
             //v10lift build
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return buildCommand(sender);
@@ -118,6 +122,7 @@ public class V10LiftCommand implements CommandExecutor {
             //v10lift rope add || v10lift rope del
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return ropeCommand(sender, args);
@@ -128,14 +133,230 @@ public class V10LiftCommand implements CommandExecutor {
             //v10lift door <Name> || v10lift door
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return doorCommand(sender, args);
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
             }
+        } else if (args[0].equalsIgnoreCase("whitelist") && (args.length == 3 || args.length == 4)) {
+            //v10lift whitelist add <Player> <Floor> || v10lift whitelist del <Player> <Floor>
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return whitelistCommand(sender, args);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
+        } else if (args[0].equalsIgnoreCase("whois") && (args.length == 1 || args.length == 2)) {
+            //v10lift whois || v10lift whois <Name>
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return whoisCommand(sender, args);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
+        } else if (args[0].equalsIgnoreCase("speed") && args.length == 2) {
+            //v10lift speed <Speed>
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return speedCommand(sender, args);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
+        } else if (args[0].equalsIgnoreCase("sound") && args.length == 1) {
+            //v10lift sound
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return soundCommand(sender);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
+        } else if (args[0].equalsIgnoreCase("realistic") && args.length == 1) {
+            //v10lift realistic
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return realisticCommand(sender);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
+        } else if (args[0].equalsIgnoreCase("repair") && args.length == 2) {
+            //v10lift repair <Name>
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return repairCommand(sender, args);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
+        } else {
+            return helpCommand(sender);
         }
-        return false;
+        return true;
+    }
+
+    private boolean repairCommand(CommandSender sender, @Nonnull String[] args) {
+        Player p = (Player) sender;
+        String liftName = args[1];
+        if (!DataManager.containsLift(liftName)) {
+            sender.sendMessage(ChatColor.RED + "Lift " + args[1] + " doesn't exists!");
+            return true;
+        }
+
+        Lift lift = DataManager.getLift(liftName);
+
+        if (!lift.isDefective()) {
+            sender.sendMessage(ChatColor.RED + "This lift isn't defective!");
+            return true;
+        }
+
+        //TODO Add defaults to config!!!
+        int masterAmount = 2;
+        Material masterItem = Material.DIAMOND;
+        if (p.getGameMode() != GameMode.CREATIVE && masterAmount > 0) {
+            if (!p.getInventory().contains(masterItem)) {
+                sender.sendMessage(ChatColor.RED + "You need " + masterAmount + "x " + masterItem.toString().toLowerCase() + "!");
+                return true;
+            }
+            p.getInventory().remove(new ItemStack(masterItem, masterAmount));
+        }
+        V10LiftPlugin.getAPI().setDefective(liftName, false);
+        sender.sendMessage(ChatColor.GREEN + "Lift repaired!");
+        return true;
+    }
+
+    private boolean realisticCommand(CommandSender sender) {
+        Player p = (Player) sender;
+        if (!DataManager.containsEditPlayer(p.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + "First switch on the editor mode!");
+            return true;
+        }
+
+        Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
+        lift.setRealistic(!lift.isRealistic());
+        sender.sendMessage(ChatColor.GREEN + "Realistic mode turned " + (lift.isSound() ? "on" : "off") + "!");
+        return true;
+    }
+
+    private boolean soundCommand(CommandSender sender) {
+        Player p = (Player) sender;
+        if (!DataManager.containsEditPlayer(p.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + "First switch on the editor mode!");
+            return true;
+        }
+
+        Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
+        lift.setSound(!lift.isSound());
+        sender.sendMessage(ChatColor.GREEN + "Sound mode turned " + (lift.isSound() ? "on" : "off") + "!");
+        return true;
+    }
+
+    private boolean speedCommand(CommandSender sender, String[] args) {
+        Player p = (Player) sender;
+        if (!DataManager.containsEditPlayer(p.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + "First switch on the editor mode!");
+            return true;
+        }
+
+        Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
+        try {
+            int speed = Integer.parseInt(args[1]);
+            lift.setSpeed(speed);
+            if (lift.getSpeed() < 1) lift.setSpeed(1);
+            sender.sendMessage(ChatColor.GREEN + "Lift speed changed!");
+        } catch (NumberFormatException e) {
+            sender.sendMessage(ChatColor.RED + "Wrong speed: " + args[1]);
+        }
+        return true;
+    }
+
+    private boolean whoisCommand(CommandSender sender, @Nonnull String[] args) {
+        Player p = (Player) sender;
+        if (args.length < 2) {
+            //Without name
+            DataManager.addWhoisREQPlayer(p.getUniqueId());
+            sender.sendMessage(ChatColor.GREEN + "Now right-click on the block you want to check.");
+        } else {
+            String liftName = args[1];
+            if (!DataManager.containsLift(liftName)) {
+                sender.sendMessage(ChatColor.RED + "Lift " + liftName + " not found!");
+            } else {
+                V10LiftPlugin.getAPI().sendLiftInfo(p, liftName);
+            }
+        }
+        return true;
+    }
+
+    private boolean whitelistCommand(CommandSender sender, @Nonnull String[] args) {
+        Player p = (Player) sender;
+        if (!DataManager.containsEditPlayer(p.getUniqueId())) {
+            sender.sendMessage(ChatColor.RED + "First switch on the editor mode!");
+            return true;
+        }
+
+        Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
+        OfflinePlayer wp = Bukkit.getOfflinePlayer(args[2]);
+        UUID wpu = wp.getUniqueId();
+
+        String floor = null;
+        if (args.length < 4) {
+            Block b = p.getLocation().getBlock();
+            Floor f = new Floor(b.getY() - 1, Objects.requireNonNull(b.getWorld(), "World was null at doorCommand").getName());
+            if (!lift.getFloors().containsValue(f)) {
+                sender.sendMessage(ChatColor.RED + "Automatic floor detection failed!");
+                return true;
+            }
+            for (Map.Entry<String, Floor> e : lift.getFloors().entrySet()) {
+                Floor fl = e.getValue();
+                if (fl.equals(f)) {
+                    floor = e.getKey();
+                    break;
+                }
+            }
+        } else {
+            floor = args[3];
+            if (!lift.getFloors().containsKey(floor)) {
+                sender.sendMessage(ChatColor.RED + "Floor " + args[3] + " not found!");
+                return true;
+            }
+        }
+
+        Floor f = lift.getFloors().get(floor);
+        if (args[1].equalsIgnoreCase("add")) {
+            if (f.getWhitelist().contains(wpu)) {
+                sender.sendMessage(ChatColor.RED + "Whitelist already contains this user!");
+            } else {
+                f.getWhitelist().add(wpu);
+                sender.sendMessage(ChatColor.GREEN + "User added to whitelist!");
+            }
+        } else if (args[1].equalsIgnoreCase("del")) {
+            if (!f.getWhitelist().contains(wpu)) {
+                sender.sendMessage(ChatColor.RED + "Whitelist doesn't contain this user!");
+            } else {
+                f.getWhitelist().remove(wpu);
+                sender.sendMessage(ChatColor.GREEN + "User removed from whitelist!");
+            }
+        } else {
+            return helpCommand(sender);
+        }
+        return true;
     }
 
     private boolean doorCommand(CommandSender sender, String[] args) {
