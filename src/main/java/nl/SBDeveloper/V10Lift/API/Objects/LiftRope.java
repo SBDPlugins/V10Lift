@@ -27,4 +27,17 @@ public class LiftRope {
         this.currently = minY;
         this.currentWorld = endWorld;
     }
+
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (obj == null) return false;
+        if (!(obj instanceof LiftRope)) return false;
+        LiftRope other = (LiftRope) obj;
+        return getStartWorld().equals(other.getStartWorld())
+            && endWorld.equals(other.getEndWorld())
+            && getX() == other.getX()
+            && getMinY() == other.getMinY()
+            && getMaxY() == other.getMaxY()
+            && getZ() == other.getZ();
+    }
 }

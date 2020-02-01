@@ -67,4 +67,15 @@ public class LiftBlock implements Comparable<LiftBlock> {
 
         return ret;
     }
+
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof LiftBlock)) {
+            if (!(obj instanceof LiftSign)) return false;
+            LiftSign other = (LiftSign) obj;
+            return getWorld().equals(other.getWorld()) && getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
+        }
+        LiftBlock other = (LiftBlock) obj;
+        return getWorld().equals(other.getWorld()) && getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
+    }
 }

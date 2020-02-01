@@ -3,10 +3,7 @@ package nl.SBDeveloper.V10Lift.Managers;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import org.bukkit.block.Block;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.LinkedHashMap;
-import java.util.UUID;
+import java.util.*;
 
 public class DataManager {
     /* A manager for general HashMaps */
@@ -42,6 +39,8 @@ public class DataManager {
     public static Lift getLift(String liftName) {
         return lifts.get(liftName);
     }
+
+    public static LinkedHashMap<String, Lift> getLifts() { return lifts; }
 
     // //
     public static boolean containsPlayer(UUID player) {

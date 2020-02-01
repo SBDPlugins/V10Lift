@@ -21,4 +21,15 @@ public class LiftSign {
         this.type = type;
         this.state = state;
     }
+
+    public boolean equals(Object obj) {
+        if (this == obj) return true;
+        if (!(obj instanceof LiftSign)) {
+            if (!(obj instanceof LiftBlock)) return false;
+            LiftBlock other = (LiftBlock) obj;
+            return getWorld().equals(other.getWorld()) && getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
+        }
+        LiftSign other = (LiftSign) obj;
+        return getWorld().equals(other.getWorld()) && getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
+    }
 }

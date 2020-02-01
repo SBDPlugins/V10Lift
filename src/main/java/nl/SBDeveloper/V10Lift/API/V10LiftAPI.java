@@ -1,9 +1,6 @@
 package nl.SBDeveloper.V10Lift.API;
 
-import nl.SBDeveloper.V10Lift.API.Objects.Floor;
-import nl.SBDeveloper.V10Lift.API.Objects.Lift;
-import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
-import nl.SBDeveloper.V10Lift.API.Objects.LiftSign;
+import nl.SBDeveloper.V10Lift.API.Objects.*;
 import nl.SBDeveloper.V10Lift.API.Runnables.DoorCloser;
 import nl.SBDeveloper.V10Lift.Managers.AntiCopyBlockManager;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
@@ -574,6 +571,35 @@ public class V10LiftAPI {
             }
         }
         return 0;
+    }
+
+    public boolean containsRope(String liftName, Block block) {
+        if (liftName == null || block == null || !DataManager.containsLift(liftName)) return false;
+
+        Lift lift = DataManager.getLift(liftName);
+        if (lift.getRopes().isEmpty()) return false;
+
+        String world = block.getWorld().getName();
+        int x = block.getX();
+        int y = block.getY();
+        int z = block.getZ();
+
+        for (LiftRope rope : lift.getRopes()) {
+            if (x != rope.getX() || z != rope.getZ()) continue;
+            if (rope.getStartWorld().equals(rope.getEndWorld())) {
+                if (y >= rope.getMinY() && y <= rope.getMaxY()) {
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean isRope(Block b) {
+        for (String lift : DataManager.getLifts().keySet()) {
+            if (containsRope(lift, b)) return true;
+        }
+        return false;
     }
 
     public void sendLiftInfo(Player p, String liftName) {
