@@ -6,6 +6,7 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 
 import javax.annotation.Nonnull;
+import java.lang.reflect.Field;
 import java.util.Map;
 
 public class LiftBlock implements Comparable<LiftBlock> {
@@ -106,5 +107,34 @@ public class LiftBlock implements Comparable<LiftBlock> {
         }
         LiftBlock other = (LiftBlock) obj;
         return getWorld().equals(other.getWorld()) && getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
+    }
+
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String newLine = System.getProperty("line.separator");
+
+        result.append(this.getClass().getName());
+        result.append(" Object {");
+        result.append(newLine);
+
+        //determine fields declared in this class only (no fields of superclass)
+        Field[] fields = this.getClass().getDeclaredFields();
+
+        //print field names paired with their values
+        for (Field field: fields) {
+            result.append("  ");
+            try {
+                result.append(field.getName());
+                result.append(": ");
+                //requires access to private field:
+                result.append(field.get(this));
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            }
+            result.append(newLine);
+        }
+        result.append("}");
+
+        return result.toString();
     }
 }

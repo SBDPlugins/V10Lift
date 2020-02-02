@@ -4,13 +4,14 @@ import lombok.Getter;
 import lombok.Setter;
 import nl.SBDeveloper.V10Lift.API.Runnables.DoorCloser;
 
+import java.lang.reflect.Field;
 import java.util.*;
 
 public class Lift {
     @Getter @Setter private String worldName;
     @Getter @Setter private int y;
     @Getter private final HashSet<UUID> owners;
-    @Getter @Setter private ArrayList<String> whitelist;
+    //@Getter @Setter private ArrayList<String> whitelist;
     @Getter private final TreeSet<LiftBlock> blocks = new TreeSet<>();
     @Getter private final LinkedHashMap<String, Floor> floors = new LinkedHashMap<>();
     @Getter private final HashSet<LiftSign> signs = new HashSet<>();
@@ -41,5 +42,34 @@ public class Lift {
         this.owners = hs;
         this.speed = speed;
         this.realistic = realistic;
+    }
+
+    public String toString() {
+        StringBuilder result = new StringBuilder();
+        String newLine = System.getProperty("line.separator");
+
+        result.append(this.getClass().getName());
+        result.append(" Object {");
+        result.append(newLine);
+
+        //determine fields declared in this class only (no fields of superclass)
+        Field[] fields = this.getClass().getDeclaredFields();
+
+        //print field names paired with their values
+        for (Field field: fields) {
+            result.append("  ");
+            try {
+                result.append(field.getName());
+                result.append(": ");
+                //requires access to private field:
+                result.append(field.get(this));
+            } catch (IllegalAccessException ex) {
+                ex.printStackTrace();
+            }
+            result.append(newLine);
+        }
+        result.append("}");
+
+        return result.toString();
     }
 }

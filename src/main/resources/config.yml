@@ -1,1 +1,9 @@
-test: "jup"
+SignText: "[v10lift]"
+DefectRate: 0.0
+RepairItem: REDSTONE
+RepairAmount: 5
+MasterRepairItem: DIAMOND
+MasterRepairAmount: 10
+DefaultSpeed: 16
+DefaultRealistic: true
+DoorCloseTime: 100

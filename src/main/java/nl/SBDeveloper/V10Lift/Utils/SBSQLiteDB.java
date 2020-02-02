@@ -96,7 +96,7 @@ public class SBSQLiteDB {
         try {
             con = this.source.getConnection();
             statement = con.prepareStatement(query);
-            if (objects != null) {
+            if (objects != null && !objects.isEmpty()) {
                 for (Map.Entry<Integer, Object> entry : objects.entrySet()) {
                     statement.setObject(entry.getKey(), entry.getValue());
                 }
@@ -122,11 +122,10 @@ public class SBSQLiteDB {
      *
      * @param query The query you want to execute
      * @param objects The objects you want to insert, in the right order
-     * @param requests The objects you want to select from the database
      *
      * @return HashMap<Object, Object> where the first object is the rowname and the second object is the value
      */
-    public ResultSet execute(String query, HashMap<Integer, Object> objects, ArrayList<Object> requests) {
+    public ResultSet execute(String query, HashMap<Integer, Object> objects) {
         Connection con = null;
         PreparedStatement statement = null;
         ResultSet set = null;
@@ -134,7 +133,7 @@ public class SBSQLiteDB {
         try {
             con = this.source.getConnection();
             statement = con.prepareStatement(query);
-            if (objects != null) {
+            if (objects != null && !objects.isEmpty()) {
                 for (Map.Entry<Integer, Object> entry : objects.entrySet()) {
                     statement.setObject(entry.getKey(), entry.getValue());
                 }
