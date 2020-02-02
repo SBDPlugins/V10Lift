@@ -184,9 +184,9 @@ public class MoveLift implements Runnable {
                 lib.setY(lib.getY() + 1);
                 block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
                 BlockState state = block.getState();
-                state.setType(lb.getMat());
+                state.setType(lib.getMat());
                 if (!XMaterial.isNewVersion()) {
-                    state.setRawData(lb.getData());
+                    state.setRawData(lib.getData());
                 }
                 state.update(true);
                 lb = lift.getBlocks().first();
@@ -224,9 +224,9 @@ public class MoveLift implements Runnable {
             for (LiftBlock lib : tb) {
                 block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
                 BlockState state = block.getState();
-                state.setType(lb.getMat());
+                state.setType(lib.getMat());
                 if (!XMaterial.isNewVersion()) {
-                    state.setRawData(lb.getData());
+                    state.setRawData(lib.getData());
                 }
                 state.update(true);
                 lift.getBlocks().add(lib);
@@ -309,9 +309,9 @@ public class MoveLift implements Runnable {
                 y = lib.getY();
                 block = world.getBlockAt(lib.getX(), lib.getY(), lib.getZ());
                 BlockState state = block.getState();
-                state.setType(lb.getMat());
+                state.setType(lib.getMat());
                 if (!XMaterial.isNewVersion()) {
-                    state.setRawData(lb.getData());
+                    state.setRawData(lib.getData());
                 }
                 state.update(true);
             }
@@ -329,9 +329,9 @@ public class MoveLift implements Runnable {
             for (LiftBlock lib : tb) {
                 block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
                 BlockState state = block.getState();
-                state.setType(lb.getMat());
+                state.setType(lib.getMat());
                 if (!XMaterial.isNewVersion()) {
-                    state.setRawData(lb.getData());
+                    state.setRawData(lib.getData());
                 }
                 state.update(true);
                 lift.getBlocks().add(lib);

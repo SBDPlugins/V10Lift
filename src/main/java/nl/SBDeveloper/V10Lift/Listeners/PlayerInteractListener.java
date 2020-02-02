@@ -38,7 +38,7 @@ public class PlayerInteractListener implements Listener {
 
         if (action == Action.RIGHT_CLICK_BLOCK
             && e.getHand() != EquipmentSlot.OFF_HAND
-            && (button.toString().contains("_BUTTON") || button == XMaterial.LEVER.parseMaterial())) {
+            && (button.toString().contains("BUTTON") || button == XMaterial.LEVER.parseMaterial())) {
             String world = block.getWorld().getName();
             int x = block.getX();
             int y = block.getY();
