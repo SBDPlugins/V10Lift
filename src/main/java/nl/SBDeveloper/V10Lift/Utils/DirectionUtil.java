@@ -12,7 +12,7 @@ public class DirectionUtil {
 
     @Nullable
     public static BlockFace getDirection(@Nonnull Block block) {
-        if (block.getBlockData() instanceof Directional && block.getType().toString().contains("WALL_SIGN")) {
+        if (block.getBlockData() instanceof Directional) {
             Directional dir = (Directional) block.getBlockData();
             return dir.getFacing();
         }
@@ -20,7 +20,7 @@ public class DirectionUtil {
     }
 
     public static void setDirection(@Nonnull Block block, BlockFace blockFace) {
-        if (block.getBlockData() instanceof Directional && block.getType().toString().contains("WALL_SIGN")) {
+        if (block.getBlockData() instanceof Directional) {
             BlockData bd = block.getBlockData();
             Directional dir = (Directional) bd;
             dir.setFacing(blockFace);
