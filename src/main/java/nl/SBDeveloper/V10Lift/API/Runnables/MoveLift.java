@@ -3,6 +3,7 @@ package nl.SBDeveloper.V10Lift.API.Runnables;
 import nl.SBDeveloper.V10Lift.API.Objects.*;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
 import nl.SBDeveloper.V10Lift.Utils.LocationSerializer;
+import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import nl.SBDeveloper.V10Lift.Utils.XSound;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import org.bukkit.*;
@@ -124,7 +125,6 @@ public class MoveLift implements Runnable {
             down = true;
         }
 
-        String tmpw = lift.getWorldName();
         if (up) {
             if (!V10LiftPlugin.getAPI().closeDoor(liftName)) return;
 
@@ -183,7 +183,12 @@ public class MoveLift implements Runnable {
                 block.setType(Material.AIR);
                 lib.setY(lib.getY() + 1);
                 block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
-                block.setType(lib.getMat());
+                BlockState state = block.getState();
+                state.setType(lb.getMat());
+                if (!XMaterial.isNewVersion()) {
+                    state.setRawData(lb.getData());
+                }
+                state.update(true);
                 lb = lift.getBlocks().first();
                 for (Entity ent : Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ()).getChunk().getEntities()) {
                     v10ent = new V10Entity(ent, null, 0);
@@ -218,7 +223,12 @@ public class MoveLift implements Runnable {
             }
             for (LiftBlock lib : tb) {
                 block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
-                block.setType(lib.getMat(), true);
+                BlockState state = block.getState();
+                state.setType(lb.getMat());
+                if (!XMaterial.isNewVersion()) {
+                    state.setRawData(lb.getData());
+                }
+                state.update(true);
                 lift.getBlocks().add(lib);
                 if (lib.getSignLines() != null) {
                     bs = block.getState();
@@ -298,7 +308,12 @@ public class MoveLift implements Runnable {
                 lib.setY(lib.getY() - 1);
                 y = lib.getY();
                 block = world.getBlockAt(lib.getX(), lib.getY(), lib.getZ());
-                block.setType(lib.getMat(), true);
+                BlockState state = block.getState();
+                state.setType(lb.getMat());
+                if (!XMaterial.isNewVersion()) {
+                    state.setRawData(lb.getData());
+                }
+                state.update(true);
             }
             veiter = lift.getToMove().iterator();
             while (veiter.hasNext()) {
@@ -313,7 +328,12 @@ public class MoveLift implements Runnable {
             }
             for (LiftBlock lib : tb) {
                 block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
-                block.setType(lib.getMat(), true);
+                BlockState state = block.getState();
+                state.setType(lb.getMat());
+                if (!XMaterial.isNewVersion()) {
+                    state.setRawData(lb.getData());
+                }
+                state.update(true);
                 lift.getBlocks().add(lib);
                 if (lib.getSignLines() != null) {
                     bs = block.getState();

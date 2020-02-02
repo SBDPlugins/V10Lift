@@ -22,7 +22,6 @@ import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import javax.xml.crypto.Data;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -34,9 +33,12 @@ public class PlayerInteractListener implements Listener {
         Block block = e.getClickedBlock();
         if (block == null) return;
         Material button = block.getType();
+
+        Bukkit.getLogger().severe("Button pressed! " + action + " || " + e.getHand() + " || " + button);
+
         if (action == Action.RIGHT_CLICK_BLOCK
             && e.getHand() != EquipmentSlot.OFF_HAND
-            && (button.toString().contains("BUTTON") || button == XMaterial.LEVER.parseMaterial())) {
+            && (button.toString().contains("_BUTTON") || button == XMaterial.LEVER.parseMaterial())) {
             String world = block.getWorld().getName();
             int x = block.getX();
             int y = block.getY();
@@ -47,6 +49,15 @@ public class PlayerInteractListener implements Listener {
                     if (world.equals(lb.getWorld()) && x == lb.getX() && y == lb.getY() && z == lb.getZ()) {
                         lb.setActive(!lb.isActive());
                         V10LiftPlugin.getAPI().setDefective(entry.getKey(), lb.isActive());
+                        return;
+                    }
+                }
+
+                if (lift.isOffline()) return;
+
+                for (LiftBlock lb : lift.getInputs()) {
+                    if (world.equals(lb.getWorld()) && x == lb.getX() && y == lb.getY() && z == lb.getZ()) {
+                        V10LiftPlugin.getAPI().addToQueue(entry.getKey(), lift.getFloors().get(lb.getFloor()), lb.getFloor());
                         return;
                     }
                 }
@@ -208,7 +219,13 @@ public class PlayerInteractListener implements Listener {
                     p.sendMessage(ChatColor.RED + "The material " + e.getClickedBlock().getType().toString() + " is currently not supported!");
                     return;
                 }
-                LiftBlock lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getType());
+                LiftBlock lb;
+                if (XMaterial.isNewVersion()) {
+                    lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getType());
+                } else {
+                    Bukkit.getLogger().info("Using deprecated method! " + block.getState().getRawData());
+                    lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getType(), block.getState().getRawData());
+                }
                 Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
                 Floor floor = lift.getFloors().get(DataManager.getDoorEditPlayer(p.getUniqueId()));
                 if (floor.getDoorBlocks().contains(lb)) {

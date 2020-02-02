@@ -4,14 +4,15 @@ import lombok.Getter;
 import lombok.Setter;
 
 import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.UUID;
 
 @Getter @Setter
 public class Floor {
-    private String world;
-    private int y;
-    private ArrayList<LiftBlock> doorBlocks;
-    private ArrayList<UUID> whitelist;
+    private final String world;
+    private final int y;
+    private final ArrayList<LiftBlock> doorBlocks = new ArrayList<>();
+    private final HashSet<UUID> whitelist = new HashSet<>();
 
     public Floor(int y, String world) {
         this.y = y;

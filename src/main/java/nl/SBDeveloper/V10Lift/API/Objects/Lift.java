@@ -9,46 +9,37 @@ import java.util.*;
 public class Lift {
     @Getter @Setter private String worldName;
     @Getter @Setter private int y;
-    @Getter private ArrayList<UUID> owners;
-    @Getter private ArrayList<String> whitelist;
-    @Getter private TreeSet<LiftBlock> blocks;
-    @Getter private LinkedHashMap<String, Floor> floors;
-    @Getter private ArrayList<LiftSign> signs;
-    @Getter private ArrayList<LiftBlock> inputs;
-    @Getter private ArrayList<LiftBlock> offlineInputs;
-    @Getter @Setter private LinkedHashMap<String, Floor> queue;
-    @Getter private ArrayList<LiftRope> ropes;
-    @Getter private ArrayList<V10Entity> toMove;
+    @Getter private final HashSet<UUID> owners;
+    @Getter @Setter private ArrayList<String> whitelist;
+    @Getter private final TreeSet<LiftBlock> blocks = new TreeSet<>();
+    @Getter private final LinkedHashMap<String, Floor> floors = new LinkedHashMap<>();
+    @Getter private final HashSet<LiftSign> signs = new HashSet<>();
+    @Getter private final HashSet<LiftBlock> inputs = new HashSet<>();
+    @Getter private HashSet<LiftBlock> offlineInputs = new HashSet<>();
+    @Getter @Setter private LinkedHashMap<String, Floor> queue = null;
+    @Getter private final HashSet<LiftRope> ropes = new HashSet<>();
+    @Getter private final ArrayList<V10Entity> toMove = new ArrayList<>();
     @Getter @Setter private int speed;
     @Getter @Setter private boolean realistic;
-    @Getter @Setter private boolean offline;
-    @Getter @Setter private boolean sound;
-    @Getter @Setter private boolean defective;
-    @Getter @Setter private String signText;
-    @Getter @Setter private int counter;
-    @Getter @Setter private Floor doorOpen;
-    @Getter @Setter private DoorCloser doorCloser;
+    @Getter @Setter private boolean offline = false;
+    @Getter @Setter private boolean sound = true;
+    @Getter @Setter private boolean defective = false;
+    @Getter @Setter private String signText = null;
+    @Getter @Setter private int counter = 0;
+    @Getter @Setter private Floor doorOpen = null;
+    @Getter @Setter private DoorCloser doorCloser = null;
 
-    public Lift(ArrayList<UUID> owners, int speed, boolean realistic) {
+    public Lift(HashSet<UUID> owners, int speed, boolean realistic) {
         this.owners = owners;
         this.speed = speed;
         this.realistic = realistic;
-        this.blocks = new TreeSet<>();
-        this.signs = new ArrayList<>();
-        this.whitelist = new ArrayList<>();
-        this.floors = new LinkedHashMap<>();
-        this.inputs = new ArrayList<>();
-        this.offlineInputs = new ArrayList<>();
-        this.queue = new LinkedHashMap<>();
-        this.ropes = new ArrayList<>();
-        this.toMove = new ArrayList<>();
-        this.offline = false;
-        this.sound = true;
-        this.defective = false;
-        this.counter = 0;
     }
 
     public Lift(UUID owner, int speed, boolean realistic) {
-        new Lift(new ArrayList<>(Collections.singletonList(owner)), speed, realistic);
+        HashSet<UUID> hs = new HashSet<>();
+        hs.add(owner);
+        this.owners = hs;
+        this.speed = speed;
+        this.realistic = realistic;
     }
 }

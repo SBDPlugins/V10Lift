@@ -9,7 +9,7 @@ public class LiftSign {
     private int x;
     private int z;
     private int y;
-    private String oldText;
+    private String oldText = null;
     private final byte type;
     private byte state;
 
