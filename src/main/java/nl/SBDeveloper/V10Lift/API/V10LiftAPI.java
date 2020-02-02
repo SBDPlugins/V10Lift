@@ -16,7 +16,6 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
-import javax.xml.crypto.Data;
 import java.util.*;
 
 public class V10LiftAPI {
@@ -29,10 +28,20 @@ public class V10LiftAPI {
         acbm = new AntiCopyBlockManager();
     }
 
+    /**
+     * Get the ForbiddenBlockManager, to check if a material is forbidden
+     *
+     * @return {@link ForbiddenBlockManager}
+     */
     public ForbiddenBlockManager getFBM() {
         return fbm;
     }
 
+    /**
+     * Get the AntiCopyBlockManager, to check if we can copy a material
+     *
+     * @return {@link AntiCopyBlockManager}
+     */
     public AntiCopyBlockManager getACBM() {
         return acbm;
     }
@@ -47,6 +56,13 @@ public class V10LiftAPI {
         while (iter.hasNext()) {
             e = iter.next();
             lift.getFloors().put(e.getKey(), e.getValue());
+        }
+    }
+
+    private void startLift(String liftName) {
+        if (!DataManager.containsMovingTask(liftName)) {
+            Lift lift = DataManager.getLift(liftName);
+            DataManager.addMovingTask(liftName, Bukkit.getScheduler().scheduleSyncRepeatingTask(V10LiftPlugin.getInstance(), new MoveLift(liftName, lift.getSpeed()), lift.getSpeed(), lift.getSpeed()));
         }
     }
 
@@ -84,6 +100,12 @@ public class V10LiftAPI {
         return true;
     }
 
+    /**
+     * Rename a lift
+     *
+     * @param liftName The name of the lift
+     * @param newName The new name of the lift
+     */
     public void renameLift(String liftName, String newName) {
         if (liftName == null || newName == null || !DataManager.containsLift(liftName)) return;
 
@@ -114,6 +136,14 @@ public class V10LiftAPI {
         return addBlockToLift(lift.getBlocks(), block);
     }
 
+    /**
+     * Add a block to a lift
+     * Use {@link nl.SBDeveloper.V10Lift.API.V10LiftAPI#sortLiftBlocks(String liftName)} after!
+     *
+     * @param blocks The blockset
+     * @param block The block
+     * @return 0 if added, -1 if null or doesn't exists, -2 if forbidden, -3 if already added
+     */
     public int addBlockToLift(Set<LiftBlock> blocks, @Nonnull Block block) {
         Material type = block.getType();
         LiftBlock lb;
@@ -126,6 +156,14 @@ public class V10LiftAPI {
         return addBlockToLift(blocks, lb);
     }
 
+    /**
+     * Add a block to a lift
+     * Use {@link nl.SBDeveloper.V10Lift.API.V10LiftAPI#sortLiftBlocks(String liftName)} after!
+     *
+     * @param blocks The blockset
+     * @param block The LiftBlock
+     * @return 0 if added, -1 if null or doesn't exists, -2 if forbidden, -3 if already added
+     */
     public int addBlockToLift(Set<LiftBlock> blocks, @Nonnull LiftBlock block) {
         if (getFBM().isForbidden(block.getMat())) return -2;
         if (blocks.contains(block)) return -3;
@@ -157,11 +195,27 @@ public class V10LiftAPI {
         return 0;
     }
 
+    /**
+     * Switch a block at a lift
+     * Use {@link nl.SBDeveloper.V10Lift.API.V10LiftAPI#sortLiftBlocks(String liftName)} after!
+     *
+     * @param liftName The name of the lift
+     * @param block The block
+     * @return 0 if added, 1 if removed, -1 if null or doesn't exists, -2 if not added
+     */
     public int switchBlockAtLift(String liftName, Block block) {
         if  (liftName == null || block == null || !DataManager.containsLift(liftName)) return -1;
         return switchBlockAtLift(DataManager.getLift(liftName).getBlocks(), block);
     }
 
+    /**
+     * Switch a block at a lift
+     * Use {@link nl.SBDeveloper.V10Lift.API.V10LiftAPI#sortLiftBlocks(String liftName)} after!
+     *
+     * @param blocks The blockset
+     * @param block The block
+     * @return 0 if added, 1 if removed, -1 if null or doesn't exists, -2 if not added
+     */
     public int switchBlockAtLift(TreeSet<LiftBlock> blocks, Block block) {
         if  (blocks == null || block == null) return -1;
         Material type = block.getType();
@@ -203,6 +257,12 @@ public class V10LiftAPI {
         }
     }
 
+    /**
+     * Open the door
+     *
+     * @param liftName The name of the lift
+     * @return true/false
+     */
     public boolean openDoor(String liftName) {
         if (liftName == null || !DataManager.containsLift(liftName)) return false;
 
@@ -239,6 +299,14 @@ public class V10LiftAPI {
         return true;
     }
 
+    /**
+     * Open the door
+     *
+     * @param lift The lift
+     * @param liftName The name of the lift
+     * @param f The floor
+     * @return true/false
+     */
     public boolean openDoor(Lift lift, String liftName, Floor f) {
         if (lift == null || liftName == null || f == null) return false;
         if (lift.getDoorOpen() != null && !closeDoor(liftName)) return false;
@@ -579,6 +647,14 @@ public class V10LiftAPI {
         return 0;
     }
 
+    /**
+     * Check if a lift contains the block as rope
+     *
+     * @param liftName The name of the lift
+     * @param block The block
+     *
+     * @return true/false
+     */
     public boolean containsRope(String liftName, Block block) {
         if (liftName == null || block == null || !DataManager.containsLift(liftName)) return false;
 
@@ -599,6 +675,13 @@ public class V10LiftAPI {
         return false;
     }
 
+    /**
+     * Check if a block is a rope
+     *
+     * @param b The block
+     *
+     * @return true/false
+     */
     public boolean isRope(Block b) {
         for (String lift : DataManager.getLifts().keySet()) {
             if (containsRope(lift, b)) return true;
@@ -606,10 +689,21 @@ public class V10LiftAPI {
         return false;
     }
 
+    /**
+     * Send info about a lift to a player
+     * @param p The player
+     * @param liftName The name of the lift
+     */
     public void sendLiftInfo(Player p, String liftName) {
         sendLiftInfo(p, liftName, DataManager.getLift(liftName));
     }
 
+    /**
+     * Send info about a lift to a player
+     * @param p The player
+     * @param liftName The name of the lift
+     * @param lift The lift
+     */
     public void sendLiftInfo(@Nonnull Player p, String liftName, @Nonnull Lift lift) {
         if (!lift.getOwners().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
             p.sendMessage(ChatColor.RED + "You don't have the permission to check this lift!");
@@ -651,6 +745,17 @@ public class V10LiftAPI {
         }
     }
 
+    /**
+     * Add a rope to a lift
+     *
+     * @param lift The name of the lift
+     * @param world The world
+     * @param x The x-pos
+     * @param minY The min y-pos
+     * @param maxY The max y-pos
+     * @param z The z-pos
+     * @return 0 if added, -1 if null or doesn't exists, -2 if not same mat, -3 if already a rope, -4 if forbidden material
+     */
     public int addRope(String lift, World world, int x, int minY, int maxY, int z) {
         if (lift == null || !DataManager.containsLift(lift) || world == null) return -1;
 
@@ -669,6 +774,14 @@ public class V10LiftAPI {
         return 0;
     }
 
+    /**
+     * Remove a rope from a lift
+     *
+     * @param lift The name of the lift
+     * @param block The block
+     *
+     * @return true/false
+     */
     public boolean removeRope(String lift, Block block) {
         if (lift == null || block == null || !DataManager.containsLift(lift) || !containsRope(lift, block)) return false;
 
@@ -690,6 +803,13 @@ public class V10LiftAPI {
         return false;
     }
 
+    /**
+     * Set the queue of a lift
+     *
+     * @param liftName The name of the lift
+     * @param queue The queue
+     * @return true/false
+     */
     public boolean setQueue(String liftName, LinkedHashMap<String, Floor> queue) {
         if (liftName == null || queue == null || !DataManager.containsLift(liftName)) return false;
 
@@ -701,14 +821,42 @@ public class V10LiftAPI {
         return true;
     }
 
+    /**
+     * Add a location to the queue
+     *
+     * @param lift The name of the lift
+     * @param y The y-pos
+     * @param world The world
+     *
+     * @return true/false
+     */
     public boolean addToQueue(String lift, int y, World world) {
         return addToQueue(lift, y, world, null);
     }
 
+    /**
+     * Add a location to the queue
+     *
+     * @param lift The name of the lift
+     * @param y The y-pos
+     * @param world The world
+     * @param floorName The name of the flor
+     *
+     * @return true/false
+     */
     public boolean addToQueue(String lift, int y, @Nonnull World world, String floorName) {
         return addToQueue(lift, new Floor(y, world.getName()), floorName);
     }
 
+    /**
+     * Add a location to the queue
+     *
+     * @param lift The name of the lift
+     * @param floor The {@link Floor}
+     * @param floorName The name of the flor
+     *
+     * @return true/false
+     */
     public boolean addToQueue(String lift, Floor floor, String floorName) {
         if (lift == null || floor == null || !DataManager.containsLift(lift)) return false;
 
@@ -735,12 +883,4 @@ public class V10LiftAPI {
         }
         return false;
     }
-
-    private void startLift(String liftName) {
-        if (!DataManager.containsMovingTask(liftName)) {
-            Lift lift = DataManager.getLift(liftName);
-            DataManager.addMovingTask(liftName, Bukkit.getScheduler().scheduleSyncRepeatingTask(V10LiftPlugin.getInstance(), new MoveLift(liftName, lift.getSpeed()), lift.getSpeed(), lift.getSpeed()));
-        }
-    }
-
 }
