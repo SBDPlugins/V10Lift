@@ -191,7 +191,7 @@ public class MoveLift implements Runnable {
                     state.setRawData(lib.getData());
                 }
                 state.update(true);
-                if (!XMaterial.isNewVersion()) {
+                if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
                 }
                 lb = lift.getBlocks().first();
@@ -234,7 +234,7 @@ public class MoveLift implements Runnable {
                     state.setRawData(lib.getData());
                 }
                 state.update(true);
-                if (!XMaterial.isNewVersion()) {
+                if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
                 }
                 lift.getBlocks().add(lib);
@@ -322,7 +322,7 @@ public class MoveLift implements Runnable {
                     state.setRawData(lib.getData());
                 }
                 state.update(true);
-                if (!XMaterial.isNewVersion()) {
+                if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
                 }
             }
@@ -345,7 +345,7 @@ public class MoveLift implements Runnable {
                     state.setRawData(lib.getData());
                 }
                 state.update(true);
-                if (!XMaterial.isNewVersion()) {
+                if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
                 }
                 lift.getBlocks().add(lib);
