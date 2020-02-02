@@ -3,6 +3,7 @@ package nl.SBDeveloper.V10Lift.API.Objects;
 import lombok.Getter;
 import lombok.Setter;
 import org.bukkit.Material;
+import org.bukkit.block.BlockFace;
 
 import javax.annotation.Nonnull;
 import java.util.Map;
@@ -17,6 +18,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
     //Only used for cabine blocks, because those need caching!
     @Getter private final Material mat;
     @Getter private final byte data;
+    @Getter private final BlockFace face;
     @Getter private final String[] signLines;
 
     //Only used for inputs!
@@ -33,6 +35,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.z = z;
         this.mat = null;
         this.data = 0;
+        this.face = null;
         this.signLines = null;
         this.floor = floor;
     }
@@ -43,6 +46,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.y = y;
         this.z = z;
         this.mat = mat;
+        this.face = null;
         this.data = 0;
         this.signLines = null;
         this.floor = null;
@@ -54,17 +58,19 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.y = y;
         this.z = z;
         this.mat = mat;
+        this.face = null;
         this.data = data;
         this.signLines = null;
         this.floor = null;
     }
 
-    public LiftBlock(String world, int x, int y, int z, Material mat, String[] signLines) {
+    public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face, String[] signLines) {
         this.world = world;
         this.x = x;
         this.y = y;
         this.z = z;
         this.mat = mat;
+        this.face = face;
         this.data = 0;
         this.signLines = signLines;
         this.floor = null;
@@ -76,6 +82,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.y = y;
         this.z = z;
         this.mat = mat;
+        this.face = null;
         this.data = data;
         this.signLines = signLines;
         this.floor = null;

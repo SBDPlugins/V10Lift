@@ -2,6 +2,8 @@ package nl.SBDeveloper.V10Lift.API.Objects;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Rotation;
+import org.bukkit.block.BlockFace;
 
 @Getter @Setter
 public class LiftSign {

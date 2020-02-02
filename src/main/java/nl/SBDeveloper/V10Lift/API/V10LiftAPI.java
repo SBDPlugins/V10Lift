@@ -6,6 +6,7 @@ import nl.SBDeveloper.V10Lift.API.Runnables.MoveLift;
 import nl.SBDeveloper.V10Lift.Managers.AntiCopyBlockManager;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
 import nl.SBDeveloper.V10Lift.Managers.ForbiddenBlockManager;
+import nl.SBDeveloper.V10Lift.Utils.DirectionUtil;
 import nl.SBDeveloper.V10Lift.Utils.LocationSerializer;
 import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
@@ -157,7 +158,8 @@ public class V10LiftAPI {
         if (type.toString().contains("SIGN")) {
             //SIGN
             if (XMaterial.isNewVersion()) {
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, ((Sign) block.getState()).getLines());
+                Bukkit.getLogger().info("Newest system! " + DirectionUtil.getDirection(block));
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
             } else {
                 Bukkit.getLogger().info("Using deprecated method! " + block.getState().getRawData());
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());
@@ -205,7 +207,8 @@ public class V10LiftAPI {
         if (type.toString().contains("SIGN")) {
             //SIGN
             if (XMaterial.isNewVersion()) {
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, ((Sign) block.getState()).getLines());
+                Bukkit.getLogger().info("Newest system! " + DirectionUtil.getDirection(block));
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
             } else {
                 Bukkit.getLogger().info("Using deprecated method! " + block.getState().getRawData());
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());
@@ -254,7 +257,8 @@ public class V10LiftAPI {
         if (type.toString().contains("SIGN")) {
             //SIGN
             if (XMaterial.isNewVersion()) {
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, ((Sign) block.getState()).getLines());
+                Bukkit.getLogger().info("Newest system! " + DirectionUtil.getDirection(block));
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
             } else {
                 Bukkit.getLogger().info("Using deprecated method! " + block.getState().getRawData());
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());

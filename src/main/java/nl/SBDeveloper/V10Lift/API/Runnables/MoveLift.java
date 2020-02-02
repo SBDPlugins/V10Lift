@@ -2,6 +2,7 @@ package nl.SBDeveloper.V10Lift.API.Runnables;
 
 import nl.SBDeveloper.V10Lift.API.Objects.*;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
+import nl.SBDeveloper.V10Lift.Utils.DirectionUtil;
 import nl.SBDeveloper.V10Lift.Utils.LocationSerializer;
 import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import nl.SBDeveloper.V10Lift.Utils.XSound;
@@ -11,6 +12,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -189,6 +191,9 @@ public class MoveLift implements Runnable {
                     state.setRawData(lib.getData());
                 }
                 state.update(true);
+                if (block.getBlockData() instanceof Directional) {
+                    DirectionUtil.setDirection(block, lib.getFace());
+                }
                 lb = lift.getBlocks().first();
                 for (Entity ent : Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ()).getChunk().getEntities()) {
                     v10ent = new V10Entity(ent, null, 0);
@@ -229,6 +234,9 @@ public class MoveLift implements Runnable {
                     state.setRawData(lib.getData());
                 }
                 state.update(true);
+                if (block.getBlockData() instanceof Directional) {
+                    DirectionUtil.setDirection(block, lib.getFace());
+                }
                 lift.getBlocks().add(lib);
                 if (lib.getSignLines() != null) {
                     bs = block.getState();
@@ -314,6 +322,9 @@ public class MoveLift implements Runnable {
                     state.setRawData(lib.getData());
                 }
                 state.update(true);
+                if (block.getBlockData() instanceof Directional) {
+                    DirectionUtil.setDirection(block, lib.getFace());
+                }
             }
             veiter = lift.getToMove().iterator();
             while (veiter.hasNext()) {
@@ -334,6 +345,9 @@ public class MoveLift implements Runnable {
                     state.setRawData(lib.getData());
                 }
                 state.update(true);
+                if (block.getBlockData() instanceof Directional) {
+                    DirectionUtil.setDirection(block, lib.getFace());
+                }
                 lift.getBlocks().add(lib);
                 if (lib.getSignLines() != null) {
                     bs = block.getState();
