@@ -1,21 +1,21 @@
 package nl.SBDeveloper.V10Lift.Managers;
 
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
-import org.bukkit.block.Block;
+import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
 
 import java.util.*;
 
 public class DataManager {
     /* A manager for general HashMaps */
     private static LinkedHashMap<String, Lift> lifts = new LinkedHashMap<>();
-    private static LinkedHashMap<UUID, ArrayList<Block>> builds = new LinkedHashMap<>();
+    private static LinkedHashMap<UUID, TreeSet<LiftBlock>> builds = new LinkedHashMap<>();
     private static LinkedHashMap<UUID, String> editors = new LinkedHashMap<>();
     private static LinkedHashMap<UUID, String> inputEdits = new LinkedHashMap<>();
     private static ArrayList<UUID> inputRemoves = new ArrayList<>();
     private static ArrayList<UUID> offlineEdits = new ArrayList<>();
     private static ArrayList<UUID> offlineRemoves = new ArrayList<>();
     private static ArrayList<UUID> builder = new ArrayList<>();
-    private static LinkedHashMap<UUID, String> ropeEdits = new LinkedHashMap<>();
+    private static LinkedHashMap<UUID, LiftBlock> ropeEdits = new LinkedHashMap<>();
     private static ArrayList<UUID> ropeRemoves = new ArrayList<>();
     private static HashMap<UUID, String> doorEdits = new HashMap<>();
     private static ArrayList<UUID> whoisReq = new ArrayList<>();
@@ -48,14 +48,14 @@ public class DataManager {
     }
 
     public static void addPlayer(UUID player) {
-        builds.put(player, new ArrayList<>());
+        builds.put(player, new TreeSet<>());
     }
 
     public static void removePlayer(UUID player) {
         builds.remove(player);
     }
 
-    public static ArrayList<Block> getPlayer(UUID player) {
+    public static TreeSet<LiftBlock> getPlayer(UUID player) {
         return builds.get(player);
     }
 
@@ -81,15 +81,15 @@ public class DataManager {
         return ropeEdits.containsKey(player);
     }
 
-    public static void addRopeEditPlayer(UUID player, String liftName) {
-        ropeEdits.put(player, liftName);
+    public static void addRopeEditPlayer(UUID player, LiftBlock liftBlock) {
+        ropeEdits.put(player, liftBlock);
     }
 
     public static void removeRopeEditPlayer(UUID player) {
         ropeEdits.remove(player);
     }
 
-    public static String getRopeEditPlayer(UUID player) {
+    public static LiftBlock getRopeEditPlayer(UUID player) {
         return ropeEdits.get(player);
     }
 

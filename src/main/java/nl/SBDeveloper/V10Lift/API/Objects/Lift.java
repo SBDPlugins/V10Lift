@@ -16,7 +16,7 @@ public class Lift {
     @Getter private ArrayList<LiftSign> signs;
     @Getter private ArrayList<LiftBlock> inputs;
     @Getter private ArrayList<LiftBlock> offlineInputs;
-    @Getter private LinkedHashMap<String, Floor> queue;
+    @Getter @Setter private LinkedHashMap<String, Floor> queue;
     @Getter private ArrayList<LiftRope> ropes;
     @Getter private ArrayList<V10Entity> toMove;
     @Getter @Setter private int speed;

@@ -130,14 +130,14 @@ public class MoveLift implements Runnable {
 
             //MOVE ROPES
             for (LiftRope rope : lift.getRopes()) {
-                if (rope.getCurrentWorld().equals(rope.getStartWorld()) && rope.getCurrently() > rope.getMaxY()) {
+                if (rope.getCurrently() > rope.getMaxY()) {
                     Bukkit.getLogger().info("[V10Lift] Lift " + liftName + " reaches the upper rope end but won't stop!!");
                     V10LiftPlugin.getAPI().setDefective(liftName, true);
                     lift.getToMove().clear();
                     quiter.remove();
                     return;
                 }
-                world = Objects.requireNonNull(Bukkit.getWorld(rope.getCurrentWorld()), "World is null at MoveLift");
+                world = Objects.requireNonNull(Bukkit.getWorld(rope.getWorld()), "World is null at MoveLift");
                 block = world.getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
                 block.setType(Material.AIR);
                 rope.setCurrently(rope.getCurrently() + 1);
@@ -354,7 +354,7 @@ public class MoveLift implements Runnable {
 
             //MOVE ROPES
             for (LiftRope rope : lift.getRopes()) {
-                if (rope.getCurrentWorld().equals(rope.getStartWorld()) && rope.getCurrently() < rope.getMinY()) {
+                if (rope.getCurrently() < rope.getMinY()) {
                     Bukkit.getLogger().info("[V10Lift] Lift " + liftName + " reaches the upper rope end but won't stop!!");
                     V10LiftPlugin.getAPI().setDefective(liftName, true);
                     lift.getToMove().clear();
@@ -364,7 +364,7 @@ public class MoveLift implements Runnable {
                     block.setType(rope.getType());
                     return;
                 }
-                world = Objects.requireNonNull(Bukkit.getWorld(rope.getCurrentWorld()), "World is null at MoveLift");
+                world = Objects.requireNonNull(Bukkit.getWorld(rope.getWorld()), "World is null at MoveLift");
                 rope.setCurrently(rope.getCurrently() - 1);
                 block = world.getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
                 block.setType(rope.getType());

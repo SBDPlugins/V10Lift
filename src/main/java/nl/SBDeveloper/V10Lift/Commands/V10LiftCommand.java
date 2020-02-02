@@ -766,7 +766,7 @@ public class V10LiftCommand implements CommandExecutor {
                 return true;
             }
 
-            ArrayList<Block> blocks = DataManager.getPlayer(p.getUniqueId());
+            TreeSet<LiftBlock> blocks = DataManager.getPlayer(p.getUniqueId());
             if (blocks.isEmpty()) {
                 sender.sendMessage(ChatColor.RED + "Add blocks first!");
                 return true;
@@ -776,7 +776,9 @@ public class V10LiftCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "A lift with that name already exists.");
             }
 
-            blocks.forEach(block -> V10LiftPlugin.getAPI().addBlockToLift(args[1], block));
+            TreeSet<LiftBlock> blcks = DataManager.getLift(args[1]).getBlocks();
+
+            blocks.forEach(block -> V10LiftPlugin.getAPI().addBlockToLift(blcks, block));
             V10LiftPlugin.getAPI().sortLiftBlocks(args[1]);
             DataManager.removePlayer(p.getUniqueId());
             sender.sendMessage(ChatColor.GREEN + "The lift " + args[1] + " is created successfully!");

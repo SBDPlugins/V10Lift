@@ -2,6 +2,7 @@ package nl.SBDeveloper.V10Lift.API;
 
 import nl.SBDeveloper.V10Lift.API.Objects.*;
 import nl.SBDeveloper.V10Lift.API.Runnables.DoorCloser;
+import nl.SBDeveloper.V10Lift.API.Runnables.MoveLift;
 import nl.SBDeveloper.V10Lift.Managers.AntiCopyBlockManager;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
 import nl.SBDeveloper.V10Lift.Managers.ForbiddenBlockManager;
@@ -15,6 +16,7 @@ import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
 import javax.annotation.Nonnull;
+import javax.xml.crypto.Data;
 import java.util.*;
 
 public class V10LiftAPI {
@@ -109,8 +111,11 @@ public class V10LiftAPI {
     public int addBlockToLift(String liftName, Block block) {
         if (liftName == null || block == null || !DataManager.containsLift(liftName)) return -1;
         Lift lift = DataManager.getLift(liftName);
+        return addBlockToLift(lift.getBlocks(), block);
+    }
+
+    public int addBlockToLift(Set<LiftBlock> blocks, @Nonnull Block block) {
         Material type = block.getType();
-        if (getFBM().isForbidden(type)) return -2;
         LiftBlock lb;
         if (type.toString().contains("SIGN")) {
             //SIGN
@@ -118,8 +123,13 @@ public class V10LiftAPI {
         } else {
             lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
         }
-        if (lift.getBlocks().contains(lb)) return -3;
-        lift.getBlocks().add(lb);
+        return addBlockToLift(blocks, lb);
+    }
+
+    public int addBlockToLift(Set<LiftBlock> blocks, @Nonnull LiftBlock block) {
+        if (getFBM().isForbidden(block.getMat())) return -2;
+        if (blocks.contains(block)) return -3;
+        blocks.add(block);
         return 0;
     }
 
@@ -147,17 +157,13 @@ public class V10LiftAPI {
         return 0;
     }
 
-    /**
-     * Switch a block at a lift
-     * Use {@link nl.SBDeveloper.V10Lift.API.V10LiftAPI#sortLiftBlocks(String liftName)} after!
-     *
-     * @param liftName The name of the lift
-     * @param block The block
-     * @return 0 if added, 1 if removed, -1 if null or doesn't exists, -2 if forbidden
-     */
     public int switchBlockAtLift(String liftName, Block block) {
         if  (liftName == null || block == null || !DataManager.containsLift(liftName)) return -1;
-        Lift lift = DataManager.getLift(liftName);
+        return switchBlockAtLift(DataManager.getLift(liftName).getBlocks(), block);
+    }
+
+    public int switchBlockAtLift(TreeSet<LiftBlock> blocks, Block block) {
+        if  (blocks == null || block == null) return -1;
         Material type = block.getType();
         if (getFBM().isForbidden(type)) return -2;
         LiftBlock lb;
@@ -167,11 +173,11 @@ public class V10LiftAPI {
         } else {
             lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
         }
-        if (lift.getBlocks().contains(lb)) {
-            lift.getBlocks().remove(lb);
+        if (blocks.contains(lb)) {
+            blocks.remove(lb);
             return 1;
         }
-        lift.getBlocks().add(lb);
+        blocks.add(lb);
         return 0;
     }
 
@@ -586,10 +592,8 @@ public class V10LiftAPI {
 
         for (LiftRope rope : lift.getRopes()) {
             if (x != rope.getX() || z != rope.getZ()) continue;
-            if (rope.getStartWorld().equals(rope.getEndWorld())) {
-                if (y >= rope.getMinY() && y <= rope.getMaxY()) {
-                    return true;
-                }
+            if (y >= rope.getMinY() && y <= rope.getMaxY()) {
+                return true;
             }
         }
         return false;
@@ -603,10 +607,10 @@ public class V10LiftAPI {
     }
 
     public void sendLiftInfo(Player p, String liftName) {
-        if (p == null || liftName == null || !DataManager.containsLift(liftName)) return;
+        sendLiftInfo(p, liftName, DataManager.getLift(liftName));
+    }
 
-        Lift lift = DataManager.getLift(liftName);
-
+    public void sendLiftInfo(@Nonnull Player p, String liftName, @Nonnull Lift lift) {
         if (!lift.getOwners().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
             p.sendMessage(ChatColor.RED + "You don't have the permission to check this lift!");
         } else {
@@ -644,6 +648,98 @@ public class V10LiftAPI {
                     }
                 }
             }
+        }
+    }
+
+    public int addRope(String lift, World world, int x, int minY, int maxY, int z) {
+        if (lift == null || !DataManager.containsLift(lift) || world == null) return -1;
+
+        boolean change = minY > maxY;
+        Block block = world.getBlockAt(x, minY, z);
+        if (isRope(block)) return -3;
+        Material mat = block.getType();
+        if (getFBM().isForbidden(mat)) return -4;
+
+        for (int i = minY + 1; i <= maxY; i++) {
+            block = world.getBlockAt(x, i, z);
+            if (isRope(block)) return -3;
+            if (block.getType() != mat) return -2;
+        }
+        DataManager.getLift(lift).getRopes().add(new LiftRope(mat, world.getName(), x, minY, maxY, z));
+        return 0;
+    }
+
+    public boolean removeRope(String lift, Block block) {
+        if (lift == null || block == null || !DataManager.containsLift(lift) || !containsRope(lift, block)) return false;
+
+        String world = block.getWorld().getName();
+        int x = block.getX();
+        int y = block.getY();
+        int z = block.getZ();
+        Iterator<LiftRope> riter = DataManager.getLift(lift).getRopes().iterator();
+        while (riter.hasNext()) {
+            LiftRope rope = riter.next();
+            if (x != rope.getX() || z != rope.getZ()) continue;
+            if (world.equals(rope.getWorld())) {
+                if (y >= rope.getMinY() && y <= rope.getMaxY()) {
+                    riter.remove();
+                    return true;
+                }
+            }
+        }
+        return false;
+    }
+
+    public boolean setQueue(String liftName, LinkedHashMap<String, Floor> queue) {
+        if (liftName == null || queue == null || !DataManager.containsLift(liftName)) return false;
+
+        Lift lift = DataManager.getLift(liftName);
+        lift.setQueue(new LinkedHashMap<>());
+        for (Map.Entry<String, Floor> e : queue.entrySet()) {
+            addToQueue(liftName, e.getValue(), e.getKey());
+        }
+        return true;
+    }
+
+    public boolean addToQueue(String lift, int y, World world) {
+        return addToQueue(lift, y, world, null);
+    }
+
+    public boolean addToQueue(String lift, int y, @Nonnull World world, String floorName) {
+        return addToQueue(lift, new Floor(y, world.getName()), floorName);
+    }
+
+    public boolean addToQueue(String lift, Floor floor, String floorName) {
+        if (lift == null || floor == null || !DataManager.containsLift(lift)) return false;
+
+        Lift l = DataManager.getLift(lift);
+        if (l.getQueue() == null) {
+            l.setQueue(new LinkedHashMap<>());
+        }
+
+        if (!l.getQueue().containsValue(floor)) {
+            if (floorName == null) {
+                floorName = ChatColor.MAGIC + "-----";
+                for (Map.Entry<String, Floor> e : l.getFloors().entrySet()) {
+                    if (e.getValue().equals(floor)) {
+                        floorName = e.getKey();
+                        floor = e.getValue();
+                        break;
+                    }
+                }
+            }
+
+            l.getQueue().put(floorName, floor);
+            startLift(lift);
+            return true;
+        }
+        return false;
+    }
+
+    private void startLift(String liftName) {
+        if (!DataManager.containsMovingTask(liftName)) {
+            Lift lift = DataManager.getLift(liftName);
+            DataManager.addMovingTask(liftName, Bukkit.getScheduler().scheduleSyncRepeatingTask(V10LiftPlugin.getInstance(), new MoveLift(liftName, lift.getSpeed()), lift.getSpeed(), lift.getSpeed()));
         }
     }
 
