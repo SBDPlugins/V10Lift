@@ -18,7 +18,7 @@
 
     <build>
         <directory>target</directory>
-        <finalName>V10Lift2</finalName>
+        <finalName>V10Lift v${project.version}</finalName>
         <resources>
             <resource>
                 <targetPath>.</targetPath>

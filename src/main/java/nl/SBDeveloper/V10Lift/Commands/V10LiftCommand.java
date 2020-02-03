@@ -813,6 +813,22 @@ public class V10LiftCommand implements CommandExecutor {
         sender.sendMessage("§8V10Lift commands:");
         sender.sendMessage("§6/v10lift info§f: Gives you information about the plugin.");
         sender.sendMessage("§6/v10lift help§f: Gives you this help page.");
+        sender.sendMessage("§6/v10lift reload§f: Reload the plugin.");
+
+        sender.sendMessage("§6/v10lift create [Name]§f: Create a lift.");
+        sender.sendMessage("§6/v10lift delete <Name>§f: Delete a lift.");
+        sender.sendMessage("§6/v10lift abort§f: Abort your action.");
+        sender.sendMessage("§6/v10lift whois [Name]§f: See information about a lift.");
+        sender.sendMessage("§6/v10lift edit <Name>§f: Edit a lift.");
+        sender.sendMessage("§6/v10lift floor <add/del/rename> <Name> [New name]§f: Add/remove/rename a floor.");
+        sender.sendMessage("§6/v10lift input <add/del> [Floorname]§f: Add/remove a input.");
+        sender.sendMessage("§6/v10lift build§f: Add/remove blocks to/from a cab.");
+        sender.sendMessage("§6/v10lift rope <add/del>§f: Add/remove a rope.");
+        sender.sendMessage("§6/v10lift door§f: Add doors to a lift.");
+        sender.sendMessage("§6/v10lift speed <New speed>§f: Change the speed of a lift.");
+        sender.sendMessage("§6/v10lift realistic§f: Toggle realistic mode.");
+        sender.sendMessage("§6/v10lift repair§f: Repair a lift.");
+        sender.sendMessage("§6/v10lift whitelist <add/del> <Player> [Floorname]§f: Add/remove someone of the whitelist.");
         return true;
     }
 

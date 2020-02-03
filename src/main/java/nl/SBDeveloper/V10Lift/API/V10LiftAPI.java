@@ -51,7 +51,6 @@ public class V10LiftAPI {
 
     /* Private API methods */
     private void sortFloors(@Nonnull Lift lift) {
-        Bukkit.getLogger().info("[V10Lift] Sorting floors for lift...");
         ArrayList<Map.Entry<String, Floor>> as = new ArrayList<>(lift.getFloors().entrySet());
         as.sort(Comparator.comparingInt(o -> o.getValue().getY()));
         Iterator<Map.Entry<String, Floor>> iter = as.iterator();
@@ -64,7 +63,6 @@ public class V10LiftAPI {
     }
 
     private void startLift(String liftName) {
-        Bukkit.getLogger().info("[V10Lift] Starting lift " + liftName);
         if (!DataManager.containsMovingTask(liftName)) {
             Lift lift = DataManager.getLift(liftName);
             DataManager.addMovingTask(liftName, Bukkit.getScheduler().scheduleSyncRepeatingTask(V10LiftPlugin.getInstance(), new MoveLift(liftName, lift.getSpeed()), lift.getSpeed(), lift.getSpeed()));
@@ -81,7 +79,6 @@ public class V10LiftAPI {
      * @return true if created, false if null or already exists
      */
     public boolean createLift(Player p, String liftName) {
-        Bukkit.getLogger().info("[V10Lift] Creating lift " + liftName);
         if (p == null || liftName == null || DataManager.containsLift(liftName)) return false;
 
         DataManager.addLift(liftName, new Lift(p.getUniqueId(), V10LiftPlugin.getSConfig().getFile().getInt("DefaultSpeed"), V10LiftPlugin.getSConfig().getFile().getBoolean("DefaultRealistic")));
@@ -95,7 +92,6 @@ public class V10LiftAPI {
      * @return true if removed, false if null or doesn't exists
      */
     public boolean removeLift(String liftName) {
-        Bukkit.getLogger().info("[V10Lift] Removing lift " + liftName);
         if (liftName == null || !DataManager.containsLift(liftName)) return false;
 
         Iterator<Map.Entry<UUID, String>> iter = DataManager.getEditors().entrySet().iterator();
@@ -135,7 +131,6 @@ public class V10LiftAPI {
      * @param newName The new name of the lift
      */
     public void renameLift(String liftName, String newName) {
-        Bukkit.getLogger().info("[V10Lift] Renaming lift " + liftName);
         if (liftName == null || newName == null || !DataManager.containsLift(liftName)) return;
 
         Lift lift = DataManager.getLift(liftName);
@@ -174,23 +169,19 @@ public class V10LiftAPI {
      * @return 0 if added, -1 if null or doesn't exists, -2 if forbidden, -3 if already added
      */
     public int addBlockToLift(Set<LiftBlock> blocks, @Nonnull Block block) {
-        Bukkit.getLogger().info("[V10Lift] Adding Block to lift...");
         Material type = block.getType();
         LiftBlock lb;
         if (type.toString().contains("SIGN")) {
             //SIGN
             if (XMaterial.isNewVersion()) {
-                Bukkit.getLogger().info("Newest system! " + DirectionUtil.getDirection(block));
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
             } else {
-                Bukkit.getLogger().info("Using deprecated method! " + block.getState().getRawData());
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());
             }
         } else {
             if (XMaterial.isNewVersion()) {
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
             } else {
-                Bukkit.getLogger().info("Using deprecated method! " + block.getState().getRawData());
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData());
             }
         }
@@ -206,7 +197,6 @@ public class V10LiftAPI {
      * @return 0 if added, -1 if null or doesn't exists, -2 if forbidden, -3 if already added
      */
     public int addBlockToLift(@Nonnull Set<LiftBlock> blocks, @Nonnull LiftBlock block) {
-        Bukkit.getLogger().info("[V10Lift] Adding Block to lift 2...");
         if (getFBM().isForbidden(block.getMat())) return -2;
         if (blocks.contains(block)) return -3;
         blocks.add(block);
@@ -229,17 +219,14 @@ public class V10LiftAPI {
         if (type.toString().contains("SIGN")) {
             //SIGN
             if (XMaterial.isNewVersion()) {
-                Bukkit.getLogger().info("Newest system! " + DirectionUtil.getDirection(block));
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
             } else {
-                Bukkit.getLogger().info("Using deprecated method! " + block.getState().getRawData());
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());
             }
         } else {
             if (XMaterial.isNewVersion()) {
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
             } else {
-                Bukkit.getLogger().info("Using deprecated method! " + block.getState().getRawData());
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData());
             }
         }
@@ -257,7 +244,6 @@ public class V10LiftAPI {
      * @return 0 if added, 1 if removed, -1 if null or doesn't exists, -2 if not added
      */
     public int switchBlockAtLift(String liftName, Block block) {
-        Bukkit.getLogger().info("[V10Lift] Switching block at lift...");
         if  (liftName == null || block == null || !DataManager.containsLift(liftName)) return -1;
         return switchBlockAtLift(DataManager.getLift(liftName).getBlocks(), block);
     }
@@ -271,7 +257,6 @@ public class V10LiftAPI {
      * @return 0 if added, 1 if removed, -1 if null or doesn't exists, -2 if not added
      */
     public int switchBlockAtLift(TreeSet<LiftBlock> blocks, Block block) {
-        Bukkit.getLogger().info("[V10Lift] Switching block at lift 2...");
         if  (blocks == null || block == null) return -1;
         Material type = block.getType();
         if (getFBM().isForbidden(type)) return -2;
@@ -279,17 +264,14 @@ public class V10LiftAPI {
         if (type.toString().contains("SIGN")) {
             //SIGN
             if (XMaterial.isNewVersion()) {
-                Bukkit.getLogger().info("Newest system! " + DirectionUtil.getDirection(block));
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
             } else {
-                Bukkit.getLogger().info("Using deprecated method! " + block.getState().getRawData());
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());
             }
         } else {
             if (XMaterial.isNewVersion()) {
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
             } else {
-                Bukkit.getLogger().info("Using deprecated method! " + block.getState().getRawData());
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData());
             }
         }
@@ -308,7 +290,6 @@ public class V10LiftAPI {
      * @param liftName The name of the lift
      */
     public void sortLiftBlocks(String liftName) {
-        Bukkit.getLogger().info("[V10Lift] Sorting blocks at lift...");
         if (liftName != null && DataManager.containsLift(liftName)) {
             Lift lift = DataManager.getLift(liftName);
             if (lift.getWorldName() == null) lift.setWorldName(lift.getBlocks().first().getWorld());
@@ -375,7 +356,6 @@ public class V10LiftAPI {
      * @return true/false
      */
     public boolean openDoor(Lift lift, String liftName, Floor f) {
-        Bukkit.getLogger().info("[V10Lift] Opening door...");
         if (lift == null || liftName == null || f == null) return false;
         if (lift.getDoorOpen() != null && !closeDoor(liftName)) return false;
 
@@ -403,7 +383,6 @@ public class V10LiftAPI {
      * @return true if door was closed, false if else.
      */
     public boolean closeDoor(String liftName) {
-        Bukkit.getLogger().info("[V10Lift] Closing door...");
         if (liftName == null || !DataManager.containsLift(liftName)) return false;
 
         Lift lift = DataManager.getLift(liftName);
@@ -451,7 +430,6 @@ public class V10LiftAPI {
      * @return true if open, false if else
      */
     public boolean hasDoorOpen(String liftName) {
-        Bukkit.getLogger().info("[V10Lift] Opening door...");
         return (liftName != null && DataManager.containsLift(liftName)) && DataManager.getLift(liftName).getDoorOpen() != null;
     }
 
@@ -464,7 +442,6 @@ public class V10LiftAPI {
      * @return 0 if added, -1 if null or doesn't exists, -2 if height is to high, -3 if floor already exists
      */
     public int addFloor(String liftName, String floorName, Floor floor) {
-        Bukkit.getLogger().info("[V10Lift] Adding door to " + floorName);
         if (liftName == null || floorName == null || floor == null || !DataManager.containsLift(liftName) || floor.getWorld() == null) return -1;
         if (floor.getY() > Objects.requireNonNull(Bukkit.getServer().getWorld(floor.getWorld()), "World is null at addNewFloor!").getMaxHeight()) return -2;
         if (floorName.length() > 13) floorName = floorName.substring(0, 13).trim();
@@ -484,7 +461,6 @@ public class V10LiftAPI {
      * @return true if removed, false if null or doesn't exists
      */
     public boolean removeFloor(String liftName, String floorName) {
-        Bukkit.getLogger().info("[V10Lift] Removing floor at " + liftName);
         if (liftName == null || floorName == null || !DataManager.containsLift(liftName)) return false;
         Lift lift = DataManager.getLift(liftName);
         if (!lift.getFloors().containsKey(floorName)) return false;
@@ -503,7 +479,6 @@ public class V10LiftAPI {
      * @return 0 if renamed, -1 if null or doesn't exists, -2 if floor doesn't exists, -3 if floor already exists
      */
     public int renameFloor(String liftName, String oldName, String newName) {
-        Bukkit.getLogger().info("[V10Lift] Renaming floor at " + liftName);
         if (liftName == null || oldName == null || newName == null || !DataManager.containsLift(liftName)) return -1;
         Lift lift = DataManager.getLift(liftName);
         if (!lift.getFloors().containsKey(oldName)) return -2;
@@ -547,7 +522,6 @@ public class V10LiftAPI {
      * @return 0 if set, -1 if null or doesn't exists, -2 if same state, -3 if no signs, -4 if wrong sign
      */
     public int setDefective(String liftName, boolean state) {
-        Bukkit.getLogger().info("[V10Lift] Set defective");
         if (liftName == null || !DataManager.containsLift(liftName)) return -1;
         Lift lift = DataManager.getLift(liftName);
         boolean oldState = lift.isDefective();
@@ -832,7 +806,6 @@ public class V10LiftAPI {
      * @return 0 if added, -1 if null or doesn't exists, -2 if not same mat, -3 if already a rope, -4 if forbidden material
      */
     public int addRope(String lift, World world, int x, int minY, int maxY, int z) {
-        Bukkit.getLogger().info("[V10Lift] Adding rope to " + lift);
         if (lift == null || !DataManager.containsLift(lift) || world == null) return -1;
 
         boolean change = minY > maxY;
@@ -859,7 +832,6 @@ public class V10LiftAPI {
      * @return true/false
      */
     public boolean removeRope(String lift, Block block) {
-        Bukkit.getLogger().info("[V10Lift] Removing rope from " + lift);
         if (lift == null || block == null || !DataManager.containsLift(lift) || !containsRope(lift, block)) return false;
 
         String world = block.getWorld().getName();
@@ -922,7 +894,6 @@ public class V10LiftAPI {
      * @return true/false
      */
     public boolean addToQueue(String lift, int y, @Nonnull World world, String floorName) {
-        Bukkit.getLogger().info("[V10Lift] Adding to queue: " + lift);
         return addToQueue(lift, new Floor(y, world.getName()), floorName);
     }
 
@@ -936,7 +907,6 @@ public class V10LiftAPI {
      * @return true/false
      */
     public boolean addToQueue(String lift, Floor floor, String floorName) {
-        Bukkit.getLogger().info("[V10Lift] Adding to queue: " + lift);
         if (lift == null || floor == null || !DataManager.containsLift(lift)) return false;
 
         Lift l = DataManager.getLift(lift);

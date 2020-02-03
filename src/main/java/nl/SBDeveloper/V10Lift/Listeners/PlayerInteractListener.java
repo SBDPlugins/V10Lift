@@ -37,8 +37,6 @@ public class PlayerInteractListener implements Listener {
         if (block == null) return;
         Material button = block.getType();
 
-        Bukkit.getLogger().severe("Button pressed! " + action + " || " + e.getHand() + " || " + button);
-
         if (action == Action.RIGHT_CLICK_BLOCK
             && e.getHand() != EquipmentSlot.OFF_HAND
             && (button.toString().contains("BUTTON") || button == XMaterial.LEVER.parseMaterial())) {
@@ -226,7 +224,6 @@ public class PlayerInteractListener implements Listener {
                 if (XMaterial.isNewVersion()) {
                     lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getType());
                 } else {
-                    Bukkit.getLogger().info("Using deprecated method! " + block.getState().getRawData());
                     lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getType(), block.getState().getRawData());
                 }
                 Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
