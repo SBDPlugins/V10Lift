@@ -20,6 +20,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import java.sql.SQLException;
 import java.util.*;
 
 public class V10LiftCommand implements CommandExecutor {
@@ -197,6 +198,28 @@ public class V10LiftCommand implements CommandExecutor {
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
             }
+        } else if (args[0].equalsIgnoreCase("abort") && args.length == 1) {
+            //v10lift abort
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return abortCommand(sender);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
+        } else if (args[0].equalsIgnoreCase("reload") && args.length == 1) {
+            //v10lift reload
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
+                return true;
+            }
+            if (sender.hasPermission("v10lift.admin")) {
+                return reloadCommand(sender);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
         } else if (args[0].equalsIgnoreCase("repair") && args.length == 2) {
             //v10lift repair <Name>
             if (!(sender instanceof Player)) {
@@ -210,6 +233,93 @@ public class V10LiftCommand implements CommandExecutor {
             }
         } else {
             return helpCommand(sender);
+        }
+        return true;
+    }
+
+    private boolean reloadCommand(CommandSender sender) {
+        for (Map.Entry<String, Lift> e : DataManager.getLifts().entrySet()) {
+            String lift = e.getKey();
+            if (DataManager.containsMovingTask(lift)) {
+                Bukkit.getScheduler().cancelTask(DataManager.getMovingTask(lift));
+            }
+
+            e.getValue().setQueue(null);
+            V10LiftPlugin.getAPI().sortLiftBlocks(lift);
+        }
+
+        DataManager.clearMovingTasks();
+        V10LiftPlugin.getSConfig().reloadConfig();
+        V10LiftPlugin.getDBManager().save();
+        try {
+            V10LiftPlugin.getDBManager().load();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        sender.sendMessage(ChatColor.YELLOW + "Plugin reset successful!");
+        return true;
+    }
+
+    private boolean abortCommand(CommandSender sender) {
+        Player p = (Player) sender;
+        boolean abort = false;
+
+        if (DataManager.containsPlayer(p.getUniqueId())) {
+            DataManager.removePlayer(p.getUniqueId());
+            abort = true;
+        }
+
+        if (DataManager.containsWhoisREQPlayer(p.getUniqueId())) {
+            DataManager.removeWhoisREQPlayer(p.getUniqueId());
+            abort = true;
+        }
+
+        if (DataManager.containsInputEditsPlayer(p.getUniqueId())) {
+            DataManager.removeInputEditsPlayer(p.getUniqueId());
+            abort = true;
+        }
+
+        if (DataManager.containsInputRemovesPlayer(p.getUniqueId())) {
+            DataManager.removeInputRemovesPlayer(p.getUniqueId());
+            abort = true;
+        }
+
+        if (DataManager.containsOfflineEditsPlayer(p.getUniqueId())) {
+            DataManager.removeOfflineEditsPlayer(p.getUniqueId());
+            abort = true;
+        }
+
+        if (DataManager.containsOfflineRemovesPlayer(p.getUniqueId())) {
+            DataManager.removeOfflineRemovesPlayer(p.getUniqueId());
+            abort = true;
+        }
+
+        if (DataManager.containsBuilderPlayer(p.getUniqueId())) {
+            DataManager.removeBuilderPlayer(p.getUniqueId());
+            V10LiftPlugin.getAPI().sortLiftBlocks(DataManager.getEditPlayer(p.getUniqueId()));
+            abort = true;
+        }
+
+        if (DataManager.containsRopeEditPlayer(p.getUniqueId())) {
+            DataManager.removeRopeEditPlayer(p.getUniqueId());
+            abort = true;
+        }
+
+        if (DataManager.containsRopeRemovesPlayer(p.getUniqueId())) {
+            DataManager.removeRopeRemovesPlayer(p.getUniqueId());
+            abort = true;
+        }
+
+        if (DataManager.containsDoorEditPlayer(p.getUniqueId())) {
+            DataManager.removeDoorEditPlayer(p.getUniqueId());
+            abort = true;
+        }
+
+        if (abort) {
+            p.sendMessage(ChatColor.GOLD + "Cancelled.");
+        } else {
+            p.sendMessage(ChatColor.RED + "Oops! You can't cancel anything.");
         }
         return true;
     }

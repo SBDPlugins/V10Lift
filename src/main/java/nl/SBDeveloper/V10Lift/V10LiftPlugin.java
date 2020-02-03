@@ -74,6 +74,10 @@ public class V10LiftPlugin extends JavaPlugin {
         return config;
     }
 
+    public static DBManager getDBManager() {
+        return dbManager;
+    }
+
     public static V10LiftAPI getAPI() {
         return api;
     }

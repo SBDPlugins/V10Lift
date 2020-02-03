@@ -133,6 +133,8 @@ public class DataManager {
         return movingTasks.get(liftName);
     }
 
+    public static void clearMovingTasks() { movingTasks.clear(); }
+
     // //
     public static boolean containsDoorEditPlayer(UUID player) {
         return doorEdits.containsKey(player);
