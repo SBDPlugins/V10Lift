@@ -114,6 +114,8 @@ public class DataManager {
         return editors.get(player);
     }
 
+    public static LinkedHashMap<UUID, String> getEditors() { return editors; }
+
     // //
     public static void addMovingTask(String liftName, int taskid) {
         movingTasks.put(liftName, taskid);

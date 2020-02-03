@@ -4,6 +4,7 @@ import nl.SBDeveloper.V10Lift.API.Objects.Floor;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
+import nl.SBDeveloper.V10Lift.Utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import org.bukkit.Bukkit;
@@ -24,6 +25,8 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Iterator;
 import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 public class PlayerInteractListener implements Listener {
     //BUTTON CLICK
@@ -257,8 +260,7 @@ public class PlayerInteractListener implements Listener {
                 if (!(bs instanceof Sign)) return;
 
                 Sign sign = (Sign) bs;
-                //TODO Add defaults to config!
-                if (!sign.getLine(0).equalsIgnoreCase("[v10lift]")) return;
+                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) return;
 
                 String liftName = sign.getLine(1);
                 if (!DataManager.containsLift(liftName)) return;
@@ -269,10 +271,18 @@ public class PlayerInteractListener implements Listener {
                 }
 
                 if (lift.isDefective()) {
-                    //TODO Add defaults to config!!!
-                    if (sign.getLine(3).equals(ChatColor.MAGIC + "Defect!") && p.hasPermission("v10lift.repair") && a == Action.RIGHT_CLICK_BLOCK) {
-                        int masterAmount = 2;
-                        Material masterItem = Material.DIAMOND;
+                    if (sign.getLine(3).equals(ConfigUtil.getColored("DefectText")) && p.hasPermission("v10lift.repair") && a == Action.RIGHT_CLICK_BLOCK) {
+                        int masterAmount = V10LiftPlugin.getSConfig().getFile().getInt("RepairAmount");
+                        Optional<XMaterial> mat = XMaterial.matchXMaterial(Objects.requireNonNull(V10LiftPlugin.getSConfig().getFile().getString("RepairItem"), "RepairItem is null"));
+                        if (!mat.isPresent()) {
+                            Bukkit.getLogger().severe("[V10Lift] The material for RepairItem is undefined!");
+                            return;
+                        }
+                        Material masterItem = mat.get().parseMaterial();
+                        if (masterItem == null) {
+                            Bukkit.getLogger().severe("[V10Lift] The material for RepairItem is undefined!");
+                            return;
+                        }
                         if (p.getGameMode() != GameMode.CREATIVE && masterAmount > 0) {
                             if (!p.getInventory().contains(masterItem)) {
                                 p.sendMessage(ChatColor.RED + "You need " + masterAmount + "x " + masterItem.toString().toLowerCase() + "!");

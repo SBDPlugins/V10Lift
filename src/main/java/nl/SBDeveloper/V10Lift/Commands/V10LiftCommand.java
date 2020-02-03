@@ -5,7 +5,9 @@ import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftSign;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
+import nl.SBDeveloper.V10Lift.Utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.Utils.LocationSerializer;
+import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import org.bukkit.*;
 import org.bukkit.block.Block;
@@ -227,9 +229,17 @@ public class V10LiftCommand implements CommandExecutor {
             return true;
         }
 
-        //TODO Add defaults to config!!!
-        int masterAmount = 2;
-        Material masterItem = Material.DIAMOND;
+        int masterAmount = V10LiftPlugin.getSConfig().getFile().getInt("MasterRepairAmount");
+        Optional<XMaterial> mat = XMaterial.matchXMaterial(Objects.requireNonNull(V10LiftPlugin.getSConfig().getFile().getString("MasterRepairItem"), "MasterRepairItem is null"));
+        if (!mat.isPresent()) {
+            Bukkit.getLogger().severe("[V10Lift] The material for MasterRepairItem is undefined!");
+            return true;
+        }
+        Material masterItem = mat.get().parseMaterial();
+        if (masterItem == null) {
+            Bukkit.getLogger().severe("[V10Lift] The material for MasterRepairItem is undefined!");
+            return true;
+        }
         if (p.getGameMode() != GameMode.CREATIVE && masterAmount > 0) {
             if (!p.getInventory().contains(masterItem)) {
                 sender.sendMessage(ChatColor.RED + "You need " + masterAmount + "x " + masterItem.toString().toLowerCase() + "!");
@@ -662,8 +672,7 @@ public class V10LiftCommand implements CommandExecutor {
                     bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at edit command").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
                     if (!(bs instanceof Sign)) continue;
                     sign = (Sign) bs;
-                    //TODO Add defaults
-                    if (!sign.getLine(0).equalsIgnoreCase("[v10lift]")) continue;
+                    if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) continue;
                     sign.setLine(3, "");
                     sign.update();
                 }
@@ -678,7 +687,6 @@ public class V10LiftCommand implements CommandExecutor {
                         continue;
                     }
                     sign = (Sign) bs;
-                    //TODO Add defaults
                     sign.setLine(3, ls.getOldText());
                     sign.update();
                     ls.setOldText(null);
@@ -712,8 +720,7 @@ public class V10LiftCommand implements CommandExecutor {
                 bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at edit command").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
                 if (!(bs instanceof Sign)) continue;
                 sign = (Sign) bs;
-                //TODO Add defaults
-                if (!sign.getLine(0).equalsIgnoreCase("[v10lift]")) continue;
+                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) continue;
                 sign.setLine(3, ChatColor.RED + "Maintenance");
                 sign.update();
             }
@@ -729,8 +736,7 @@ public class V10LiftCommand implements CommandExecutor {
                 }
                 sign = (Sign) bs;
                 ls.setOldText(sign.getLine(3));
-                //TODO Add defaults
-                sign.setLine(3, ChatColor.RED + "Maintenance");
+                sign.setLine(3, ConfigUtil.getColored("MaintenanceText"));
                 sign.update();
             }
             sender.sendMessage(ChatColor.GREEN + "Editor turned on!");
@@ -750,8 +756,10 @@ public class V10LiftCommand implements CommandExecutor {
             sender.sendMessage(ChatColor.RED + "You don't have the permission to remove that lift.");
         }
 
-        //TODO Fix ignoring of result
-        V10LiftPlugin.getAPI().removeLift(args[1]);
+        if (!V10LiftPlugin.getAPI().removeLift(args[1])) {
+            sender.sendMessage(ChatColor.RED + "The lift " + args[1] + " couldn't be removed!");
+            return true;
+        }
 
         sender.sendMessage(ChatColor.GREEN + "The lift " + args[1] + " is removed successfully!");
         return true;

@@ -96,8 +96,7 @@ public class MoveLift implements Runnable {
             return;
         }
 
-        //TODO Add defaults to config (chanceOfDefect)
-        double changeOfDefect = 0.0D;
+        double changeOfDefect = V10LiftPlugin.getSConfig().getFile().getDouble("DefectRate");
         if (changeOfDefect > 0.0D) {
             y = new Random().nextInt(100);
             double chance;

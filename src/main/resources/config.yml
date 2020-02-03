@@ -1,4 +1,7 @@
 SignText: "[v10lift]"
+DefectText: "&kDefect!"
+DisabledText: "&cDisabled"
+MaintenanceText: "&cMaintenance"
 DefectRate: 0.0
 RepairItem: REDSTONE
 RepairAmount: 5

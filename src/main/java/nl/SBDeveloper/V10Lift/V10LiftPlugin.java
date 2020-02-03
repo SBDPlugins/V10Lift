@@ -13,6 +13,7 @@ import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
+import java.util.Objects;
 
 public class V10LiftPlugin extends JavaPlugin {
 
@@ -38,7 +39,7 @@ public class V10LiftPlugin extends JavaPlugin {
 
         api = new V10LiftAPI();
 
-        getCommand("v10lift").setExecutor(new V10LiftCommand());
+        Objects.requireNonNull(getCommand("v10lift"), "Internal error! Command not found.").setExecutor(new V10LiftCommand());
 
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(), this);
         Bukkit.getPluginManager().registerEvents(new BlockBreakListener(), this);

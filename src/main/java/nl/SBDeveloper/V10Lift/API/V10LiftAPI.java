@@ -6,6 +6,7 @@ import nl.SBDeveloper.V10Lift.API.Runnables.MoveLift;
 import nl.SBDeveloper.V10Lift.Managers.AntiCopyBlockManager;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
 import nl.SBDeveloper.V10Lift.Managers.ForbiddenBlockManager;
+import nl.SBDeveloper.V10Lift.Utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.Utils.DirectionUtil;
 import nl.SBDeveloper.V10Lift.Utils.LocationSerializer;
 import nl.SBDeveloper.V10Lift.Utils.XMaterial;
@@ -83,8 +84,7 @@ public class V10LiftAPI {
         Bukkit.getLogger().info("[V10Lift] Creating lift " + liftName);
         if (p == null || liftName == null || DataManager.containsLift(liftName)) return false;
 
-        //TODO Add defaults to config
-        DataManager.addLift(liftName, new Lift(p.getUniqueId(), 16, true));
+        DataManager.addLift(liftName, new Lift(p.getUniqueId(), V10LiftPlugin.getSConfig().getFile().getInt("DefaultSpeed"), V10LiftPlugin.getSConfig().getFile().getBoolean("DefaultRealistic")));
         return true;
     }
 
@@ -98,9 +98,31 @@ public class V10LiftAPI {
         Bukkit.getLogger().info("[V10Lift] Removing lift " + liftName);
         if (liftName == null || !DataManager.containsLift(liftName)) return false;
 
-        //TODO Remove lift from all data maps
+        Iterator<Map.Entry<UUID, String>> iter = DataManager.getEditors().entrySet().iterator();
+        HashSet<UUID> activeEdits = new HashSet<>();
+        while (iter.hasNext()) {
+            Map.Entry<UUID, String> entry = iter.next();
+            if (entry.getValue().equals(liftName)) {
+                activeEdits.add(entry.getKey());
+                iter.remove();
+            }
+        }
 
-        //TODO Stop movingtask if running
+        for (UUID puuid : activeEdits) {
+            DataManager.removeInputEditsPlayer(puuid);
+            DataManager.removeInputRemovesPlayer(puuid);
+            DataManager.removeOfflineEditsPlayer(puuid);
+            DataManager.removeOfflineRemovesPlayer(puuid);
+            DataManager.removeBuilderPlayer(puuid);
+            DataManager.removeRopeEditPlayer(puuid);
+            DataManager.removeRopeRemovesPlayer(puuid);
+            DataManager.removeDoorEditPlayer(puuid);
+        }
+
+        if (DataManager.containsMovingTask(liftName)) {
+            Bukkit.getScheduler().cancelTask(DataManager.getMovingTask(liftName));
+            DataManager.removeMovingTask(liftName);
+        }
 
         DataManager.removeLift(liftName);
         return true;
@@ -336,8 +358,8 @@ public class V10LiftAPI {
 
         if (lift.isRealistic()) {
             lift.setDoorCloser(new DoorCloser(liftName));
-            //TODO Add defaults (doorclosetime) to config
-            long doorCloseTime = 5 * 20;
+            long doorCloseTime = V10LiftPlugin.getSConfig().getFile().getLong("DoorCloseTime");
+
             int pid = Bukkit.getScheduler().scheduleSyncRepeatingTask(V10LiftPlugin.getInstance(), lift.getDoorCloser(), doorCloseTime, doorCloseTime);
             lift.getDoorCloser().setPid(pid);
         }
@@ -366,8 +388,8 @@ public class V10LiftAPI {
 
         if (lift.isRealistic()) {
             lift.setDoorCloser(new DoorCloser(liftName));
-            //TODO Add defaults (doorclosetime) to config
-            long doorCloseTime = 5 * 20;
+            long doorCloseTime = V10LiftPlugin.getSConfig().getFile().getLong("DoorCloseTime");
+
             int pid = Bukkit.getScheduler().scheduleSyncRepeatingTask(V10LiftPlugin.getInstance(), lift.getDoorCloser(), doorCloseTime, doorCloseTime);
             lift.getDoorCloser().setPid(pid);
         }
@@ -560,8 +582,7 @@ public class V10LiftAPI {
 
             Sign s = (Sign) bs;
             ls.setOldText(s.getLine(3));
-            //TODO Add defaults to config
-            s.setLine(3, ChatColor.MAGIC + "Defect!");
+            s.setLine(3, ConfigUtil.getColored("DefectText"));
             s.update();
 
             //Update all other signs
@@ -571,7 +592,7 @@ public class V10LiftAPI {
 
                 s = (Sign) bs;
                 lift.setSignText(s.getLine(3));
-                s.setLine(3, ChatColor.MAGIC + "Defect!");
+                s.setLine(3, ConfigUtil.getColored("DefectText"));
                 s.update();
             }
         } else {
@@ -587,7 +608,7 @@ public class V10LiftAPI {
                     continue;
                 }
                 s = (Sign) bs;
-                if (s.getLine(3).equals(ChatColor.MAGIC + "Defect!")) {
+                if (s.getLine(3).equals(ConfigUtil.getColored("DefectText"))) {
                     s.setLine(3, ls.getOldText());
                     s.update();
                     ls.setOldText(null);
@@ -656,9 +677,8 @@ public class V10LiftAPI {
                 bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at setOffline").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
                 if (!(bs instanceof Sign)) continue;
                 sign = (Sign) bs;
-                //TODO Add defaults
-                if (!sign.getLine(0).equalsIgnoreCase("[v10lift]")) continue;
-                sign.setLine(3, ChatColor.RED + "Disabled");
+                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) continue;
+                sign.setLine(3, ConfigUtil.getColored("DisabledText"));
                 sign.update();
             }
 
@@ -672,8 +692,7 @@ public class V10LiftAPI {
                 }
                 sign = (Sign) bs;
                 ls.setOldText(sign.getLine(3));
-                //TODO Add defaults
-                sign.setLine(3, ChatColor.RED + "Disabled");
+                sign.setLine(3, ConfigUtil.getColored("DisabledText"));
                 sign.update();
             }
         } else {
@@ -681,8 +700,7 @@ public class V10LiftAPI {
                 bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at setOffline").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
                 if (!(bs instanceof Sign)) continue;
                 sign = (Sign) bs;
-                //TODO Add defaults
-                if (!sign.getLine(0).equalsIgnoreCase("[v10lift]")) continue;
+                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) continue;
                 sign.setLine(3, "");
                 sign.update();
             }
