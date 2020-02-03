@@ -12,7 +12,6 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Chest;
 import org.bukkit.block.Sign;
-import org.bukkit.block.data.Directional;
 import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
@@ -72,6 +71,7 @@ public class MoveLift implements Runnable {
         }
 
         if (lift.getQueue().isEmpty() || lift.isOffline()) {
+            lift.setQueue(null);
             stopMe();
             return;
         }
@@ -84,6 +84,19 @@ public class MoveLift implements Runnable {
         }
 
         lb = lift.getBlocks().first();
+        world = Bukkit.getWorld(lb.getWorld());
+        if (world == null) {
+            lift.setCounter(ft);
+            return;
+        }
+
+        loc = new Location(world, lb.getX(), lb.getY(), lb.getZ());
+        if (!loc.getChunk().isLoaded()) {
+            lift.setCounter(ft);
+            return;
+        }
+
+        lb = lift.getBlocks().last();
         world = Bukkit.getWorld(lb.getWorld());
         if (world == null) {
             lift.setCounter(ft);
@@ -114,8 +127,8 @@ public class MoveLift implements Runnable {
             }
         }
 
-        Iterator < Map.Entry < String, Floor >> quiter = lift.getQueue().entrySet().iterator();
-        Map.Entry < String, Floor > floor = quiter.next();
+        Iterator<Map.Entry<String, Floor>> quiter = lift.getQueue().entrySet().iterator();
+        Map.Entry<String, Floor> floor = quiter.next();
         Floor to = floor.getValue();
         String fl = floor.getKey();
         boolean up = false;
@@ -132,7 +145,7 @@ public class MoveLift implements Runnable {
             //MOVE ROPES
             for (LiftRope rope : lift.getRopes()) {
                 if (rope.getCurrently() > rope.getMaxY()) {
-                    Bukkit.getLogger().info("[V10Lift] Lift " + liftName + " reaches the upper rope end but won't stop!!");
+                    Bukkit.getLogger().info("[V10Lift] Lift " + liftName + " reaches the upper rope end but won't stop!! 1");
                     V10LiftPlugin.getAPI().setDefective(liftName, true);
                     lift.getToMove().clear();
                     quiter.remove();
@@ -387,20 +400,41 @@ public class MoveLift implements Runnable {
 
             //MOVE ROPES
             for (LiftRope rope : lift.getRopes()) {
+
                 if (rope.getCurrently() < rope.getMinY()) {
-                    Bukkit.getLogger().info("[V10Lift] Lift " + liftName + " reaches the upper rope end but won't stop!!");
+                    Bukkit.getLogger().info("[V10Lift] Lift " + liftName + " reaches the upper rope end but won't stop!! 2");
                     V10LiftPlugin.getAPI().setDefective(liftName, true);
                     lift.getToMove().clear();
                     quiter.remove();
                     rope.setCurrently(rope.getCurrently() - 1);
                     block = world.getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
                     block.setType(rope.getType());
+                    if (XMaterial.isNewVersion()) {
+                        org.bukkit.block.data.type.Ladder ladder = (org.bukkit.block.data.type.Ladder) block.getBlockData();
+                        ladder.setFacing(rope.getFace());
+                    } else {
+                        BlockState state = block.getState();
+                        org.bukkit.material.Ladder ladder = new org.bukkit.material.Ladder(rope.getType());
+                        ladder.setFacingDirection(rope.getFace());
+                        state.setData(ladder);
+                        state.update(true);
+                    }
                     return;
                 }
                 world = Objects.requireNonNull(Bukkit.getWorld(rope.getWorld()), "World is null at MoveLift");
                 rope.setCurrently(rope.getCurrently() - 1);
                 block = world.getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
                 block.setType(rope.getType());
+                if (XMaterial.isNewVersion()) {
+                    org.bukkit.block.data.type.Ladder ladder = (org.bukkit.block.data.type.Ladder) block.getBlockData();
+                    ladder.setFacing(rope.getFace());
+                } else {
+                    BlockState state = block.getState();
+                    org.bukkit.material.Ladder ladder = new org.bukkit.material.Ladder(rope.getType());
+                    ladder.setFacingDirection(rope.getFace());
+                    state.setData(ladder);
+                    state.update(true);
+                }
             }
         } else {
             lift.getToMove().clear();

@@ -13,6 +13,7 @@ import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import org.bukkit.*;
 import org.bukkit.block.Block;
+import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
 import org.bukkit.entity.Entity;
@@ -121,6 +122,7 @@ public class V10LiftAPI {
         }
 
         DataManager.removeLift(liftName);
+        V10LiftPlugin.getDBManager().removeFromData(liftName);
         return true;
     }
 
@@ -808,7 +810,13 @@ public class V10LiftAPI {
     public int addRope(String lift, World world, int x, int minY, int maxY, int z) {
         if (lift == null || !DataManager.containsLift(lift) || world == null) return -1;
 
-        boolean change = minY > maxY;
+        //minY = maxY, so reverse
+        if (minY > maxY) {
+            int tempY = minY;
+            minY = maxY;
+            maxY = tempY;
+        }
+
         Block block = world.getBlockAt(x, minY, z);
         if (isRope(block)) return -3;
         Material mat = block.getType();
@@ -819,7 +827,21 @@ public class V10LiftAPI {
             if (isRope(block)) return -3;
             if (block.getType() != mat) return -2;
         }
-        DataManager.getLift(lift).getRopes().add(new LiftRope(mat, world.getName(), x, minY, maxY, z));
+
+        BlockFace face;
+        if (XMaterial.isNewVersion()) {
+            org.bukkit.block.data.type.Ladder ladder = (org.bukkit.block.data.type.Ladder) block.getBlockData();
+            Bukkit.getLogger().info(ladder.getFacing().toString());
+            face = ladder.getFacing();
+        } else {
+            BlockState state = block.getState();
+            org.bukkit.material.Ladder ladder = (org.bukkit.material.Ladder) state.getData();
+            face = ladder.getAttachedFace();
+        }
+
+        LiftRope rope = new LiftRope(mat, face, world.getName(), x, minY, maxY, z);
+        DataManager.getLift(lift).getRopes().add(rope);
+
         return 0;
     }
 

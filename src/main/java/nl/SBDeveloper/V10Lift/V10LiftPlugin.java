@@ -61,9 +61,11 @@ public class V10LiftPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        instance = null;
+        V10LiftPlugin.getDBManager().removeFromData();
         dbManager.save();
         dbManager.closeConnection();
+
+        instance = null;
     }
 
     public static V10LiftPlugin getInstance() {
