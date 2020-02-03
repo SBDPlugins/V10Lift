@@ -32,16 +32,16 @@ public class SBYamlFile {
         if (!this.file.exists()) {
             try {
                 this.file.createNewFile();
-                Bukkit.getLogger().info("[SBYamlManager] Generating the " + name + ".yml!");
+                Bukkit.getLogger().info("[V10Lift] Generating the " + name + ".yml!");
             } catch (IOException e) {
-                Bukkit.getLogger().severe("[SBYamlManager] Couldn't generate the " + name + ".yml!");
+                Bukkit.getLogger().severe("[V10Lift] Couldn't generate the " + name + ".yml!");
             }
         }
         this.fileConfiguration = YamlConfiguration.loadConfiguration(this.file);
     }
 
     public void loadDefaults() {
-        Bukkit.getLogger().info("[SBYamlManager] Copying default " + name + ".yml to the folder!");
+        Bukkit.getLogger().info("[V10Lift] Copying default " + name + ".yml to the folder, if needed!");
         Reader defConfigStream1 = new InputStreamReader(this.pl.getResource(name + ".yml"), StandardCharsets.UTF_8);
         YamlConfiguration defConfig1 = YamlConfiguration.loadConfiguration(defConfigStream1);
         getFile().setDefaults(defConfig1);
@@ -57,7 +57,7 @@ public class SBYamlFile {
         try {
             this.fileConfiguration.save(this.file);
         } catch (IOException e) {
-            Bukkit.getLogger().severe("[SBYamlManager] Couldn't save the " + name + ".yml!");
+            Bukkit.getLogger().severe("[V10Lift] Couldn't save the " + name + ".yml!");
         }
     }
 

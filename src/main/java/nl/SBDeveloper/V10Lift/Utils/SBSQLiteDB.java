@@ -27,16 +27,16 @@ public class SBSQLiteDB {
      * @param name The database name
      */
     public SBSQLiteDB(@Nonnull Plugin plugin, String name) {
-        Bukkit.getLogger().info("[SBDBManager] Loading databases...");
+        Bukkit.getLogger().info("[V10Lift] Loading databases...");
 
         File dbFile = new File(plugin.getDataFolder(), name + ".db");
 
         if (!dbFile.exists()) {
             try {
-                Bukkit.getLogger().info("[SBDBManager] Generating the " + name + ".db!");
+                Bukkit.getLogger().info("[V10Lift] Generating the " + name + ".db!");
                 dbFile.createNewFile();
             } catch (IOException e) {
-                Bukkit.getLogger().severe("[SBDBManager] Couldn't generate the " + name + ".db!");
+                Bukkit.getLogger().severe("[V10Lift] Couldn't generate the " + name + ".db!");
                 e.printStackTrace();
                 return;
             }
@@ -50,114 +50,16 @@ public class SBSQLiteDB {
         this.source = new HikariDataSource(config);
     }
 
-    /**
-     * Execute queries like CREATE TABLE, ALTER TABLE, ....
-     *
-     * @param query The query you want to execute
-     *
-     * @return true/false
-     */
-    public boolean execute(String query) {
-        Connection con = null;
-        PreparedStatement statement = null;
-        boolean b;
+    //CREATE TABLE -> execute()
+    //SELECT -> executeQuery()
+    //UPDATE -> executeUpdate()
 
-        try {
-            con = this.source.getConnection();
-            statement = con.prepareStatement(query);
-            b = statement.execute();
-            return b;
-        } catch (SQLException e) {
-            Bukkit.getLogger().severe("[SBDBManager] SQL exception! Please check the stacktrace below.");
-            e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) statement.close();
-                if (con != null) con.close();
-            } catch(SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Execute queries like INSERT, UPDATE, DELETE, ...
-     *
-     * @param query The query you want to execute
-     * @param objects The objects you want to insert, in the right order
-     *
-     * @return true/false
-     */
-    public boolean execute(String query, LinkedHashMap<Integer, Object> objects) {
-        Connection con = null;
-        PreparedStatement statement = null;
-        int b;
-        try {
-            con = this.source.getConnection();
-            statement = con.prepareStatement(query);
-            if (objects != null && !objects.isEmpty()) {
-                for (Map.Entry<Integer, Object> entry : objects.entrySet()) {
-                    statement.setObject(entry.getKey(), entry.getValue());
-                }
-            }
-            b = statement.executeUpdate();
-            if (b >= 0) return true;
-        } catch (SQLException e) {
-            Bukkit.getLogger().severe("[SBDBManager] SQL exception! Please check the stacktrace below.");
-            e.printStackTrace();
-        } finally {
-            try {
-                if (statement != null) statement.close();
-                if (con != null) con.close();
-            } catch(SQLException e) {
-                e.printStackTrace();
-            }
-        }
-        return false;
-    }
-
-    /**
-     * Execute a SELECT query
-     *
-     * @param query The query you want to execute
-     * @param objects The objects you want to insert, in the right order
-     *
-     * @return HashMap<Object, Object> where the first object is the rowname and the second object is the value
-     */
-    public ResultSet execute(String query, HashMap<Integer, Object> objects) {
-        Connection con = null;
-        PreparedStatement statement = null;
-        ResultSet set = null;
-
-        try {
-            con = this.source.getConnection();
-            statement = con.prepareStatement(query);
-            if (objects != null && !objects.isEmpty()) {
-                for (Map.Entry<Integer, Object> entry : objects.entrySet()) {
-                    statement.setObject(entry.getKey(), entry.getValue());
-                }
-            }
-            set = statement.executeQuery();
-            return set;
-        } catch (SQLException e) {
-            Bukkit.getLogger().severe("[SBDBManager] SQL exception! Please check the stacktrace below.");
-            e.printStackTrace();
-        } finally {
-            try {
-                if (set != null) set.close();
-                if (statement != null) statement.close();
-                if (con != null) con.close();
-            } catch(SQLException e) {
-                e.printStackTrace();
-            }
-        }
-
-        return set;
+    public Connection getConnection() throws SQLException {
+        return this.source.getConnection();
     }
 
     public void closeSource() {
-        Bukkit.getLogger().info("[SBDBManager] Closing the database connection!");
+        Bukkit.getLogger().info("[V10Lift] Closing the database connection!");
         this.source.close();
     }
 }

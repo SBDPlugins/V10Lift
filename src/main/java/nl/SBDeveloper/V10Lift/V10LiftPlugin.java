@@ -12,6 +12,8 @@ import nl.SBDeveloper.V10Lift.Utils.UpdateManager;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.sql.SQLException;
+
 public class V10LiftPlugin extends JavaPlugin {
 
     private static V10LiftPlugin instance;
@@ -27,6 +29,12 @@ public class V10LiftPlugin extends JavaPlugin {
         config.loadDefaults();
 
         dbManager = new DBManager(this, "data");
+
+        try {
+            dbManager.load();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
 
         api = new V10LiftAPI();
 
@@ -47,12 +55,13 @@ public class V10LiftPlugin extends JavaPlugin {
             }
         }).check();
 
-        getLogger().info("[V10Lift] Plugin loaded successfully!");
+        Bukkit.getLogger().info("[V10Lift] Plugin loaded successfully!");
     }
 
     @Override
     public void onDisable() {
         instance = null;
+        dbManager.save();
         dbManager.closeConnection();
     }
 
@@ -62,10 +71,6 @@ public class V10LiftPlugin extends JavaPlugin {
 
     public static SBYamlFile getSConfig() {
         return config;
-    }
-
-    public static DBManager getDBManager() {
-        return dbManager;
     }
 
     public static V10LiftAPI getAPI() {
