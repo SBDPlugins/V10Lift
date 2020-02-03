@@ -45,12 +45,28 @@ public class DBManager {
     }
 
     public void save() {
-        Gson gson = new Gson();
-        for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
+        try {
+            Gson gson = new Gson();
 
-            byte[] blob = gson.toJson(entry.getValue()).getBytes();
+            String query0 = "SELECT * FROM lifts";
+            PreparedStatement statement0 = data.getConnection().prepareStatement(query0);
+            ResultSet liftSet = statement0.executeQuery();
+            while (liftSet.next()) {
+                if (!DataManager.containsLift(liftSet.getString("liftName"))) {
+                    Bukkit.getLogger().info("[V10Lift] Removing lift " + liftSet.getString("liftName") + " to data...");
 
-            try {
+                    String query = "DELETE FROM lifts WHERE liftName = ?";
+                    PreparedStatement statement = data.getConnection().prepareStatement(query);
+                    statement.setString(1, liftSet.getString("liftName"));
+                    statement.executeUpdate();
+                }
+            }
+
+            for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
+                byte[] blob = gson.toJson(entry.getValue()).getBytes();
+
+                Bukkit.getLogger().info("[V10Lift] Saving lift " + entry.getKey() + " to data...");
+
                 String query = "INSERT INTO lifts (liftName, liftData) VALUES (?, ?)";
                 PreparedStatement statement = data.getConnection().prepareStatement(query);
                 statement.setString(1, entry.getKey());
@@ -62,10 +78,8 @@ public class DBManager {
                 statement2.setBytes(1, blob);
                 statement2.setString(2, entry.getKey());
                 statement2.executeUpdate();
-
-                Bukkit.getLogger().info("[V10Lift] Saving lift " + entry.getKey() + " to data...");
-            } catch(SQLException ignored) {}
-        }
+            }
+        } catch(SQLException ignored) {}
     }
 
     public void closeConnection() {
