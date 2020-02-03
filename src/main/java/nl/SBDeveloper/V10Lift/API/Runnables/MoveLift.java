@@ -205,6 +205,7 @@ public class MoveLift implements Runnable {
                 state.update(true);
                 if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
+                    DirectionUtil.setBisected(block, lib.getBisected());
                 }
                 lb = lift.getBlocks().first();
                 for (Entity ent : Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ()).getChunk().getEntities()) {
@@ -248,6 +249,7 @@ public class MoveLift implements Runnable {
                 state.update(true);
                 if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
+                    DirectionUtil.setBisected(block, lib.getBisected());
                 }
                 lift.getBlocks().add(lib);
                 if (lib.getSignLines() != null) {
@@ -336,6 +338,7 @@ public class MoveLift implements Runnable {
                 state.update(true);
                 if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
+                    DirectionUtil.setBisected(block, lib.getBisected());
                 }
             }
             veiter = lift.getToMove().iterator();
@@ -359,6 +362,7 @@ public class MoveLift implements Runnable {
                 state.update(true);
                 if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
+                    DirectionUtil.setBisected(block, lib.getBisected());
                 }
                 lift.getBlocks().add(lib);
                 if (lib.getSignLines() != null) {
@@ -410,8 +414,9 @@ public class MoveLift implements Runnable {
                     block = world.getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
                     block.setType(rope.getType());
                     if (XMaterial.isNewVersion()) {
-                        org.bukkit.block.data.type.Ladder ladder = (org.bukkit.block.data.type.Ladder) block.getBlockData();
-                        ladder.setFacing(rope.getFace());
+                        org.bukkit.block.data.Directional data = (org.bukkit.block.data.Directional) block.getBlockData();
+                        data.setFacing(rope.getFace());
+                        block.setBlockData(data);
                     } else {
                         BlockState state = block.getState();
                         org.bukkit.material.Ladder ladder = new org.bukkit.material.Ladder(rope.getType());
@@ -426,8 +431,9 @@ public class MoveLift implements Runnable {
                 block = world.getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
                 block.setType(rope.getType());
                 if (XMaterial.isNewVersion()) {
-                    org.bukkit.block.data.type.Ladder ladder = (org.bukkit.block.data.type.Ladder) block.getBlockData();
-                    ladder.setFacing(rope.getFace());
+                    org.bukkit.block.data.Directional data = (org.bukkit.block.data.Directional) block.getBlockData();
+                    data.setFacing(rope.getFace());
+                    block.setBlockData(data);
                 } else {
                     BlockState state = block.getState();
                     org.bukkit.material.Ladder ladder = new org.bukkit.material.Ladder(rope.getType());

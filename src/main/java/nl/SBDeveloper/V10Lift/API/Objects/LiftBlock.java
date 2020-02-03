@@ -20,6 +20,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
     @Getter private final Material mat;
     @Getter private final byte data;
     @Getter private final BlockFace face;
+    @Getter private final Object bisected;
     @Getter private final String[] signLines;
 
     //Only used for inputs!
@@ -29,6 +30,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
     //Only used for chests
     public Map<String, Object>[] serializedItemStacks = null;
 
+    /* Floor based liftblock, no material */
     public LiftBlock(String world, int x, int y, int z, String floor) {
         this.world = world;
         this.x = x;
@@ -39,20 +41,12 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.face = null;
         this.signLines = null;
         this.floor = floor;
+        this.bisected = null;
     }
 
-    public LiftBlock(String world, int x, int y, int z, Material mat) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.mat = mat;
-        this.face = null;
-        this.data = 0;
-        this.signLines = null;
-        this.floor = null;
-    }
+    /** 1.12 liftblocks **/
 
+    /* 1.12 liftblock (Directional) */
     public LiftBlock(String world, int x, int y, int z, Material mat, byte data) {
         this.world = world;
         this.x = x;
@@ -63,20 +57,10 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.data = data;
         this.signLines = null;
         this.floor = null;
+        this.bisected = null;
     }
 
-    public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face, String[] signLines) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.mat = mat;
-        this.face = face;
-        this.data = 0;
-        this.signLines = signLines;
-        this.floor = null;
-    }
-
+    /* 1.12 liftblock (sign) */
     public LiftBlock(String world, int x, int y, int z, Material mat, byte data, String[] signLines) {
         this.world = world;
         this.x = x;
@@ -87,6 +71,65 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.data = data;
         this.signLines = signLines;
         this.floor = null;
+        this.bisected = null;
+    }
+
+    /** 1.13 liftblocks **/
+
+    /* 1.13 liftblock (no Dir) */
+    public LiftBlock(String world, int x, int y, int z, Material mat) {
+        this.world = world;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.mat = mat;
+        this.face = null;
+        this.data = 0;
+        this.signLines = null;
+        this.floor = null;
+        this.bisected = null;
+    }
+
+    /* 1.13 liftblock (Directional) */
+    public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face) {
+        this.world = world;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.mat = mat;
+        this.face = face;
+        this.data = 0;
+        this.signLines = null;
+        this.floor = null;
+        this.bisected = null;
+    }
+
+    /* 1.13 liftblock (dir & bisec) */
+    public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face, Object bisected) {
+        this.world = world;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.mat = mat;
+        this.face = face;
+        this.data = 0;
+        this.signLines = null;
+        this.floor = null;
+        this.bisected = bisected;
+    }
+
+    /* 1.13 liftblock (sign) */
+    public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face, String[] signLines) {
+        this.world = world;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.mat = mat;
+        this.face = face;
+        this.data = 0;
+        this.signLines = signLines;
+        this.floor = null;
+        this.bisected = null;
     }
 
     @Override

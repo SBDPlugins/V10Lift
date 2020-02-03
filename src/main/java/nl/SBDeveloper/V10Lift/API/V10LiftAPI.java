@@ -173,17 +173,34 @@ public class V10LiftAPI {
     public int addBlockToLift(Set<LiftBlock> blocks, @Nonnull Block block) {
         Material type = block.getType();
         LiftBlock lb;
-        if (type.toString().contains("SIGN")) {
-            //SIGN
-            if (XMaterial.isNewVersion()) {
+        if (XMaterial.isNewVersion()) {
+            Class<?> biClass;
+            try {
+                biClass = Class.forName("org.bukkit.block.data.Bisected");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return -1;
+            }
+
+            if (type.toString().contains("SIGN")) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.13 & is sign");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
+            } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional && block.getBlockData().getClass().isInstance(biClass)) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.13 & bisected");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), DirectionUtil.getBisected(block));
+            } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.13");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block));
             } else {
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());
+                Bukkit.getLogger().info("Block not instanceof Dir 1.13");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
             }
         } else {
-            if (XMaterial.isNewVersion()) {
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
+            if (type.toString().contains("SIGN")) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.12 & is sign");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());
             } else {
+                Bukkit.getLogger().info("Block no sign 1.12");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData());
             }
         }
@@ -218,17 +235,34 @@ public class V10LiftAPI {
         Lift lift = DataManager.getLift(liftName);
         Material type = block.getType();
         LiftBlock lb;
-        if (type.toString().contains("SIGN")) {
-            //SIGN
-            if (XMaterial.isNewVersion()) {
+        if (XMaterial.isNewVersion()) {
+            Class<?> biClass;
+            try {
+                biClass = Class.forName("org.bukkit.block.data.Bisected");
+            } catch (ClassNotFoundException e) {
+                e.printStackTrace();
+                return -1;
+            }
+
+            if (type.toString().contains("SIGN")) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.13 & is sign");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
+            } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional && block.getBlockData().getClass().isInstance(biClass)) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.13 & bisected");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), DirectionUtil.getBisected(block));
+            } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.13");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block));
             } else {
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());
+                Bukkit.getLogger().info("Block not instanceof Dir 1.13");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
             }
         } else {
-            if (XMaterial.isNewVersion()) {
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
+            if (type.toString().contains("SIGN")) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.12 & is sign");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());
             } else {
+                Bukkit.getLogger().info("Block no sign 1.12");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData());
             }
         }
@@ -263,17 +297,26 @@ public class V10LiftAPI {
         Material type = block.getType();
         if (getFBM().isForbidden(type)) return -2;
         LiftBlock lb;
-        if (type.toString().contains("SIGN")) {
-            //SIGN
-            if (XMaterial.isNewVersion()) {
+        if (XMaterial.isNewVersion()) {
+            if (type.toString().contains("SIGN")) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.13 & is sign");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
+            } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional && block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.13 & bisected");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), DirectionUtil.getBisected(block));
+            } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.13");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block));
             } else {
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());
+                Bukkit.getLogger().info("Block not instanceof Dir 1.13");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
             }
         } else {
-            if (XMaterial.isNewVersion()) {
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
+            if (type.toString().contains("SIGN")) {
+                Bukkit.getLogger().info("Block instanceof Dir 1.12 & is sign");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData(), ((Sign) block.getState()).getLines());
             } else {
+                Bukkit.getLogger().info("Block no sign 1.12");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, block.getState().getRawData());
             }
         }
