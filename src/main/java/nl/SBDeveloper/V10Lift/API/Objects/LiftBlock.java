@@ -20,7 +20,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
     @Getter private final Material mat;
     @Getter private final byte data;
     @Getter private final BlockFace face;
-    @Getter private final Object bisected;
+    @Getter private final String bisected;
     @Getter private final String[] signLines;
 
     //Only used for inputs!
@@ -105,7 +105,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
     }
 
     /* 1.13 liftblock (dir & bisec) */
-    public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face, Object bisected) {
+    public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face, String bisected) {
         this.world = world;
         this.x = x;
         this.y = y;

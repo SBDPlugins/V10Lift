@@ -30,19 +30,27 @@ public class DirectionUtil {
     }
 
     @Nullable
-    public static Object getBisected(@Nonnull Block block) {
+    public static String getBisected(@Nonnull Block block) {
         if (block.getBlockData() instanceof Bisected) {
             Bisected bis = (Bisected) block.getBlockData();
-            return bis.getHalf();
+            return bis.getHalf().toString();
         }
         return null;
     }
 
-    public static void setBisected(@Nonnull Block block, Object bisected) {
-        if (bisected != null && block.getBlockData() instanceof Bisected && bisected instanceof Bisected.Half) {
+    public static void setBisected(@Nonnull Block block, String bisected) {
+        if (bisected != null && block.getBlockData() instanceof Bisected) {
+
+            Bisected.Half half;
+            try {
+                half = Bisected.Half.valueOf(bisected);
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+
             BlockData bd = block.getBlockData();
             Bisected bis = (Bisected) bd;
-            bis.setHalf((Bisected.Half) bisected);
+            bis.setHalf(half);
             block.setBlockData(bd);
         }
     }
