@@ -209,7 +209,7 @@ public class MoveLift implements Runnable {
                 }
                 lb = lift.getBlocks().first();
                 for (Entity ent : Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ()).getChunk().getEntities()) {
-                    v10ent = new V10Entity(ent, null, 0);
+                    v10ent = new V10Entity(ent.getUniqueId(), null, 0, 0, 0, 0);
                     if (lift.getToMove().contains(v10ent)) continue;
                     loc = ent.getLocation();
                     y = loc.getBlockY();

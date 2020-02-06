@@ -1,5 +1,6 @@
 package nl.SBDeveloper.V10Lift;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import nl.SBDeveloper.V10Lift.API.V10LiftAPI;
 import nl.SBDeveloper.V10Lift.Commands.V10LiftCommand;
 import nl.SBDeveloper.V10Lift.Listeners.BlockBreakListener;
@@ -28,7 +29,7 @@ public class V10LiftPlugin extends JavaPlugin {
         instance = this;
 
         //Initialize the util
-        new SBUtilities(this, "[V10Lift]");
+        new SBUtilities(this, "V10Lift");
 
         config = new YamlFile("config");
         config.loadDefaults();
@@ -36,7 +37,7 @@ public class V10LiftPlugin extends JavaPlugin {
         dbManager = new DBManager("data");
         try {
             dbManager.load();
-        } catch (SQLException e) {
+        } catch (SQLException | JsonProcessingException e) {
             e.printStackTrace();
         }
 
@@ -65,7 +66,11 @@ public class V10LiftPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         V10LiftPlugin.getDBManager().removeFromData();
-        dbManager.save();
+        try {
+            dbManager.save();
+        } catch (JsonProcessingException e) {
+            e.printStackTrace();
+        }
         dbManager.closeConnection();
 
         instance = null;

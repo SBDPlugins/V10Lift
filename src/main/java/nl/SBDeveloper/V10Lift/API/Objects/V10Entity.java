@@ -2,6 +2,7 @@ package nl.SBDeveloper.V10Lift.API.Objects;
 
 import lombok.Getter;
 import lombok.Setter;
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
@@ -10,52 +11,50 @@ import java.util.UUID;
 
 @Getter
 public class V10Entity {
-    private final Entity entity;
-    private final Location loc;
+    private final UUID entityUUID;
+    private String world;
+    private int locX;
+    private int locY;
+    private int locZ;
     private final int y;
     @Setter private short step;
 
-    public V10Entity(Entity entity, Location loc, int y) {
-        this.entity = entity;
-        this.loc = loc;
-        this.y = y;
+    public V10Entity(UUID entityUUID, String worldName, int x, int y, int z, int cury) {
+        this.entityUUID = entityUUID;
+        this.world = worldName;
+        this.locX = x;
+        this.locY = y;
+        this.locZ = z;
+        this.y = cury;
         this.step = 0;
     }
 
     public void moveUp() {
+        if (entityUUID == null) return;
+        Entity entity = Bukkit.getEntity(entityUUID);
         if (entity == null || entity.isDead()) return;
-        loc.setY(y + step);
-        entity.teleport(loc);
+        locY = y + step;
+        entity.teleport(new Location(Bukkit.getWorld(world), locX, locY, locZ));
     }
 
     public void moveDown() {
+        if (entityUUID == null) return;
+        Entity entity = Bukkit.getEntity(entityUUID);
         if (entity == null || entity.isDead()) return;
-        loc.setY(y - step);
-        entity.teleport(loc);
+        locY = y - step;
+        entity.teleport(new Location(Bukkit.getWorld(world), locX, locY, locZ));
     }
 
     public boolean equals(Object obj) {
         if (this == obj) return true;
         if (obj == null) return false;
-        UUID uuid;
         if (obj instanceof V10Entity) {
-            Entity ent = ((V10Entity) obj).getEntity();
-            if (ent == null || ent.isDead()) {
-                return getEntity() == null || getEntity().isDead();
-            }
-            uuid = ent.getUniqueId();
+            return ((V10Entity) obj).getEntityUUID().equals(getEntityUUID());
         } else if (obj instanceof Entity) {
-            Entity ent = (Entity) obj;
-            if (ent.isDead()) {
-                return getEntity() == null || getEntity().isDead();
-            }
-            uuid = ent.getUniqueId();
+            return ((Entity) obj).getUniqueId().equals(getEntityUUID());
         } else {
             return false;
         }
-
-        if (getEntity() == null || getEntity().isDead()) return false;
-        return uuid == getEntity().getUniqueId();
     }
 
     public String toString() {

@@ -1,5 +1,6 @@
 package nl.SBDeveloper.V10Lift.Commands;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
 import nl.SBDeveloper.V10Lift.API.Objects.Floor;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
@@ -250,10 +251,10 @@ public class V10LiftCommand implements CommandExecutor {
 
         DataManager.clearMovingTasks();
         V10LiftPlugin.getSConfig().reloadConfig();
-        V10LiftPlugin.getDBManager().save();
         try {
+            V10LiftPlugin.getDBManager().save();
             V10LiftPlugin.getDBManager().load();
-        } catch (SQLException e) {
+        } catch (SQLException | JsonProcessingException e) {
             e.printStackTrace();
         }
 
