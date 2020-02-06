@@ -60,6 +60,10 @@
             <id>spigot-repo</id>
             <url>https://hub.spigotmc.org/nexus/content/repositories/snapshots/</url>
         </repository>
+        <repository>
+            <id>iobyte-repo</id>
+            <url>https://nexus.iobyte.nl/repository/maven-public/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -89,6 +93,12 @@
             <artifactId>lombok</artifactId>
             <version>1.18.10</version>
             <scope>provided</scope>
+        </dependency>
+        <dependency>
+            <groupId>nl.SBDevelopment</groupId>
+            <artifactId>SBUtilities</artifactId>
+            <version>1.0</version>
+            <classifier>SBUtilities</classifier>
         </dependency>
     </dependencies>
 

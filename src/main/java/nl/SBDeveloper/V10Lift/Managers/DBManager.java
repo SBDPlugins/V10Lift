@@ -3,23 +3,22 @@ package nl.SBDeveloper.V10Lift.Managers;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
-import nl.SBDeveloper.V10Lift.Utils.SBSQLiteDB;
+import nl.SBDevelopment.SBUtilities.Data.SQLiteDB;
 import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.util.*;
+import java.util.Map;
 
 public class DBManager {
 
-    private static SBSQLiteDB data;
+    private static SQLiteDB data;
     private static Connection con;
 
-    public DBManager(JavaPlugin plugin, String name) {
-        data = new SBSQLiteDB(plugin, name);
+    public DBManager(String name) {
+        data = new SQLiteDB(name);
 
         try {
             con = data.getConnection();
@@ -95,7 +94,33 @@ public class DBManager {
         Gson gson = new Gson();
 
         for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
-            byte[] blob = gson.toJson(entry.getValue()).getBytes();
+
+
+            //Building JSON for debug purposes.
+            String json = "{" +
+                    "blocks: " + gson.toJson(entry.getValue().getBlocks()) +
+                    "counter: " + gson.toJson(entry.getValue().getCounter()) +
+                    "doorcloser: " + gson.toJson(entry.getValue().getDoorCloser()) +
+                    "dooropen:" + gson.toJson(entry.getValue().getDoorOpen()) +
+                    "floors: " + gson.toJson(entry.getValue().getFloors()) +
+                    "inputs: " + gson.toJson(entry.getValue().getInputs()) +
+                    "offlineinputs: " + gson.toJson(entry.getValue().getOfflineInputs()) +
+                    "owners: " + gson.toJson(entry.getValue().getOwners()) +
+                    "queue: " + gson.toJson(entry.getValue().getQueue()) +
+                    "ropes: " + gson.toJson(entry.getValue().getRopes()) +
+                    "signs: " + gson.toJson(entry.getValue().getSigns()) +
+                    "signtext: " + gson.toJson(entry.getValue().getSignText()) +
+                    "speed: " + gson.toJson(entry.getValue().getSpeed()) +
+                    "tomove: " + gson.toJson(entry.getValue().getToMove()) +
+                    "worldname: " + gson.toJson(entry.getValue().getWorldName()) +
+                    "y: " + gson.toJson(entry.getValue().getY()) +
+                    "}";
+
+            Bukkit.getLogger().info(entry.getKey() + " : " + json);
+
+            Bukkit.getLogger().info(gson.toJson(entry.getValue()));
+
+            /*byte[] blob = gson.toJson(entry.getValue()).getBytes();
 
             Bukkit.getLogger().info("[V10Lift] Saving lift " + entry.getKey() + " to data...");
 
@@ -115,7 +140,7 @@ public class DBManager {
                 statement2.executeUpdate();
             } catch (SQLException e) {
                 e.printStackTrace();
-            }
+            }*/
         }
     }
 

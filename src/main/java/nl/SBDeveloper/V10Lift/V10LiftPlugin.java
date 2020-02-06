@@ -7,8 +7,9 @@ import nl.SBDeveloper.V10Lift.Listeners.EntityDamageListener;
 import nl.SBDeveloper.V10Lift.Listeners.PlayerInteractListener;
 import nl.SBDeveloper.V10Lift.Listeners.SignChangeListener;
 import nl.SBDeveloper.V10Lift.Managers.DBManager;
-import nl.SBDeveloper.V10Lift.Utils.SBYamlFile;
-import nl.SBDeveloper.V10Lift.Utils.UpdateManager;
+import nl.SBDevelopment.SBUtilities.Data.YamlFile;
+import nl.SBDevelopment.SBUtilities.PrivateManagers.UpdateManager;
+import nl.SBDevelopment.SBUtilities.SBUtilities;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -18,7 +19,7 @@ import java.util.Objects;
 public class V10LiftPlugin extends JavaPlugin {
 
     private static V10LiftPlugin instance;
-    private static SBYamlFile config;
+    private static YamlFile config;
     private static DBManager dbManager;
     private static V10LiftAPI api;
 
@@ -26,11 +27,13 @@ public class V10LiftPlugin extends JavaPlugin {
     public void onEnable() {
         instance = this;
 
-        config = new SBYamlFile(this, "config");
+        //Initialize the util
+        new SBUtilities(this, "[V10Lift]");
+
+        config = new YamlFile("config");
         config.loadDefaults();
 
-        dbManager = new DBManager(this, "data");
-
+        dbManager = new DBManager("data");
         try {
             dbManager.load();
         } catch (SQLException e) {
@@ -72,7 +75,7 @@ public class V10LiftPlugin extends JavaPlugin {
         return instance;
     }
 
-    public static SBYamlFile getSConfig() {
+    public static YamlFile getSConfig() {
         return config;
     }
 
