@@ -8,7 +8,7 @@
     <artifactId>V10Lift2</artifactId>
     <packaging>jar</packaging>
     <name>V10Lift</name>
-    <version>0.5</version>
+    <version>0.5.1</version>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
