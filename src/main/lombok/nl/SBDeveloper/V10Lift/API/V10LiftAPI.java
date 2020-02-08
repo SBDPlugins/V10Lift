@@ -174,18 +174,10 @@ public class V10LiftAPI {
         Material type = block.getType();
         LiftBlock lb;
         if (XMaterial.isNewVersion()) {
-            Class<?> biClass;
-            try {
-                biClass = Class.forName("org.bukkit.block.data.Bisected");
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                return -1;
-            }
-
             if (type.toString().contains("SIGN")) {
                 Bukkit.getLogger().info("Block instanceof Dir 1.13 & is sign");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
-            } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional && block.getBlockData().getClass().isInstance(biClass)) {
+            } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional && block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
                 Bukkit.getLogger().info("Block instanceof Dir 1.13 & bisected");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), DirectionUtil.getBisected(block));
             } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
@@ -236,18 +228,10 @@ public class V10LiftAPI {
         Material type = block.getType();
         LiftBlock lb;
         if (XMaterial.isNewVersion()) {
-            Class<?> biClass;
-            try {
-                biClass = Class.forName("org.bukkit.block.data.Bisected");
-            } catch (ClassNotFoundException e) {
-                e.printStackTrace();
-                return -1;
-            }
-
             if (type.toString().contains("SIGN")) {
                 Bukkit.getLogger().info("Block instanceof Dir 1.13 & is sign");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
-            } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional && block.getBlockData().getClass().isInstance(biClass)) {
+            } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional && block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
                 Bukkit.getLogger().info("Block instanceof Dir 1.13 & bisected");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), DirectionUtil.getBisected(block));
             } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
