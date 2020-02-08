@@ -7,7 +7,6 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
-import java.util.Objects;
 import java.util.UUID;
 
 @Getter @NoArgsConstructor
@@ -49,20 +48,33 @@ public class V10Entity {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        V10Entity v10Entity = (V10Entity) o;
-        return locX == v10Entity.locX &&
-                locY == v10Entity.locY &&
-                locZ == v10Entity.locZ &&
-                y == v10Entity.y &&
-                step == v10Entity.step &&
-                Objects.equals(entityUUID, v10Entity.entityUUID) &&
-                Objects.equals(world, v10Entity.world);
+        if (o == null) return false;
+        UUID uuid;
+        if (o instanceof V10Entity) {
+            Entity ent = Bukkit.getEntity(((V10Entity) o).getEntityUUID());
+            if (ent == null || ent.isDead()) {
+                Entity e = Bukkit.getEntity(entityUUID);
+                return e == null || e.isDead();
+            }
+            uuid = ent.getUniqueId();
+        } else if (o instanceof Entity) {
+            Entity ent = (Entity) o;
+            if (ent.isDead()) {
+                Entity e = Bukkit.getEntity(entityUUID);
+                return e == null || e.isDead();
+            }
+            uuid = ((Entity) o).getUniqueId();
+        } else
+            return false;
+        Entity e = Bukkit.getEntity(entityUUID);
+        if (e == null || e.isDead())
+            return false;
+        return uuid == e.getUniqueId();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(entityUUID, world, locX, locY, locZ, y, step);
+        return 31 + ((entityUUID == null) ? 0 : entityUUID.hashCode());
     }
 
     @Override

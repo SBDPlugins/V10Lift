@@ -39,15 +39,19 @@ public class LiftRope {
                 minY == liftRope.minY &&
                 maxY == liftRope.maxY &&
                 z == liftRope.z &&
-                currently == liftRope.currently &&
-                type == liftRope.type &&
-                face == liftRope.face &&
                 Objects.equals(world, liftRope.world);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(type, face, world, x, minY, maxY, z, currently);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + world.hashCode();
+        result = prime * result + x;
+        result = prime * result + minY;
+        result = prime * result + maxY;
+        result = prime * result + z;
+        return result;
     }
 
     @Override

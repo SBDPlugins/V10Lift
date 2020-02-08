@@ -2,8 +2,6 @@ package nl.SBDeveloper.V10Lift.Utils;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Bisected;
-import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Directional;
 
 import javax.annotation.Nonnull;
@@ -13,6 +11,7 @@ public class DirectionUtil {
 
     @Nullable
     public static BlockFace getDirection(@Nonnull Block block) {
+        if (!XMaterial.isNewVersion()) return null;
         if (block.getBlockData() instanceof Directional) {
             Directional dir = (Directional) block.getBlockData();
             return dir.getFacing();
@@ -21,8 +20,9 @@ public class DirectionUtil {
     }
 
     public static void setDirection(@Nonnull Block block, BlockFace blockFace) {
+        if (!XMaterial.isNewVersion()) return;
         if (blockFace != null && block.getBlockData() instanceof Directional) {
-            BlockData bd = block.getBlockData();
+            org.bukkit.block.data.BlockData bd = block.getBlockData();
             Directional dir = (Directional) bd;
             dir.setFacing(blockFace);
             block.setBlockData(bd);
@@ -31,25 +31,27 @@ public class DirectionUtil {
 
     @Nullable
     public static String getBisected(@Nonnull Block block) {
-        if (block.getBlockData() instanceof Bisected) {
-            Bisected bis = (Bisected) block.getBlockData();
+        if (!XMaterial.isNewVersion()) return null;
+        if (block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
+            org.bukkit.block.data.Bisected bis = (org.bukkit.block.data.Bisected) block.getBlockData();
             return bis.getHalf().toString();
         }
         return null;
     }
 
     public static void setBisected(@Nonnull Block block, String bisected) {
-        if (bisected != null && block.getBlockData() instanceof Bisected) {
+        if (!XMaterial.isNewVersion()) return;
+        if (bisected != null && block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
 
-            Bisected.Half half;
+            org.bukkit.block.data.Bisected.Half half;
             try {
-                half = Bisected.Half.valueOf(bisected);
+                half = org.bukkit.block.data.Bisected.Half.valueOf(bisected);
             } catch (IllegalArgumentException e) {
                 return;
             }
 
-            BlockData bd = block.getBlockData();
-            Bisected bis = (Bisected) bd;
+            org.bukkit.block.data.BlockData bd = block.getBlockData();
+            org.bukkit.block.data.Bisected bis = (org.bukkit.block.data.Bisected) bd;
             bis.setHalf(half);
             block.setBlockData(bd);
         }

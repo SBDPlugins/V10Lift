@@ -46,38 +46,6 @@ public class Lift {
     }
 
     @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        Lift lift = (Lift) o;
-        return y == lift.y &&
-                speed == lift.speed &&
-                realistic == lift.realistic &&
-                offline == lift.offline &&
-                sound == lift.sound &&
-                defective == lift.defective &&
-                counter == lift.counter &&
-                Objects.equals(worldName, lift.worldName) &&
-                Objects.equals(owners, lift.owners) &&
-                Objects.equals(blocks, lift.blocks) &&
-                Objects.equals(floors, lift.floors) &&
-                Objects.equals(signs, lift.signs) &&
-                Objects.equals(inputs, lift.inputs) &&
-                Objects.equals(offlineInputs, lift.offlineInputs) &&
-                Objects.equals(queue, lift.queue) &&
-                Objects.equals(ropes, lift.ropes) &&
-                Objects.equals(toMove, lift.toMove) &&
-                Objects.equals(signText, lift.signText) &&
-                Objects.equals(doorOpen, lift.doorOpen) &&
-                Objects.equals(doorCloser, lift.doorCloser);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(worldName, y, owners, blocks, floors, signs, inputs, offlineInputs, queue, ropes, toMove, speed, realistic, offline, sound, defective, signText, counter, doorOpen, doorCloser);
-    }
-
-    @Override
     public String toString() {
         return "Lift{" +
                 "worldName='" + worldName + '\'' +

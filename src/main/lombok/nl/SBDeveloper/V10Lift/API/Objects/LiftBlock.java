@@ -31,7 +31,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
     @Getter @Setter private boolean active = false;
 
     //Only used for chests
-    public Map<String, Object>[] serializedItemStacks = null;
+    public Map[] serializedItemStacks = null;
 
     /* Floor based liftblock, no material */
     public LiftBlock(String world, int x, int y, int z, String floor) {
@@ -147,27 +147,29 @@ public class LiftBlock implements Comparable<LiftBlock> {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LiftBlock liftBlock = (LiftBlock) o;
-        return x == liftBlock.x &&
-                y == liftBlock.y &&
-                z == liftBlock.z &&
-                data == liftBlock.data &&
-                active == liftBlock.active &&
-                Objects.equals(world, liftBlock.world) &&
-                mat == liftBlock.mat &&
-                face == liftBlock.face &&
-                Objects.equals(bisected, liftBlock.bisected) &&
-                Arrays.equals(signLines, liftBlock.signLines) &&
-                Objects.equals(floor, liftBlock.floor) &&
-                Arrays.equals(serializedItemStacks, liftBlock.serializedItemStacks);
+        if (!(o instanceof LiftBlock)) {
+            if (!(o instanceof LiftSign)) return false;
+            LiftSign other = (LiftSign) o;
+            return world.equals(other.getWorld()) &&
+                    x == other.getX() &&
+                    y == other.getY() &&
+                    z == other.getZ();
+        }
+        LiftBlock other = (LiftBlock) o;
+        return world.equals(other.world) &&
+                x == other.x &&
+                y == other.y &&
+                z == other.z;
     }
 
     @Override
     public int hashCode() {
-        int result = Objects.hash(world, x, y, z, mat, data, face, bisected, floor, active);
-        result = 31 * result + Arrays.hashCode(signLines);
-        result = 31 * result + Arrays.hashCode(serializedItemStacks);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((world == null) ? 0 : world.hashCode());
+        result = prime * result + x;
+        result = prime * result + y;
+        result = prime * result + z;
         return result;
     }
 

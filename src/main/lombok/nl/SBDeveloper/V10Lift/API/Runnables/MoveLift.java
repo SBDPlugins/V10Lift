@@ -169,7 +169,6 @@ public class MoveLift implements Runnable {
                 }
             }
 
-            boolean wc = false;
             for (LiftBlock lib : lift.getBlocks().descendingSet()) {
                 world = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift");
                 block = world.getBlockAt(lib.getX(), lib.getY(), lib.getZ());

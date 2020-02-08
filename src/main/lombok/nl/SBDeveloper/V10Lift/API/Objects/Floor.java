@@ -6,7 +6,6 @@ import lombok.Setter;
 
 import java.util.ArrayList;
 import java.util.HashSet;
-import java.util.Objects;
 import java.util.UUID;
 
 @Getter @Setter @NoArgsConstructor
@@ -26,15 +25,20 @@ public class Floor {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
         Floor floor = (Floor) o;
-        return y == floor.y &&
-                Objects.equals(world, floor.world) &&
-                Objects.equals(doorBlocks, floor.doorBlocks) &&
-                Objects.equals(whitelist, floor.whitelist);
+        if (world == null) {
+            if (floor.getWorld() != null) return false;
+        } else if (!world.equals(floor.getWorld())) return false;
+
+        return y == floor.getY();
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(world, y, doorBlocks, whitelist);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((world == null) ? 0 : world.hashCode());
+        result = prime * result + y;
+        return result;
     }
 
     @Override

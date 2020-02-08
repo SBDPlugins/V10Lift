@@ -28,20 +28,31 @@ public class LiftSign {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (o == null || getClass() != o.getClass()) return false;
-        LiftSign liftSign = (LiftSign) o;
-        return x == liftSign.x &&
-                z == liftSign.z &&
-                y == liftSign.y &&
-                type == liftSign.type &&
-                state == liftSign.state &&
-                Objects.equals(world, liftSign.world) &&
-                Objects.equals(oldText, liftSign.oldText);
+        if (!(o instanceof LiftSign)) {
+            if (!(o instanceof LiftBlock))
+                return false;
+            LiftBlock other = (LiftBlock) o;
+            return world.equals(other.getWorld()) &&
+                    x == other.getX() &&
+                    y == other.getY() &&
+                    z == other.getZ();
+        }
+        LiftSign other = (LiftSign) o;
+        return world.equals(other.world) &&
+                x == other.x &&
+                y == other.y &&
+                z == other.z;
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(world, x, z, y, oldText, type, state);
+        final int prime = 31;
+        int result = 1;
+        result = prime * result + ((world == null) ? 0 : world.hashCode());
+        result = prime * result + x;
+        result = prime * result + y;
+        result = prime * result + z;
+        return result;
     }
 
     @Override
