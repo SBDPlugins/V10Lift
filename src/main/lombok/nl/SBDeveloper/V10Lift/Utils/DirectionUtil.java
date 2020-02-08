@@ -2,7 +2,6 @@ package nl.SBDeveloper.V10Lift.Utils;
 
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
-import org.bukkit.block.data.Directional;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
@@ -12,8 +11,8 @@ public class DirectionUtil {
     @Nullable
     public static BlockFace getDirection(@Nonnull Block block) {
         if (!XMaterial.isNewVersion()) return null;
-        if (block.getBlockData() instanceof Directional) {
-            Directional dir = (Directional) block.getBlockData();
+        if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
+            org.bukkit.block.data.Directional dir = (org.bukkit.block.data.Directional) block.getBlockData();
             return dir.getFacing();
         }
         return null;
@@ -21,9 +20,9 @@ public class DirectionUtil {
 
     public static void setDirection(@Nonnull Block block, BlockFace blockFace) {
         if (!XMaterial.isNewVersion()) return;
-        if (blockFace != null && block.getBlockData() instanceof Directional) {
+        if (blockFace != null && block.getBlockData() instanceof org.bukkit.block.data.Directional) {
             org.bukkit.block.data.BlockData bd = block.getBlockData();
-            Directional dir = (Directional) bd;
+            org.bukkit.block.data.Directional dir = (org.bukkit.block.data.Directional) bd;
             dir.setFacing(blockFace);
             block.setBlockData(bd);
         }

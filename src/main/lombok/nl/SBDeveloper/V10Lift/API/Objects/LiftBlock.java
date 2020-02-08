@@ -9,7 +9,6 @@ import org.bukkit.block.BlockFace;
 import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Map;
-import java.util.Objects;
 
 @NoArgsConstructor
 public class LiftBlock implements Comparable<LiftBlock> {
@@ -31,7 +30,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
     @Getter @Setter private boolean active = false;
 
     //Only used for chests
-    public Map[] serializedItemStacks = null;
+    public Map<String, Object>[] serializedItemStacks = null;
 
     /* Floor based liftblock, no material */
     public LiftBlock(String world, int x, int y, int z, String floor) {

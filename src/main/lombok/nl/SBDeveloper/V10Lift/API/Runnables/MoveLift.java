@@ -413,9 +413,7 @@ public class MoveLift implements Runnable {
                     block = world.getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
                     block.setType(rope.getType());
                     if (XMaterial.isNewVersion()) {
-                        org.bukkit.block.data.Directional data = (org.bukkit.block.data.Directional) block.getBlockData();
-                        data.setFacing(rope.getFace());
-                        block.setBlockData(data);
+                        DirectionUtil.setDirection(block, rope.getFace());
                     } else {
                         BlockState state = block.getState();
                         org.bukkit.material.Ladder ladder = new org.bukkit.material.Ladder(rope.getType());
@@ -430,9 +428,7 @@ public class MoveLift implements Runnable {
                 block = world.getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
                 block.setType(rope.getType());
                 if (XMaterial.isNewVersion()) {
-                    org.bukkit.block.data.Directional data = (org.bukkit.block.data.Directional) block.getBlockData();
-                    data.setFacing(rope.getFace());
-                    block.setBlockData(data);
+                    DirectionUtil.setDirection(block, rope.getFace());
                 } else {
                     BlockState state = block.getState();
                     org.bukkit.material.Ladder ladder = new org.bukkit.material.Ladder(rope.getType());

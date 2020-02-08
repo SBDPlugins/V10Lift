@@ -857,9 +857,7 @@ public class V10LiftAPI {
 
         BlockFace face;
         if (XMaterial.isNewVersion()) {
-            org.bukkit.block.data.type.Ladder ladder = (org.bukkit.block.data.type.Ladder) block.getBlockData();
-            Bukkit.getLogger().info(ladder.getFacing().toString());
-            face = ladder.getFacing();
+            face = DirectionUtil.getDirection(block);
         } else {
             BlockState state = block.getState();
             org.bukkit.material.Ladder ladder = (org.bukkit.material.Ladder) state.getData();
