@@ -7,8 +7,9 @@ import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 
 import javax.annotation.Nonnull;
-import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.Map;
+import java.util.Objects;
 
 @NoArgsConstructor
 public class LiftBlock implements Comparable<LiftBlock> {
@@ -143,43 +144,48 @@ public class LiftBlock implements Comparable<LiftBlock> {
         return ret;
     }
 
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (!(obj instanceof LiftBlock)) {
-            if (!(obj instanceof LiftSign)) return false;
-            LiftSign other = (LiftSign) obj;
-            return getWorld().equals(other.getWorld()) && getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
-        }
-        LiftBlock other = (LiftBlock) obj;
-        return getWorld().equals(other.getWorld()) && getX() == other.getX() && getY() == other.getY() && getZ() == other.getZ();
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        LiftBlock liftBlock = (LiftBlock) o;
+        return x == liftBlock.x &&
+                y == liftBlock.y &&
+                z == liftBlock.z &&
+                data == liftBlock.data &&
+                active == liftBlock.active &&
+                Objects.equals(world, liftBlock.world) &&
+                mat == liftBlock.mat &&
+                face == liftBlock.face &&
+                Objects.equals(bisected, liftBlock.bisected) &&
+                Arrays.equals(signLines, liftBlock.signLines) &&
+                Objects.equals(floor, liftBlock.floor) &&
+                Arrays.equals(serializedItemStacks, liftBlock.serializedItemStacks);
     }
 
+    @Override
+    public int hashCode() {
+        int result = Objects.hash(world, x, y, z, mat, data, face, bisected, floor, active);
+        result = 31 * result + Arrays.hashCode(signLines);
+        result = 31 * result + Arrays.hashCode(serializedItemStacks);
+        return result;
+    }
+
+    @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-
-        result.append(this.getClass().getName());
-        result.append(" Object {");
-        result.append(newLine);
-
-        //determine fields declared in this class only (no fields of superclass)
-        Field[] fields = this.getClass().getDeclaredFields();
-
-        //print field names paired with their values
-        for (Field field: fields) {
-            result.append("  ");
-            try {
-                result.append(field.getName());
-                result.append(": ");
-                //requires access to private field:
-                result.append(field.get(this));
-            } catch (IllegalAccessException ex) {
-                ex.printStackTrace();
-            }
-            result.append(newLine);
-        }
-        result.append("}");
-
-        return result.toString();
+        return "LiftBlock{" +
+                "world='" + world + '\'' +
+                ", x=" + x +
+                ", y=" + y +
+                ", z=" + z +
+                ", mat=" + mat +
+                ", data=" + data +
+                ", face=" + face +
+                ", bisected='" + bisected + '\'' +
+                ", signLines=" + Arrays.toString(signLines) +
+                ", floor='" + floor + '\'' +
+                ", active=" + active +
+                ", serializedItemStacks=" + Arrays.toString(serializedItemStacks) +
+                '}';
     }
 }

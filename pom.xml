@@ -60,6 +60,30 @@
                     <compilerArgument>-parameters</compilerArgument>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>org.projectlombok</groupId>
+                <artifactId>lombok-maven-plugin</artifactId>
+                <version>1.18.10.0</version>
+                <executions>
+                    <execution>
+                        <phase>generate-sources</phase>
+                        <goals>
+                            <goal>delombok</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-javadoc-plugin</artifactId>
+                <version>3.1.1</version>
+                <configuration>
+                    <sourceFileIncludes>
+                        <include>nl/SBDeveloper/V10Lift/API/*.java</include>
+                        <include>nl/SBDeveloper/V10Lift/API/Objects/*.java</include>
+                    </sourceFileIncludes>
+                </configuration>
+            </plugin>
         </plugins>
     </build>
 

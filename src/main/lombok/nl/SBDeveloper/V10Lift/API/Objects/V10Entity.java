@@ -8,6 +8,7 @@ import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 import java.lang.reflect.Field;
+import java.util.Objects;
 import java.util.UUID;
 
 @Getter @NoArgsConstructor
@@ -46,44 +47,35 @@ public class V10Entity {
         entity.teleport(new Location(Bukkit.getWorld(world), locX, locY, locZ));
     }
 
-    public boolean equals(Object obj) {
-        if (this == obj) return true;
-        if (obj == null) return false;
-        if (obj instanceof V10Entity) {
-            return ((V10Entity) obj).getEntityUUID().equals(getEntityUUID());
-        } else if (obj instanceof Entity) {
-            return ((Entity) obj).getUniqueId().equals(getEntityUUID());
-        } else {
-            return false;
-        }
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        V10Entity v10Entity = (V10Entity) o;
+        return locX == v10Entity.locX &&
+                locY == v10Entity.locY &&
+                locZ == v10Entity.locZ &&
+                y == v10Entity.y &&
+                step == v10Entity.step &&
+                Objects.equals(entityUUID, v10Entity.entityUUID) &&
+                Objects.equals(world, v10Entity.world);
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(entityUUID, world, locX, locY, locZ, y, step);
+    }
+
+    @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        String newLine = System.getProperty("line.separator");
-
-        result.append(this.getClass().getName());
-        result.append(" Object {");
-        result.append(newLine);
-
-        //determine fields declared in this class only (no fields of superclass)
-        Field[] fields = this.getClass().getDeclaredFields();
-
-        //print field names paired with their values
-        for (Field field: fields) {
-            result.append("  ");
-            try {
-                result.append(field.getName());
-                result.append(": ");
-                //requires access to private field:
-                result.append(field.get(this));
-            } catch (IllegalAccessException ex) {
-                ex.printStackTrace();
-            }
-            result.append(newLine);
-        }
-        result.append("}");
-
-        return result.toString();
+        return "V10Entity{" +
+                "entityUUID=" + entityUUID +
+                ", world='" + world + '\'' +
+                ", locX=" + locX +
+                ", locY=" + locY +
+                ", locZ=" + locZ +
+                ", y=" + y +
+                ", step=" + step +
+                '}';
     }
 }
