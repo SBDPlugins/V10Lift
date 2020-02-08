@@ -1,6 +1,7 @@
 package nl.SBDeveloper.V10Lift.API.Objects;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
@@ -9,22 +10,23 @@ import javax.annotation.Nonnull;
 import java.lang.reflect.Field;
 import java.util.Map;
 
+@NoArgsConstructor
 public class LiftBlock implements Comparable<LiftBlock> {
 
     @Getter @Setter private String world;
-    @Getter private final int x;
+    @Getter private int x;
     @Getter @Setter private int y;
-    @Getter private final int z;
+    @Getter private int z;
 
     //Only used for cabine blocks, because those need caching!
-    @Getter private final Material mat;
-    @Getter private final byte data;
-    @Getter private final BlockFace face;
-    @Getter private final String bisected;
-    @Getter private final String[] signLines;
+    @Getter private Material mat;
+    @Getter private byte data;
+    @Getter private BlockFace face;
+    @Getter private String bisected;
+    @Getter private String[] signLines;
 
     //Only used for inputs!
-    @Getter private final String floor;
+    @Getter private String floor;
     @Getter @Setter private boolean active = false;
 
     //Only used for chests

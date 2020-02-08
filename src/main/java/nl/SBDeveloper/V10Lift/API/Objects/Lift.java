@@ -1,16 +1,18 @@
 package nl.SBDeveloper.V10Lift.API.Objects;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import nl.SBDeveloper.V10Lift.API.Runnables.DoorCloser;
 
 import java.lang.reflect.Field;
 import java.util.*;
 
+@NoArgsConstructor
 public class Lift {
     @Getter @Setter private String worldName;
     @Getter @Setter private int y;
-    @Getter private final HashSet<UUID> owners;
+    @Getter private HashSet<UUID> owners;
     //@Getter @Setter private ArrayList<String> whitelist;
     @Getter private final TreeSet<LiftBlock> blocks = new TreeSet<>();
     @Getter private final LinkedHashMap<String, Floor> floors = new LinkedHashMap<>();

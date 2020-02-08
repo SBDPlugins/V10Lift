@@ -1,21 +1,22 @@
 package nl.SBDeveloper.V10Lift.API.Objects;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Material;
 import org.bukkit.block.BlockFace;
 
 import java.lang.reflect.Field;
 
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor
 public class LiftRope {
-    private final Material type;
-    private final BlockFace face;
-    private final String world;
-    private final int x;
-    private final int minY;
-    private final int maxY;
-    private final int z;
+    private Material type;
+    private BlockFace face;
+    private String world;
+    private int x;
+    private int minY;
+    private int maxY;
+    private int z;
     private int currently;
 
     public LiftRope(Material type, BlockFace face, String world, int x, int minY, int maxY, int z) {

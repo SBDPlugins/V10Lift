@@ -1,18 +1,19 @@
 package nl.SBDeveloper.V10Lift.API.Objects;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.lang.reflect.Field;
 
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor
 public class LiftSign {
     private String world;
     private int x;
     private int z;
     private int y;
     private String oldText = null;
-    private final byte type;
+    private byte type;
     private byte state;
 
     public LiftSign(String world, int x, int y, int z, byte type, byte state) {

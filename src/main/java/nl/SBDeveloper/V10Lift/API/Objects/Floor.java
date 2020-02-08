@@ -1,6 +1,7 @@
 package nl.SBDeveloper.V10Lift.API.Objects;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import java.lang.reflect.Field;
@@ -8,12 +9,12 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
 
-@Getter @Setter
+@Getter @Setter @NoArgsConstructor
 public class Floor {
-    private final String world;
-    private final int y;
-    private final ArrayList<LiftBlock> doorBlocks = new ArrayList<>();
-    private final HashSet<UUID> whitelist = new HashSet<>();
+    private String world;
+    private int y;
+    private ArrayList<LiftBlock> doorBlocks = new ArrayList<>();
+    private HashSet<UUID> whitelist = new HashSet<>();
 
     public Floor(int y, String world) {
         this.y = y;

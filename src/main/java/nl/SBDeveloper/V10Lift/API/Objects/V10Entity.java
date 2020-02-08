@@ -1,6 +1,7 @@
 package nl.SBDeveloper.V10Lift.API.Objects;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
@@ -9,14 +10,14 @@ import org.bukkit.entity.Entity;
 import java.lang.reflect.Field;
 import java.util.UUID;
 
-@Getter
+@Getter @NoArgsConstructor
 public class V10Entity {
-    private final UUID entityUUID;
+    private UUID entityUUID;
     private String world;
     private int locX;
     private int locY;
     private int locZ;
-    private final int y;
+    private int y;
     @Setter private short step;
 
     public V10Entity(UUID entityUUID, String worldName, int x, int y, int z, int cury) {
