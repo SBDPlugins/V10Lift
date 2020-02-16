@@ -168,7 +168,7 @@
         <dependency>
             <groupId>nl.SBDevelopment</groupId>
             <artifactId>SBUtilities</artifactId>
-            <version>1.0</version>
+            <version>1.1</version>
             <classifier>SBUtilities</classifier>
             <scope>compile</scope>
         </dependency>
