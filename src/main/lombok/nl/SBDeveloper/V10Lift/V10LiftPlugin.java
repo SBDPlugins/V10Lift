@@ -16,6 +16,8 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 public class V10LiftPlugin extends JavaPlugin {
 
@@ -31,9 +33,14 @@ public class V10LiftPlugin extends JavaPlugin {
         //Initialize the util
         new SBUtilities(this, "V10Lift");
 
+        //Load the config
         config = new YamlFile("config");
         config.loadDefaults();
 
+        //Disable the start/stop logging op HikariCP
+        Logger.getLogger("com.zaxxer.hikari.HikariDataSource").setLevel(Level.OFF);
+
+        //Load the database
         dbManager = new DBManager("data");
         try {
             dbManager.load();
@@ -41,15 +48,19 @@ public class V10LiftPlugin extends JavaPlugin {
             e.printStackTrace();
         }
 
+        //Load the API
         api = new V10LiftAPI();
 
+        //Load the command
         Objects.requireNonNull(getCommand("v10lift"), "Internal error! Command not found.").setExecutor(new V10LiftCommand());
 
+        //Register the listeners
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(), this);
         Bukkit.getPluginManager().registerEvents(new BlockBreakListener(), this);
         Bukkit.getPluginManager().registerEvents(new SignChangeListener(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
 
+        //Load the update checker
         new UpdateManager(this, 72317, UpdateManager.CheckType.SPIGOT).handleResponse((versionResponse, version) -> {
             if (versionResponse == UpdateManager.VersionResponse.FOUND_NEW) {
                 Bukkit.getLogger().warning("[V10Lift] There is a new version available! Current: " + this.getDescription().getVersion() + " New: " + version);
@@ -66,6 +77,7 @@ public class V10LiftPlugin extends JavaPlugin {
     @Override
     public void onDisable() {
         V10LiftPlugin.getDBManager().removeFromData();
+
         try {
             dbManager.save();
         } catch (JsonProcessingException e) {

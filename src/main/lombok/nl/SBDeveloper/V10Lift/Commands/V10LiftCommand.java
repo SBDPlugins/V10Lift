@@ -777,6 +777,12 @@ public class V10LiftCommand implements CommandExecutor {
                 DataManager.removeRopeRemovesPlayer(p.getUniqueId());
                 DataManager.removeDoorEditPlayer(p.getUniqueId());
 
+                try {
+                    V10LiftPlugin.getDBManager().save();
+                } catch (JsonProcessingException e) {
+                    e.printStackTrace();
+                }
+
                 BlockState bs;
                 Sign sign;
                 for (LiftBlock lb : lift.getBlocks()) {
