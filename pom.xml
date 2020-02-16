@@ -1,20 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0"
-         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>nl.SBDeveloper</groupId>
     <artifactId>V10Lift2</artifactId>
-    <packaging>jar</packaging>
     <name>V10Lift</name>
     <version>0.5.1</version>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.8</maven.compiler.source>
-        <maven.compiler.target>1.8</maven.compiler.target>
-    </properties>
 
     <distributionManagement>
         <repository>
@@ -23,9 +14,14 @@
         </repository>
     </distributionManagement>
 
+    <properties>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.compiler.target>1.8</maven.compiler.target>
+    </properties>
+
     <build>
-        <directory>target</directory>
-        <finalName>V10Lift v${project.version}</finalName>
+        <!-- Include yml files -->
         <resources>
             <resource>
                 <targetPath>.</targetPath>
@@ -44,14 +40,16 @@
                 </includes>
             </resource>
         </resources>
+        <directory>target</directory>
+        <finalName>V10Lift v${project.version}</finalName>
         <plugins>
+            <!-- Clean -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-clean-plugin</artifactId>
                 <version>3.1.0</version>
             </plugin>
+            <!-- Shade JAR -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-shade-plugin</artifactId>
                 <version>3.2.2</version>
                 <executions>
@@ -64,14 +62,15 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Compile JAR -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
                     <compilerArgument>-parameters</compilerArgument>
                 </configuration>
             </plugin>
+            <!-- Delombok the source for the javadoc -->
             <plugin>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok-maven-plugin</artifactId>
@@ -85,8 +84,8 @@
                     </execution>
                 </executions>
             </plugin>
+            <!-- Build the javadoc -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.1.1</version>
                 <configuration>
@@ -96,14 +95,15 @@
                     </sourceFileIncludes>
                 </configuration>
             </plugin>
+            <!-- SKIP the maven deploy -->
             <plugin>
-                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-deploy-plugin</artifactId>
                 <version>2.8.2</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
             </plugin>
+            <!-- Deploy to nexus -->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>
                 <artifactId>nexus-staging-maven-plugin</artifactId>
@@ -138,39 +138,31 @@
     </repositories>
 
     <dependencies>
+        <!-- Spigot dependency -->
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
             <version>1.15.2-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>com.google.code.findbugs</groupId>
-            <artifactId>jsr305</artifactId>
-            <version>3.0.2</version>
-        </dependency>
-        <dependency>
-            <groupId>com.zaxxer</groupId>
-            <artifactId>HikariCP</artifactId>
-            <version>3.4.2</version>
-        </dependency>
-        <dependency>
-            <groupId>org.slf4j</groupId>
-            <artifactId>slf4j-simple</artifactId>
-            <version>1.7.30</version>
-        </dependency>
+
+        <!-- Lombok, used for the objects -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
             <scope>provided</scope>
         </dependency>
+
+        <!-- SBUtilities, our own Util dependency, used for all sort of things -->
         <dependency>
             <groupId>nl.SBDevelopment</groupId>
             <artifactId>SBUtilities</artifactId>
             <version>1.1</version>
             <scope>compile</scope>
         </dependency>
+
+        <!-- Jackson, used for Object to JSON -->
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
             <artifactId>jackson-databind</artifactId>
@@ -182,6 +174,5 @@
             <version>2.10.2</version>
         </dependency>
     </dependencies>
-
 
 </project>
