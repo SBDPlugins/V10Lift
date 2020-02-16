@@ -19,7 +19,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
     @Getter private int z;
 
     //Only used for cabine blocks, because those need caching!
-    @Getter private Material mat;
+    @Getter @Setter private Material mat;
     @Getter private byte data;
     @Getter private BlockFace face;
     @Getter private String bisected;

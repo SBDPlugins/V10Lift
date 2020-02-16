@@ -197,6 +197,7 @@ public class MoveLift implements Runnable {
                 lib.setY(lib.getY() + 1);
                 block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
                 BlockState state = block.getState();
+                if (lib.getMat() == null) lib.setMat(Material.AIR);
                 state.setType(lib.getMat());
                 if (!XMaterial.isNewVersion()) {
                     state.setRawData(lib.getData());
@@ -241,6 +242,7 @@ public class MoveLift implements Runnable {
             for (LiftBlock lib : tb) {
                 block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
                 BlockState state = block.getState();
+                if (lib.getMat() == null) lib.setMat(Material.AIR);
                 state.setType(lib.getMat());
                 if (!XMaterial.isNewVersion()) {
                     state.setRawData(lib.getData());
@@ -330,6 +332,7 @@ public class MoveLift implements Runnable {
                 y = lib.getY();
                 block = world.getBlockAt(lib.getX(), lib.getY(), lib.getZ());
                 BlockState state = block.getState();
+                if (lib.getMat() == null) lib.setMat(Material.AIR);
                 state.setType(lib.getMat());
                 if (!XMaterial.isNewVersion()) {
                     state.setRawData(lib.getData());
@@ -354,6 +357,7 @@ public class MoveLift implements Runnable {
             for (LiftBlock lib : tb) {
                 block = Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ());
                 BlockState state = block.getState();
+                if (lib.getMat() == null) lib.setMat(Material.AIR);
                 state.setType(lib.getMat());
                 if (!XMaterial.isNewVersion()) {
                     state.setRawData(lib.getData());
@@ -411,6 +415,7 @@ public class MoveLift implements Runnable {
                     quiter.remove();
                     rope.setCurrently(rope.getCurrently() - 1);
                     block = world.getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
+                    if (rope.getType() == null) rope.setType(Material.AIR);
                     block.setType(rope.getType());
                     if (XMaterial.isNewVersion()) {
                         DirectionUtil.setDirection(block, rope.getFace());
@@ -426,6 +431,7 @@ public class MoveLift implements Runnable {
                 world = Objects.requireNonNull(Bukkit.getWorld(rope.getWorld()), "World is null at MoveLift");
                 rope.setCurrently(rope.getCurrently() - 1);
                 block = world.getBlockAt(rope.getX(), rope.getCurrently(), rope.getZ());
+                if (rope.getType() == null) rope.setType(Material.AIR);
                 block.setType(rope.getType());
                 if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, rope.getFace());

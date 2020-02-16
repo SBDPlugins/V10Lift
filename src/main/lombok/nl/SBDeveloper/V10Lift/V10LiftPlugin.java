@@ -37,9 +37,6 @@ public class V10LiftPlugin extends JavaPlugin {
         config = new YamlFile("config");
         config.loadDefaults();
 
-        //Disable the start/stop logging op HikariCP
-        Logger.getLogger("com.zaxxer.hikari.HikariDataSource").setLevel(Level.OFF);
-
         //Load the database
         dbManager = new DBManager("data");
         try {
