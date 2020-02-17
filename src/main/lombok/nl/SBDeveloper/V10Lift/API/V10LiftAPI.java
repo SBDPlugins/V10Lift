@@ -72,6 +72,10 @@ public class V10LiftAPI {
 
     /* API methods */
 
+    /*
+    @todo Fix creating lifts in adventure not working
+     */
+
     /**
      * Create a new Lift
      *
