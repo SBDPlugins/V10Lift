@@ -1,5 +1,6 @@
 # V10Lift2
 ![Build status](https://travis-ci.org/stijnb1234/V10Lift2.svg?branch=master)
+
 The rebuild of the V10Lift plugin!
 
 ## Maven
