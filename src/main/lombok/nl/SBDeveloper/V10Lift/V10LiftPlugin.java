@@ -1,6 +1,7 @@
 package nl.SBDeveloper.V10Lift;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
+import com.google.common.base.MoreObjects;
 import nl.SBDeveloper.V10Lift.API.V10LiftAPI;
 import nl.SBDeveloper.V10Lift.Commands.V10LiftCommand;
 import nl.SBDeveloper.V10Lift.Listeners.BlockBreakListener;
@@ -62,7 +63,7 @@ public class V10LiftPlugin extends JavaPlugin {
         metrics.addCustomChart(new Metrics.SingleLineChart("lifts", () -> DataManager.getLifts().size()));
 
         //Load the update checker
-        if (getSConfig().getFile().getBoolean("CheckUpdates")) {
+        if (MoreObjects.firstNonNull(getSConfig().getFile().getBoolean("CheckUpdates"), true)) {
             new UpdateManager(this, 72317, UpdateManager.CheckType.SPIGOT).handleResponse((versionResponse, version) -> {
                 if (versionResponse == UpdateManager.VersionResponse.FOUND_NEW) {
                     Bukkit.getLogger().warning("[V10Lift] There is a new version available! Current: " + this.getDescription().getVersion() + " New: " + version);
