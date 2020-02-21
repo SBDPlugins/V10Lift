@@ -579,7 +579,10 @@ public class V10LiftCommand implements CommandExecutor {
             return true;
         }
 
+        Bukkit.dispatchCommand(sender, "v10lift edit");
         V10LiftPlugin.getAPI().renameLift(liftName, args[1]);
+        Bukkit.dispatchCommand(sender, "v10lift edit " + args[1]);
+
         sender.sendMessage(ChatColor.GREEN + "Lift successfully renamed!");
         return true;
     }
