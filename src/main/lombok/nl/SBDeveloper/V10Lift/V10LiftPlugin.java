@@ -1,7 +1,6 @@
 package nl.SBDeveloper.V10Lift;
 
 import com.fasterxml.jackson.core.JsonProcessingException;
-import com.google.common.base.MoreObjects;
 import nl.SBDeveloper.V10Lift.API.V10LiftAPI;
 import nl.SBDeveloper.V10Lift.Commands.V10LiftCommand;
 import nl.SBDeveloper.V10Lift.Listeners.BlockBreakListener;
@@ -19,7 +18,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 import java.util.Objects;
-import java.util.Optional;
 
 public class V10LiftPlugin extends JavaPlugin {
 
