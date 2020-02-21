@@ -19,6 +19,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 
 import java.sql.SQLException;
 import java.util.Objects;
+import java.util.Optional;
 
 public class V10LiftPlugin extends JavaPlugin {
 
@@ -63,7 +64,7 @@ public class V10LiftPlugin extends JavaPlugin {
         metrics.addCustomChart(new Metrics.SingleLineChart("lifts", () -> DataManager.getLifts().size()));
 
         //Load the update checker
-        if (MoreObjects.firstNonNull(getSConfig().getFile().getBoolean("CheckUpdates"), true)) {
+        if (!getSConfig().getFile().contains("CheckUpdates") || getSConfig().getFile().getBoolean("CheckUpdates")) {
             new UpdateManager(this, 72317, UpdateManager.CheckType.SPIGOT).handleResponse((versionResponse, version) -> {
                 if (versionResponse == UpdateManager.VersionResponse.FOUND_NEW) {
                     Bukkit.getLogger().warning("[V10Lift] There is a new version available! Current: " + this.getDescription().getVersion() + " New: " + version);
