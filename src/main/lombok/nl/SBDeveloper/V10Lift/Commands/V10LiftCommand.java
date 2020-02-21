@@ -1008,7 +1008,8 @@ public class V10LiftCommand implements CommandExecutor {
         sender.sendMessage("§6/v10lift whois [Name]§f: See information about a lift.");
         sender.sendMessage("§6/v10lift edit <Name>§f: Edit a lift.");
         sender.sendMessage("§6/v10lift floor <add/del/rename> <Name> [New name]§f: Add/remove/rename a floor.");
-        sender.sendMessage("§6/v10lift input <add/del> [Floorname]§f: Add/remove a input.");
+        sender.sendMessage("§6/v10lift input <add/del> [Floorname]§f: Add/remove an input.");
+        sender.sendMessage("§6/v10lift offline <add/del> [Floorname]§f: Add/remove an offline input.");
         sender.sendMessage("§6/v10lift build§f: Add/remove blocks to/from a cab.");
         sender.sendMessage("§6/v10lift rope <add/del>§f: Add/remove a rope.");
         sender.sendMessage("§6/v10lift door§f: Add doors to a lift.");

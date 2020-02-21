@@ -2,6 +2,7 @@ name: V10Lift
 main: nl.SBDeveloper.V10Lift.V10LiftPlugin
 version: ${project.version}
 api-version: "1.13"
+author: SBDeveloper
 commands:
   v10lift:
     description: The V10Lift Command

@@ -3,6 +3,7 @@ package nl.SBDeveloper.V10Lift;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import nl.SBDeveloper.V10Lift.API.V10LiftAPI;
 import nl.SBDeveloper.V10Lift.Commands.V10LiftCommand;
+import nl.SBDeveloper.V10Lift.Commands.V10LiftTabCompleter;
 import nl.SBDeveloper.V10Lift.Listeners.BlockBreakListener;
 import nl.SBDeveloper.V10Lift.Listeners.EntityDamageListener;
 import nl.SBDeveloper.V10Lift.Listeners.PlayerInteractListener;
@@ -50,6 +51,7 @@ public class V10LiftPlugin extends JavaPlugin {
 
         //Load the command
         Objects.requireNonNull(getCommand("v10lift"), "Internal error! Command not found.").setExecutor(new V10LiftCommand());
+        Objects.requireNonNull(getCommand("v10lift"), "Internal error! Command not found.").setTabCompleter(new V10LiftTabCompleter());
 
         //Register the listeners
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(), this);
