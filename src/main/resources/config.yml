@@ -10,3 +10,4 @@ MasterRepairAmount: 10
 DefaultSpeed: 16
 DefaultRealistic: true
 DoorCloseTime: 100
+CheckUpdates: true

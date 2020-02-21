@@ -8,9 +8,11 @@ import nl.SBDeveloper.V10Lift.Listeners.EntityDamageListener;
 import nl.SBDeveloper.V10Lift.Listeners.PlayerInteractListener;
 import nl.SBDeveloper.V10Lift.Listeners.SignChangeListener;
 import nl.SBDeveloper.V10Lift.Managers.DBManager;
+import nl.SBDeveloper.V10Lift.Managers.DataManager;
 import nl.SBDevelopment.SBUtilities.Data.YamlFile;
 import nl.SBDevelopment.SBUtilities.PrivateManagers.UpdateManager;
 import nl.SBDevelopment.SBUtilities.SBUtilities;
+import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -55,16 +57,22 @@ public class V10LiftPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new SignChangeListener(), this);
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
 
+        //Load metrics
+        Metrics metrics = new Metrics(this, 6564);
+        metrics.addCustomChart(new Metrics.SingleLineChart("lifts", () -> DataManager.getLifts().size()));
+
         //Load the update checker
-        new UpdateManager(this, 72317, UpdateManager.CheckType.SPIGOT).handleResponse((versionResponse, version) -> {
-            if (versionResponse == UpdateManager.VersionResponse.FOUND_NEW) {
-                Bukkit.getLogger().warning("[V10Lift] There is a new version available! Current: " + this.getDescription().getVersion() + " New: " + version);
-            } else if (versionResponse == UpdateManager.VersionResponse.LATEST) {
-                Bukkit.getLogger().info("[V10Lift] You are running the latest version [" + this.getDescription().getVersion() + "]!");
-            } else if (versionResponse == UpdateManager.VersionResponse.UNAVAILABLE) {
-                Bukkit.getLogger().severe("[V10Lift] Unable to perform an update check.");
-            }
-        }).check();
+        if (getSConfig().getFile().getBoolean("CheckUpdates")) {
+            new UpdateManager(this, 72317, UpdateManager.CheckType.SPIGOT).handleResponse((versionResponse, version) -> {
+                if (versionResponse == UpdateManager.VersionResponse.FOUND_NEW) {
+                    Bukkit.getLogger().warning("[V10Lift] There is a new version available! Current: " + this.getDescription().getVersion() + " New: " + version);
+                } else if (versionResponse == UpdateManager.VersionResponse.LATEST) {
+                    Bukkit.getLogger().info("[V10Lift] You are running the latest version [" + this.getDescription().getVersion() + "]!");
+                } else if (versionResponse == UpdateManager.VersionResponse.UNAVAILABLE) {
+                    Bukkit.getLogger().severe("[V10Lift] Unable to perform an update check.");
+                }
+            }).check();
+        }
 
         Bukkit.getLogger().info("[V10Lift] Plugin loaded successfully!");
     }
