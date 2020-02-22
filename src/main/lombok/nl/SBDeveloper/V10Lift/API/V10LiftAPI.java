@@ -131,6 +131,24 @@ public class V10LiftAPI {
     }
 
     /**
+     * Get the name of a lift by a location (checking for cab blocks)
+     *
+     * @param loc The location you want to check for
+     * @return The liftname
+     */
+    public String getLiftByLocation(Location loc) {
+        for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
+            for (LiftBlock block : entry.getValue().getBlocks()) {
+                //Check for world, x and z
+                if (block.getWorld().equals(Objects.requireNonNull(loc.getWorld(), "World is null at getLiftByLocation").getName()) && block.getX() == loc.getBlockX() && block.getZ() == loc.getBlockZ()) {
+                    return entry.getKey();
+                }
+            }
+        }
+        return null;
+    }
+
+    /**
      * Rename a lift
      *
      * @param liftName The name of the lift

@@ -232,7 +232,7 @@ public class V10LiftCommand implements CommandExecutor {
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
             }
-        } else if (args[0].equalsIgnoreCase("start") && args.length == 3) {
+        } else if (args[0].equalsIgnoreCase("start")) {
             //v10lift start <Name> <Floor>
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
@@ -243,7 +243,7 @@ public class V10LiftCommand implements CommandExecutor {
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
             }
-        } else if (args[0].equalsIgnoreCase("stop") && args.length == 2) {
+        } else if (args[0].equalsIgnoreCase("stop")) {
             //v10lift stop <Name>
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
@@ -261,18 +261,24 @@ public class V10LiftCommand implements CommandExecutor {
     }
 
     private boolean stopCommand(CommandSender sender, @Nonnull String[] args) {
-        String liftName = args[1];
-        if (!DataManager.containsLift(liftName)) {
-            sender.sendMessage(ChatColor.RED + "Lift " + args[1] + " doesn't exists!");
+        String liftName;
+        if (args.length == 1 && sender instanceof Player) {
+            //v10lift stop -> Get liftName from loc and floorName from sign
+            Player p = (Player) sender;
+            liftName = V10LiftPlugin.getAPI().getLiftByLocation(p.getLocation());
+        } else if (args.length == 1) {
+            sender.sendMessage(ChatColor.RED + "Please give a name as non-player!");
+            return true;
+        } else {
+            liftName = args[1];
+        }
+
+        if (liftName == null || !DataManager.containsLift(liftName)) {
+            sender.sendMessage(ChatColor.RED + "Lift doesn't exists!");
             return true;
         }
 
         Lift lift = DataManager.getLift(liftName);
-        if (!lift.getFloors().containsKey(args[2])) {
-            sender.sendMessage(ChatColor.RED + "Lift " + args[1] + " doesn't contain the floor " + args[2] + "!");
-            return true;
-        }
-
         if (!lift.getQueue().isEmpty()) lift.getQueue().clear();
 
         if (!DataManager.containsMovingTask(args[1])) {
@@ -287,21 +293,49 @@ public class V10LiftCommand implements CommandExecutor {
     }
 
     private boolean startCommand(CommandSender sender, @Nonnull String[] args) {
-        String liftName = args[1];
-        if (!DataManager.containsLift(liftName)) {
-            sender.sendMessage(ChatColor.RED + "Lift " + args[1] + " doesn't exists!");
+        String liftName;
+        if (args.length == 1 && sender instanceof Player) {
+            //v10lift start -> Get liftName from loc and floorName from sign
+            Player p = (Player) sender;
+            liftName = V10LiftPlugin.getAPI().getLiftByLocation(p.getLocation());
+        } else if (args.length == 1) {
+            sender.sendMessage(ChatColor.RED + "Please give a name as non-player!");
+            return true;
+        } else {
+            liftName = args[1];
+        }
+
+        if (liftName == null || !DataManager.containsLift(liftName)) {
+            sender.sendMessage(ChatColor.RED + "Lift doesn't exists!");
             return true;
         }
 
         Lift lift = DataManager.getLift(liftName);
-        if (!lift.getFloors().containsKey(args[2])) {
-            sender.sendMessage(ChatColor.RED + "Lift " + args[1] + " doesn't contain the floor " + args[2] + "!");
+
+        String floorName = null;
+        if (args.length == 2) {
+            for (LiftBlock lb : lift.getBlocks()) {
+                Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at start command").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
+                if (block.getState() instanceof Sign) {
+                    Sign sign = (Sign) block.getState();
+                    String f = ChatColor.stripColor(sign.getLine(3));
+                    if (lift.getFloors().containsKey(f)) {
+                        floorName = f;
+                    }
+                }
+            }
+        } else {
+            floorName = args[2];
+        }
+
+        if (floorName == null || !lift.getFloors().containsKey(floorName)) {
+            sender.sendMessage(ChatColor.RED + "Lift " + liftName + " doesn't contain this floor!");
             return true;
         }
 
-        Floor f = lift.getFloors().get(args[2]);
-        V10LiftPlugin.getAPI().addToQueue(args[1], f, args[2]);
-        sender.sendMessage(ChatColor.GREEN + "Lift " + args[1] + " started!");
+        Floor f = lift.getFloors().get(floorName);
+        V10LiftPlugin.getAPI().addToQueue(liftName, f, floorName);
+        sender.sendMessage(ChatColor.GREEN + "Lift " + liftName + " started!");
         return true;
     }
 
@@ -1017,8 +1051,8 @@ public class V10LiftCommand implements CommandExecutor {
         sender.sendMessage("§6/v10lift realistic§f: Toggle realistic mode.");
         sender.sendMessage("§6/v10lift repair§f: Repair a lift.");
         sender.sendMessage("§6/v10lift whitelist <add/del> <Player> [Floorname]§f: Add/remove someone of the whitelist.");
-        sender.sendMessage("§6/v10lift start <Name> <Floor>§f: Start a lift to a floor.");
-        sender.sendMessage("§6/v10lift stop <Name>§f: Stop a lift.");
+        sender.sendMessage("§6/v10lift start [Name] [Floor]§f: Start a lift to a floor.");
+        sender.sendMessage("§6/v10lift stop [Name]§f: Stop a lift.");
         sender.sendMessage("§6/v10lift repair§f: Repair a lift.");
         return true;
     }
