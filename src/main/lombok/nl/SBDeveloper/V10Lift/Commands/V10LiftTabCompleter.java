@@ -25,20 +25,15 @@ public class V10LiftTabCompleter implements TabCompleter {
                     returns.add("add");
                     returns.add("del");
                     returns.add("rename");
-                } else if (args[0].equalsIgnoreCase("input")) {
+                } else if (args[0].equalsIgnoreCase("input") || args[0].equalsIgnoreCase("offline") || args[0].equalsIgnoreCase("whitelist") || args[0].equalsIgnoreCase("rope")) {
                     returns.add("add");
                     returns.add("del");
-                } else if (args[0].equalsIgnoreCase("offline")) {
-                    returns.add("add");
-                    returns.add("del");
-                } else if (args[0].equalsIgnoreCase("whitelist")) {
-                    returns.add("add");
-                    returns.add("del");
-                } else if (args[0].equalsIgnoreCase("rope")) {
-                    returns.add("add");
-                    returns.add("del");
-                } else if (args[0].equalsIgnoreCase("edit")) {
+                } else if (args[0].equalsIgnoreCase("edit") || args[0].equalsIgnoreCase("start") || args[0].equalsIgnoreCase("stop")) {
                     returns.addAll(DataManager.getLifts().keySet());
+                }
+            } else if (args.length == 3) {
+                if (args[0].equalsIgnoreCase("start")) {
+                    returns.addAll(DataManager.getLift(args[1]).getFloors().keySet());
                 }
             }
 
