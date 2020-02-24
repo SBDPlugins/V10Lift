@@ -313,7 +313,7 @@ public class V10LiftCommand implements CommandExecutor {
         Lift lift = DataManager.getLift(liftName);
 
         String floorName = null;
-        if (args.length == 2) {
+        if (args.length == 1 || args.length == 2) {
             for (LiftBlock lb : lift.getBlocks()) {
                 Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at start command").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
                 if (block.getState() instanceof Sign) {
