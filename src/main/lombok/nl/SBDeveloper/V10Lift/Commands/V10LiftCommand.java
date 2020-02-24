@@ -21,6 +21,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -355,7 +356,7 @@ public class V10LiftCommand implements CommandExecutor {
         try {
             V10LiftPlugin.getDBManager().save();
             V10LiftPlugin.getDBManager().load();
-        } catch (SQLException | JsonProcessingException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
 

@@ -1,14 +1,12 @@
 package nl.SBDeveloper.V10Lift.Managers;
 
-import com.fasterxml.jackson.annotation.JsonCreator;
-import com.fasterxml.jackson.core.JsonParser;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
-import com.fasterxml.jackson.module.paramnames.ParameterNamesModule;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDevelopment.SBUtilities.Data.SQLiteDB;
 import org.bukkit.Bukkit;
 
+import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -34,7 +32,7 @@ public class DBManager {
         }
     }
 
-    public void load() throws SQLException, JsonProcessingException {
+    public void load() throws SQLException, IOException {
         String query = "SELECT * FROM lifts";
         PreparedStatement statement = con.prepareStatement(query);
         ResultSet liftSet = statement.executeQuery();
@@ -50,9 +48,7 @@ public class DBManager {
 
             byte[] blob = liftSet.getBytes("liftData");
             String json = new String(blob);
-            ObjectMapper mapper = new ObjectMapper()
-                    .enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES)
-                    .registerModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES));
+            ObjectMapper mapper = new ObjectMapper();
             Lift lift = mapper.readValue(json, Lift.class);
             DataManager.addLift(liftSet.getString("liftName"), lift);
 
@@ -98,9 +94,7 @@ public class DBManager {
     public void save() throws JsonProcessingException {
         for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
 
-            ObjectMapper mapper = new ObjectMapper()
-                    .enable(JsonParser.Feature.ALLOW_UNQUOTED_FIELD_NAMES)
-                    .registerModule(new ParameterNamesModule(JsonCreator.Mode.PROPERTIES));
+            ObjectMapper mapper = new ObjectMapper();
 
             byte[] blob = mapper.writeValueAsString(entry.getValue()).getBytes();
 

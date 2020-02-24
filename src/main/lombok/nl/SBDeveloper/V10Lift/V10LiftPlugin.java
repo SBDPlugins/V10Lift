@@ -17,6 +17,7 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
 
@@ -42,7 +43,7 @@ public class V10LiftPlugin extends JavaPlugin {
         dbManager = new DBManager("data");
         try {
             dbManager.load();
-        } catch (SQLException | JsonProcessingException e) {
+        } catch (SQLException | IOException e) {
             e.printStackTrace();
         }
 
