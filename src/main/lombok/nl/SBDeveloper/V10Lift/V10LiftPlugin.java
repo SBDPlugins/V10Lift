@@ -109,5 +109,4 @@ public class V10LiftPlugin extends JavaPlugin {
     public static V10LiftAPI getAPI() {
         return api;
     }
-
 }

@@ -190,7 +190,6 @@
             <version>2.9.10.1</version>
         </dependency>
 
-
         <!-- BStats, used for metrics -->
         <dependency>
             <groupId>org.bstats</groupId>

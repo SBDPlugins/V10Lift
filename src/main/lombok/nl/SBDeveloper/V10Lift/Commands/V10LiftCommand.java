@@ -282,14 +282,14 @@ public class V10LiftCommand implements CommandExecutor {
         Lift lift = DataManager.getLift(liftName);
         if (!lift.getQueue().isEmpty()) lift.getQueue().clear();
 
-        if (!DataManager.containsMovingTask(args[1])) {
-            sender.sendMessage(ChatColor.RED + "Lift " + args[1] + " doesn't contain any movingtasks!");
+        if (!DataManager.containsMovingTask(liftName)) {
+            sender.sendMessage(ChatColor.RED + "Lift " + liftName + " doesn't contain any movingtasks!");
             return true;
         }
 
-        Bukkit.getScheduler().cancelTask(DataManager.getMovingTask(args[1]));
-        DataManager.removeMovingTask(args[1]);
-        sender.sendMessage(ChatColor.GREEN + "Lift " + args[1] + " stopped!");
+        Bukkit.getScheduler().cancelTask(DataManager.getMovingTask(liftName));
+        DataManager.removeMovingTask(liftName);
+        sender.sendMessage(ChatColor.GREEN + "Lift " + liftName + " stopped!");
         return true;
     }
 
