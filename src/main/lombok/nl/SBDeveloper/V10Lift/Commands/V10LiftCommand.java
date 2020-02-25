@@ -212,44 +212,50 @@ public class V10LiftCommand implements CommandExecutor {
             }
         } else if (args[0].equalsIgnoreCase("reload") && args.length == 1) {
             //v10lift reload
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
-                return true;
-            }
-            if (sender.hasPermission("v10lift.admin")) {
+            if (sender.hasPermission("v10lift.reload") || sender.hasPermission("v10lift.admin")) {
                 return reloadCommand(sender);
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
             }
         } else if (args[0].equalsIgnoreCase("repair") && args.length == 2) {
             //v10lift repair <Name>
+            //@TODO Make non-player
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
                 return true;
             }
-            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+            if (sender.hasPermission("v10lift.repair") || sender.hasPermission("v10lift.admin")) {
                 return repairCommand(sender, args);
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
             }
+        } else if (args[0].equalsIgnoreCase("disable") && args.length == 2) {
+            //v10lift disable <Name>
+            if (sender.hasPermission("v10lift.disable") || sender.hasPermission("v10lift.admin")) {
+                return disableCommand(sender, args);
+            } else {
+                sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
+            }
         } else if (args[0].equalsIgnoreCase("start")) {
+            //@TODO Make non-player
             //v10lift start <Name> <Floor>
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
                 return true;
             }
-            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+            if (sender.hasPermission("v10lift.start") || sender.hasPermission("v10lift.admin")) {
                 return startCommand(sender, args);
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
             }
         } else if (args[0].equalsIgnoreCase("stop")) {
+            //@TODO Make non-player
             //v10lift stop <Name>
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
                 return true;
             }
-            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+            if (sender.hasPermission("v10lift.stop") || sender.hasPermission("v10lift.admin")) {
                 return stopCommand(sender, args);
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
@@ -257,6 +263,25 @@ public class V10LiftCommand implements CommandExecutor {
         } else {
             return helpCommand(sender);
         }
+        return true;
+    }
+
+    private boolean disableCommand(CommandSender sender, @Nonnull String[] args) {
+        String liftName = args[1];
+        if (!DataManager.containsLift(liftName)) {
+            sender.sendMessage(ChatColor.RED + "Lift " + args[1] + " doesn't exists!");
+            return true;
+        }
+
+        Lift lift = DataManager.getLift(liftName);
+
+        if (lift.isDefective()) {
+            sender.sendMessage(ChatColor.RED + "This lift is already defective!");
+            return true;
+        }
+
+        V10LiftPlugin.getAPI().setDefective(liftName, true);
+        sender.sendMessage(ChatColor.GREEN + "Lift disabled!");
         return true;
     }
 
@@ -1068,7 +1093,7 @@ public class V10LiftCommand implements CommandExecutor {
 
         sender.sendMessage("§6/v10lift create [Name]§f: Create a lift.");
         sender.sendMessage("§6/v10lift delete <Name>§f: Delete a lift.");
-        sender.sendMessage("§6/v10lift rename <Name> <New name>§f: Rename a lift.");
+        sender.sendMessage("§6/v10lift rename <New name>§f: Rename a lift.");
         sender.sendMessage("§6/v10lift abort§f: Abort your action.");
         sender.sendMessage("§6/v10lift whois [Name]§f: See information about a lift.");
         sender.sendMessage("§6/v10lift edit [Name]§f: Edit a lift.");
@@ -1084,7 +1109,8 @@ public class V10LiftCommand implements CommandExecutor {
         sender.sendMessage("§6/v10lift whitelist <add/del> <Player/Group> [Floorname]§f: Add/remove someone of the whitelist. Use g:<Groupname> for a group.");
         sender.sendMessage("§6/v10lift start [Name] [Floor]§f: Start a lift to a floor.");
         sender.sendMessage("§6/v10lift stop [Name]§f: Stop a lift.");
-        sender.sendMessage("§6/v10lift repair§f: Repair a lift.");
+        sender.sendMessage("§6/v10lift disable <Name>§f: Repair a lift.");
+        sender.sendMessage("§6/v10lift repair <Name>§f: Repair a lift.");
         return true;
     }
 

@@ -12,7 +12,7 @@ import java.util.List;
 
 public class V10LiftTabCompleter implements TabCompleter {
 
-    private static final List<String> COMMANDS = Arrays.asList("create", "delete", "rename", "abort", "whois", "edit", "floor", "input", "build", "rope", "door", "speed", "realistic", "repair", "whitelist", "reload", "help", "start", "stop", "offline");
+    private static final List<String> COMMANDS = Arrays.asList("create", "delete", "rename", "abort", "whois", "edit", "floor", "input", "build", "rope", "door", "speed", "realistic", "repair", "disable", "whitelist", "reload", "help", "start", "stop", "offline");
 
 
     @Override

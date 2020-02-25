@@ -7,3 +7,19 @@ softdepend: ["Vault"]
 commands:
   v10lift:
     description: The V10Lift Command
+permissions:
+  v10lift.admin:
+    description: The full power admin permission
+    default: op
+  v10lift.build:
+    description: The permission to build a lift
+  v10lift.reload:
+    description: Reload the plugin
+  v10lift.repair:
+    description: Repair a lift
+  v10lift.disable:
+    description: Disable a lift
+  v10lift.start:
+    description: Start a lift
+  v10lift.stop:
+    description: Stop a lift
