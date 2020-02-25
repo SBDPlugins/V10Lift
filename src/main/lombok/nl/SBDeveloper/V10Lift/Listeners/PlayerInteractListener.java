@@ -51,7 +51,7 @@ public class PlayerInteractListener implements Listener {
                 for (LiftBlock lb : lift.getOfflineInputs()) {
                     if (world.equals(lb.getWorld()) && x == lb.getX() && y == lb.getY() && z == lb.getZ()) {
                         lb.setActive(!lb.isActive());
-                        V10LiftPlugin.getAPI().setDefective(entry.getKey(), lb.isActive());
+                        V10LiftPlugin.getAPI().setOffline(entry.getKey(), lb.isActive());
                         return;
                     }
                 }

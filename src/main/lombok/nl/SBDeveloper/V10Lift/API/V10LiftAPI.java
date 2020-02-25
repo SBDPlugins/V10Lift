@@ -161,7 +161,7 @@ public class V10LiftAPI {
         DataManager.removeLift(liftName);
         DataManager.addLift(newName, lift);
         for (LiftSign ls : lift.getSigns()) {
-            Block block = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at setDefective").getBlockAt(ls.getX(), ls.getY(), ls.getZ());
+            Block block = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at renameLift").getBlockAt(ls.getX(), ls.getY(), ls.getZ());
             BlockState bs = block.getState();
             if (!(bs instanceof Sign)) continue;
             Sign si = (Sign) bs;
