@@ -653,18 +653,36 @@ public class V10LiftAPI {
     }
 
     /**
-     * Get the whitelist of a lift
+     * Get the userWhitelist of a lift
      *
      * @param liftName The name of the lift
      * @param floorName The name of the floor
      * @return list with UUIDs of the players
      */
-    public HashSet<UUID> getWhitelist(String liftName, String floorName) {
+    public HashSet<UUID> getUserWhitelist(String liftName, String floorName) {
         HashSet<UUID> ret = new HashSet<>();
         if (liftName != null && floorName != null && DataManager.containsLift(liftName)) {
             Lift lift = DataManager.getLift(liftName);
             if (lift.getFloors().containsKey(floorName)) {
-                ret = lift.getFloors().get(floorName).getWhitelist();
+                ret = lift.getFloors().get(floorName).getUserWhitelist();
+            }
+        }
+        return ret;
+    }
+
+    /**
+     * Get the groupWhitelist of a lift
+     *
+     * @param liftName The name of the lift
+     * @param floorName The name of the floor
+     * @return list with groupnames
+     */
+    public HashSet<String> getGroupWhitelist(String liftName, String floorName) {
+        HashSet<String> ret = new HashSet<>();
+        if (liftName != null && floorName != null && DataManager.containsLift(liftName)) {
+            Lift lift = DataManager.getLift(liftName);
+            if (lift.getFloors().containsKey(floorName)) {
+                ret = lift.getFloors().get(floorName).getGroupWhitelist();
             }
         }
         return ret;
@@ -823,11 +841,12 @@ public class V10LiftAPI {
                     p.sendMessage(ChatColor.YELLOW + "    World: " + ChatColor.GREEN + f.getWorld());
                     p.sendMessage(ChatColor.YELLOW + "    Height: " + ChatColor.GREEN + f.getY());
                     p.sendMessage(ChatColor.YELLOW + "    Whitelist:");
-                    if (f.getWhitelist().isEmpty()) {
+                    if (f.getUserWhitelist().isEmpty() && f.getGroupWhitelist().isEmpty()) {
                         p.sendMessage(ChatColor.GOLD + "      None.");
                     } else {
                         ChatColor color = ChatColor.DARK_PURPLE;
-                        Iterator<UUID> iter = f.getWhitelist().iterator();
+                        Iterator<UUID> iter = f.getUserWhitelist().iterator();
+                        Iterator<String> iter2 = f.getGroupWhitelist().iterator();
                         StringBuilder sb = new StringBuilder();
                         sb.append("      ").append(color).append(Bukkit.getOfflinePlayer(iter.next()).getName());
                         while (iter.hasNext()) {
@@ -837,6 +856,14 @@ public class V10LiftAPI {
                                 color = ChatColor.DARK_PURPLE;
                             }
                             sb.append(ChatColor.AQUA).append(", ").append(color).append(Bukkit.getOfflinePlayer(iter.next()).getName());
+                        }
+                        while (iter2.hasNext()) {
+                            if (color == ChatColor.DARK_PURPLE) {
+                                color = ChatColor.LIGHT_PURPLE;
+                            } else {
+                                color = ChatColor.DARK_PURPLE;
+                            }
+                            sb.append(ChatColor.AQUA).append(", ").append(color).append("Group: ").append(iter2.next());
                         }
                         p.sendMessage(sb.toString());
                     }
