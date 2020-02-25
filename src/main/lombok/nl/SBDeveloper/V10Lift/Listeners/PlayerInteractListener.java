@@ -20,14 +20,12 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
+import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class PlayerInteractListener implements Listener {
     //BUTTON CLICK
@@ -65,6 +63,61 @@ public class PlayerInteractListener implements Listener {
                 }
             }
         }
+    }
+
+    //Gamemode adventure left click fix
+    @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
+    public void onPlayerLeftClickSign(PlayerAnimationEvent e) {
+        Player p = e.getPlayer();
+
+        if (p.getGameMode() != GameMode.ADVENTURE) return;
+
+        Block lookingBlock = p.getTargetBlock(null, 5);
+
+        BlockState bs = lookingBlock.getState();
+        if (!(bs instanceof Sign)) return;
+
+        Sign sign = (Sign) bs;
+        if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) return;
+
+        String liftName = sign.getLine(1);
+        if (!DataManager.containsLift(liftName)) return;
+        Lift lift = DataManager.getLift(liftName);
+        if (lift.isOffline()) {
+            e.setCancelled(true);
+            return;
+        }
+
+        if (lift.isDefective()) {
+            e.setCancelled(true);
+            return;
+        }
+
+        if (!lift.getBlocks().contains(new LiftBlock(sign.getWorld().getName(), sign.getX(), sign.getY(), sign.getZ(), (String) null))) return;
+        if (DataManager.containsEditLift(liftName)) return;
+        e.setCancelled(true);
+        if (lift.isDefective()) return;
+        String f = ChatColor.stripColor(sign.getLine(3));
+
+        if (!lift.getFloors().containsKey(f)) {
+            p.sendMessage(ChatColor.RED + "Floor not found!");
+            return;
+        }
+
+        Floor floor = lift.getFloors().get(f);
+        if (!floor.getUserWhitelist().isEmpty() && !floor.getUserWhitelist().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
+            p.sendMessage(ChatColor.RED + "You can't go to that floor!");
+            e.setCancelled(true);
+            return;
+        }
+
+        if (!floor.getGroupWhitelist().isEmpty() && !VaultManager.userHasAnyGroup(p, floor.getGroupWhitelist()) && !p.hasPermission("v10lift.admin")) {
+            p.sendMessage(ChatColor.RED + "You can't go to that floor!");
+            e.setCancelled(true);
+            return;
+        }
+
+        V10LiftPlugin.getAPI().addToQueue(liftName, lift.getFloors().get(f), f);
     }
 
     //BLOCK ADD
