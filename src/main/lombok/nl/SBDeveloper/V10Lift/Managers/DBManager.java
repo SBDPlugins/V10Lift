@@ -1,12 +1,10 @@
 package nl.SBDeveloper.V10Lift.Managers;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
-import com.fasterxml.jackson.databind.ObjectMapper;
+import com.google.gson.Gson;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDevelopment.SBUtilities.Data.SQLiteDB;
 import org.bukkit.Bukkit;
 
-import java.io.IOException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -32,7 +30,7 @@ public class DBManager {
         }
     }
 
-    public void load() throws SQLException, IOException {
+    public void load() throws SQLException {
         String query = "SELECT * FROM lifts";
         PreparedStatement statement = con.prepareStatement(query);
         ResultSet liftSet = statement.executeQuery();
@@ -48,8 +46,9 @@ public class DBManager {
 
             byte[] blob = liftSet.getBytes("liftData");
             String json = new String(blob);
-            ObjectMapper mapper = new ObjectMapper();
-            Lift lift = mapper.readValue(json, Lift.class);
+
+            Gson gson = new Gson();
+            Lift lift = gson.fromJson(json, Lift.class);
             DataManager.addLift(liftSet.getString("liftName"), lift);
 
             Bukkit.getLogger().info("[V10Lift] Loading lift " + liftSet.getString("liftName") + " from data...");
@@ -91,12 +90,11 @@ public class DBManager {
         }
     }
 
-    public void save() throws JsonProcessingException {
+    public void save() {
         for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
 
-            ObjectMapper mapper = new ObjectMapper();
-
-            byte[] blob = mapper.writeValueAsString(entry.getValue()).getBytes();
+            Gson gson = new Gson();
+            byte[] blob = gson.toJson(entry.getValue()).getBytes();
 
             Bukkit.getLogger().info("[V10Lift] Saving lift " + entry.getKey() + " to data...");
 

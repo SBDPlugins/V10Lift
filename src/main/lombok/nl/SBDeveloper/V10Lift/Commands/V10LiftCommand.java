@@ -1,6 +1,5 @@
 package nl.SBDeveloper.V10Lift.Commands;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import nl.SBDeveloper.V10Lift.API.Objects.Floor;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
@@ -22,7 +21,6 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.*;
 
@@ -357,7 +355,7 @@ public class V10LiftCommand implements CommandExecutor {
         try {
             V10LiftPlugin.getDBManager().save();
             V10LiftPlugin.getDBManager().load();
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -917,11 +915,7 @@ public class V10LiftCommand implements CommandExecutor {
                 DataManager.removeRopeRemovesPlayer(p.getUniqueId());
                 DataManager.removeDoorEditPlayer(p.getUniqueId());
 
-                try {
-                    V10LiftPlugin.getDBManager().save();
-                } catch (JsonProcessingException e) {
-                    e.printStackTrace();
-                }
+                V10LiftPlugin.getDBManager().save();
 
                 BlockState bs;
                 Sign sign;
@@ -1087,7 +1081,7 @@ public class V10LiftCommand implements CommandExecutor {
         sender.sendMessage("§6/v10lift speed <New speed>§f: Change the speed of a lift.");
         sender.sendMessage("§6/v10lift realistic§f: Toggle realistic mode.");
         sender.sendMessage("§6/v10lift repair§f: Repair a lift.");
-        sender.sendMessage("§6/v10lift whitelist <add/del> <Player> [Floorname]§f: Add/remove someone of the whitelist.");
+        sender.sendMessage("§6/v10lift whitelist <add/del> <Player/Group> [Floorname]§f: Add/remove someone of the whitelist. Use g:<Groupname> for a group.");
         sender.sendMessage("§6/v10lift start [Name] [Floor]§f: Start a lift to a floor.");
         sender.sendMessage("§6/v10lift stop [Name]§f: Stop a lift.");
         sender.sendMessage("§6/v10lift repair§f: Repair a lift.");

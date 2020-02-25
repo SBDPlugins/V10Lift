@@ -1,6 +1,5 @@
 package nl.SBDeveloper.V10Lift;
 
-import com.fasterxml.jackson.core.JsonProcessingException;
 import nl.SBDeveloper.V10Lift.API.V10LiftAPI;
 import nl.SBDeveloper.V10Lift.Commands.V10LiftCommand;
 import nl.SBDeveloper.V10Lift.Commands.V10LiftTabCompleter;
@@ -18,7 +17,6 @@ import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import java.io.IOException;
 import java.sql.SQLException;
 import java.util.Objects;
 
@@ -45,7 +43,7 @@ public class V10LiftPlugin extends JavaPlugin {
         dbManager = new DBManager("data");
         try {
             dbManager.load();
-        } catch (SQLException | IOException e) {
+        } catch (SQLException e) {
             e.printStackTrace();
         }
 
@@ -92,11 +90,7 @@ public class V10LiftPlugin extends JavaPlugin {
     public void onDisable() {
         V10LiftPlugin.getDBManager().removeFromData();
 
-        try {
-            dbManager.save();
-        } catch (JsonProcessingException e) {
-            e.printStackTrace();
-        }
+        dbManager.save();
         dbManager.closeConnection();
 
         instance = null;
