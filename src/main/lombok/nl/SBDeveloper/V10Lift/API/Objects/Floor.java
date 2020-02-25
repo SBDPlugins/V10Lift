@@ -13,7 +13,8 @@ public class Floor {
     private String world;
     private int y;
     private ArrayList<LiftBlock> doorBlocks = new ArrayList<>();
-    private HashSet<UUID> whitelist = new HashSet<>();
+    private HashSet<UUID> userWhitelist = new HashSet<>();
+    private HashSet<String> groupWhitelist = new HashSet<>();
 
     public Floor(int y, String world) {
         this.y = y;
@@ -47,7 +48,8 @@ public class Floor {
                 "world='" + world + '\'' +
                 ", y=" + y +
                 ", doorBlocks=" + doorBlocks +
-                ", whitelist=" + whitelist +
+                ", userWhitelist=" + userWhitelist +
+                ", groupWhitelist=" + groupWhitelist +
                 '}';
     }
 }

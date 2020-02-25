@@ -4,6 +4,7 @@ import nl.SBDeveloper.V10Lift.API.Objects.Floor;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
+import nl.SBDeveloper.V10Lift.Managers.VaultManager;
 import nl.SBDeveloper.V10Lift.Utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
@@ -316,7 +317,9 @@ public class PlayerInteractListener implements Listener {
                     Floor floor = lift.getFloors().get(f2);
                     if (lift.getY() == floor.getY()) {
                         sign.setLine(3, ChatColor.GREEN + f2);
-                    } else if (!floor.getWhitelist().isEmpty() && !floor.getWhitelist().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
+                    } else if (!floor.getUserWhitelist().isEmpty() && !floor.getUserWhitelist().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
+                        sign.setLine(3, ChatColor.RED + f2);
+                    } else if (!floor.getGroupWhitelist().isEmpty() && !VaultManager.userHasAnyGroup(p, floor.getGroupWhitelist()) && !p.hasPermission("v10lift.admin")) {
                         sign.setLine(3, ChatColor.RED + f2);
                     } else {
                         sign.setLine(3, ChatColor.YELLOW + f2);
@@ -329,7 +332,13 @@ public class PlayerInteractListener implements Listener {
                     }
 
                     Floor floor = lift.getFloors().get(f);
-                    if (!floor.getWhitelist().isEmpty() && !floor.getWhitelist().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
+                    if (!floor.getUserWhitelist().isEmpty() && !floor.getUserWhitelist().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
+                        p.sendMessage(ChatColor.RED + "You can't go to that floor!");
+                        e.setCancelled(true);
+                        return;
+                    }
+
+                    if (!floor.getGroupWhitelist().isEmpty() && !VaultManager.userHasAnyGroup(p, floor.getGroupWhitelist()) && !p.hasPermission("v10lift.admin")) {
                         p.sendMessage(ChatColor.RED + "You can't go to that floor!");
                         e.setCancelled(true);
                         return;

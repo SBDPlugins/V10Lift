@@ -10,6 +10,7 @@ import nl.SBDeveloper.V10Lift.Listeners.PlayerInteractListener;
 import nl.SBDeveloper.V10Lift.Listeners.SignChangeListener;
 import nl.SBDeveloper.V10Lift.Managers.DBManager;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
+import nl.SBDeveloper.V10Lift.Managers.VaultManager;
 import nl.SBDevelopment.SBUtilities.Data.YamlFile;
 import nl.SBDevelopment.SBUtilities.PrivateManagers.UpdateManager;
 import nl.SBDevelopment.SBUtilities.SBUtilities;
@@ -27,6 +28,7 @@ public class V10LiftPlugin extends JavaPlugin {
     private static YamlFile config;
     private static DBManager dbManager;
     private static V10LiftAPI api;
+    private static boolean vault = false;
 
     @Override
     public void onEnable() {
@@ -49,6 +51,12 @@ public class V10LiftPlugin extends JavaPlugin {
 
         //Load the API
         api = new V10LiftAPI();
+
+        //Load vault if found
+        if (Bukkit.getServer().getPluginManager().getPlugin("Vault") != null) {
+            vault = true;
+            VaultManager.setupPermissions();
+        }
 
         //Load the command
         Objects.requireNonNull(getCommand("v10lift"), "Internal error! Command not found.").setExecutor(new V10LiftCommand());
@@ -108,5 +116,9 @@ public class V10LiftPlugin extends JavaPlugin {
 
     public static V10LiftAPI getAPI() {
         return api;
+    }
+
+    public static boolean isVaultEnabled() {
+        return vault;
     }
 }

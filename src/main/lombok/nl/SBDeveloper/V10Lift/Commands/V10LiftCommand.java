@@ -6,6 +6,7 @@ import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftSign;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
+import nl.SBDeveloper.V10Lift.Managers.VaultManager;
 import nl.SBDeveloper.V10Lift.Utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
@@ -535,8 +536,24 @@ public class V10LiftCommand implements CommandExecutor {
         }
 
         Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
-        OfflinePlayer wp = Bukkit.getOfflinePlayer(args[2]);
-        UUID wpu = wp.getUniqueId();
+        boolean isGroup = false;
+        String wgn = null;
+        UUID wpu = null;
+        if (args[2].startsWith("g:")) {
+            if (!V10LiftPlugin.isVaultEnabled()) {
+                sender.sendMessage(ChatColor.RED + "You can't add a group when Vault is not found.");
+                return true;
+            }
+            isGroup = true;
+            wgn = args[2].replace("g:", "");
+            if (!VaultManager.isGroup(wgn)) {
+                sender.sendMessage(ChatColor.RED + "Group " + wgn + " not found!");
+                return true;
+            }
+        } else {
+            OfflinePlayer wp = Bukkit.getOfflinePlayer(args[2]);
+            wpu = wp.getUniqueId();
+        }
 
         String floor = null;
         if (args.length < 4) {
@@ -563,18 +580,36 @@ public class V10LiftCommand implements CommandExecutor {
 
         Floor f = lift.getFloors().get(floor);
         if (args[1].equalsIgnoreCase("add")) {
-            if (f.getWhitelist().contains(wpu)) {
-                sender.sendMessage(ChatColor.RED + "Whitelist already contains this user!");
+            if (isGroup) {
+                if (f.getGroupWhitelist().contains(wgn)) {
+                    sender.sendMessage(ChatColor.RED + "Whitelist already contains this group!");
+                } else {
+                    f.getGroupWhitelist().add(wgn);
+                    sender.sendMessage(ChatColor.GREEN + "Group added to whitelist!");
+                }
             } else {
-                f.getWhitelist().add(wpu);
-                sender.sendMessage(ChatColor.GREEN + "User added to whitelist!");
+                if (f.getUserWhitelist().contains(wpu)) {
+                    sender.sendMessage(ChatColor.RED + "Whitelist already contains this user!");
+                } else {
+                    f.getUserWhitelist().add(wpu);
+                    sender.sendMessage(ChatColor.GREEN + "User added to whitelist!");
+                }
             }
         } else if (args[1].equalsIgnoreCase("del")) {
-            if (!f.getWhitelist().contains(wpu)) {
-                sender.sendMessage(ChatColor.RED + "Whitelist doesn't contain this user!");
+            if (isGroup) {
+                if (!f.getGroupWhitelist().contains(wgn)) {
+                    sender.sendMessage(ChatColor.RED + "Whitelist doesn't contain this group!");
+                } else {
+                    f.getGroupWhitelist().remove(wgn);
+                    sender.sendMessage(ChatColor.GREEN + "Group removed from whitelist!");
+                }
             } else {
-                f.getWhitelist().remove(wpu);
-                sender.sendMessage(ChatColor.GREEN + "User removed from whitelist!");
+                if (!f.getUserWhitelist().contains(wpu)) {
+                    sender.sendMessage(ChatColor.RED + "Whitelist doesn't contain this user!");
+                } else {
+                    f.getUserWhitelist().remove(wpu);
+                    sender.sendMessage(ChatColor.GREEN + "User removed from whitelist!");
+                }
             }
         } else {
             return helpCommand(sender);
