@@ -18,11 +18,6 @@ pipeline {
             steps {
                 sh 'mvn -Dmaven.test.failure.ignore=true install' 
             }
-            post {
-                success {
-                    junit 'target/v10lift2/**/*.xml' 
-                }
-            }
         }
     }
 }
