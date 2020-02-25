@@ -15,17 +15,21 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.player.PlayerAnimationEvent;
+import org.bukkit.event.entity.EntityDamageByEntityEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.*;
+import java.util.Iterator;
+import java.util.Map;
+import java.util.Objects;
+import java.util.Optional;
 
 public class PlayerInteractListener implements Listener {
     //BUTTON CLICK
@@ -67,8 +71,10 @@ public class PlayerInteractListener implements Listener {
 
     //Gamemode adventure left click fix
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerLeftClickSign(PlayerAnimationEvent e) {
-        Player p = e.getPlayer();
+    public void onPlayerLeftClickSign(EntityDamageByEntityEvent e) {
+        Entity ent = e.getDamager();
+        if (!(ent instanceof Player)) return;
+        Player p = (Player) e.getDamager();
 
         if (p.getGameMode() != GameMode.ADVENTURE) return;
 
