@@ -15,23 +15,22 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
-import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.Action;
-import org.bukkit.event.entity.EntityDamageByEntityEvent;
+import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
 
-import java.util.Iterator;
-import java.util.Map;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class PlayerInteractListener implements Listener {
+
+    private ArrayList<UUID> rightClicked = new ArrayList<>();
+
     //BUTTON CLICK
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerInteractButton(PlayerInteractEvent e) {
@@ -71,10 +70,8 @@ public class PlayerInteractListener implements Listener {
 
     //Gamemode adventure left click fix
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
-    public void onPlayerLeftClickSign(EntityDamageByEntityEvent e) {
-        Entity ent = e.getDamager();
-        if (!(ent instanceof Player)) return;
-        Player p = (Player) e.getDamager();
+    public void onPlayerLeftClickSign(PlayerAnimationEvent e) {
+        Player p = e.getPlayer();
 
         if (p.getGameMode() != GameMode.ADVENTURE) return;
 
@@ -82,6 +79,11 @@ public class PlayerInteractListener implements Listener {
 
         BlockState bs = lookingBlock.getState();
         if (!(bs instanceof Sign)) return;
+
+        if (rightClicked.contains(p.getUniqueId())) {
+            rightClicked.remove(p.getUniqueId());
+            return;
+        }
 
         Sign sign = (Sign) bs;
         if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) return;
@@ -129,6 +131,8 @@ public class PlayerInteractListener implements Listener {
     //BLOCK ADD
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)
     public void onPlayerInteract(PlayerInteractEvent e) {
+        rightClicked.add(e.getPlayer().getUniqueId());
+
         if (e.getHand() != EquipmentSlot.OFF_HAND && e.getClickedBlock() != null) {
             Player p = e.getPlayer();
             if (DataManager.containsPlayer(p.getUniqueId())) {
