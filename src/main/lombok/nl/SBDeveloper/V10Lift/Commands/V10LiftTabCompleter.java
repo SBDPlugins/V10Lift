@@ -14,6 +14,7 @@ public class V10LiftTabCompleter implements TabCompleter {
 
     private static final List<String> COMMANDS = Arrays.asList("create", "delete", "rename", "abort", "whois", "edit", "floor", "input", "build", "rope", "door", "speed", "realistic", "repair", "whitelist", "reload", "help", "start", "stop", "offline");
 
+    
     @Override
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
         if (label.equalsIgnoreCase("v10lift")) {
