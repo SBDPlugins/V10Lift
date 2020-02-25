@@ -3,7 +3,7 @@ pipeline {
   stages {
     stage('Build') {
       steps {
-        build 'Build'
+        echo 'Building V10Lift...'
       }
     }
 
