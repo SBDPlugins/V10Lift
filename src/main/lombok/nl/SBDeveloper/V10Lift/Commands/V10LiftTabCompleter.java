@@ -18,7 +18,7 @@ public class V10LiftTabCompleter implements TabCompleter {
         if (label.equalsIgnoreCase("v10lift")) {
             ArrayList<String> returns = new ArrayList<>();
             if (args.length == 1) {
-                String[] strs = { "create", "delete", "abort", "whois", "edit", "floor", "input", "build", "rope", "door", "speed", "realistic", "repair", "whitelist", "reload", "help", "start", "stop", "offline" };
+                String[] strs = { "create", "delete", "rename", "abort", "whois", "edit", "floor", "input", "build", "rope", "door", "speed", "realistic", "repair", "whitelist", "reload", "help", "start", "stop", "offline" };
                 returns.addAll(Arrays.asList(strs));
             } else if (args.length == 2) {
                 if (args[0].equalsIgnoreCase("floor")) {

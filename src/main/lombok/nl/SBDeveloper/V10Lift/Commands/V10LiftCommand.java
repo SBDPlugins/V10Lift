@@ -1039,6 +1039,7 @@ public class V10LiftCommand implements CommandExecutor {
 
         sender.sendMessage("§6/v10lift create [Name]§f: Create a lift.");
         sender.sendMessage("§6/v10lift delete <Name>§f: Delete a lift.");
+        sender.sendMessage("§6/v10lift rename <Name> <New name>§f: Rename a lift.");
         sender.sendMessage("§6/v10lift abort§f: Abort your action.");
         sender.sendMessage("§6/v10lift whois [Name]§f: See information about a lift.");
         sender.sendMessage("§6/v10lift edit <Name>§f: Edit a lift.");
