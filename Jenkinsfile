@@ -18,6 +18,16 @@ pipeline {
             steps {
                 sh 'mvn -Dmaven.test.failure.ignore=true install' 
             }
+            post {
+                always {
+                    echo 'Archiving coverage results...'
+                    jacoco(execPattern: '**/**.exec', classPattern: '**/classes', sourcePattern: '**/src/main/java')
+                    echo 'Archiving test results...'
+                    junit 'target/surefire-reports/*.xml'
+                    echo 'Archiving artifacts...'
+                    archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+                }
+            }
         }
     }
 }
