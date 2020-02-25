@@ -52,6 +52,7 @@ public class V10LiftPlugin extends JavaPlugin {
 
         //Load vault if found
         if (Bukkit.getServer().getPluginManager().getPlugin("Vault") != null) {
+            Bukkit.getLogger().info("[V10Lift] Loading Vault hook for group whitelist support.");
             vault = true;
             VaultManager.setupPermissions();
         }
@@ -67,6 +68,7 @@ public class V10LiftPlugin extends JavaPlugin {
         Bukkit.getPluginManager().registerEvents(new EntityDamageListener(), this);
 
         //Load metrics
+        Bukkit.getLogger().info("[V10Lift] Loading metrics. Can be disabled in the global bStats config.");
         Metrics metrics = new Metrics(this, 6564);
         metrics.addCustomChart(new Metrics.SingleLineChart("lifts", () -> DataManager.getLifts().size()));
 
