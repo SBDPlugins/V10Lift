@@ -157,6 +157,7 @@ public class V10LiftCommand implements CommandExecutor {
             }
         } else if (args[0].equalsIgnoreCase("whois") && (args.length == 1 || args.length == 2)) {
             //v10lift whois || v10lift whois <Name>
+            //@TODO Make non-player
             if (!(sender instanceof Player)) {
                 sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
                 return true;
@@ -1099,7 +1100,7 @@ public class V10LiftCommand implements CommandExecutor {
         sender.sendMessage("§6/v10lift edit [Name]§f: Edit a lift.");
         sender.sendMessage("§6/v10lift floor <add/del/rename> <Name> [New name]§f: Add/remove/rename a floor.");
         sender.sendMessage("§6/v10lift input <add/del> [Floorname]§f: Add/remove an input.");
-        sender.sendMessage("§6/v10lift offline <add/del> [Floorname]§f: Add/remove an offline input.");
+        sender.sendMessage("§6/v10lift offline <add/del>§f: Add/remove an offline input.");
         sender.sendMessage("§6/v10lift build§f: Add/remove blocks to/from a cab.");
         sender.sendMessage("§6/v10lift rope <add/del>§f: Add/remove a rope.");
         sender.sendMessage("§6/v10lift door§f: Add doors to a lift.");
@@ -1109,7 +1110,7 @@ public class V10LiftCommand implements CommandExecutor {
         sender.sendMessage("§6/v10lift whitelist <add/del> <Player/Group> [Floorname]§f: Add/remove someone of the whitelist. Use g:<Groupname> for a group.");
         sender.sendMessage("§6/v10lift start [Name] [Floor]§f: Start a lift to a floor.");
         sender.sendMessage("§6/v10lift stop [Name]§f: Stop a lift.");
-        sender.sendMessage("§6/v10lift disable <Name>§f: Repair a lift.");
+        sender.sendMessage("§6/v10lift disable <Name>§f: Disable a lift.");
         sender.sendMessage("§6/v10lift repair <Name>§f: Repair a lift.");
         return true;
     }
