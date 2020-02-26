@@ -45,12 +45,7 @@ public class BlockBreakListener implements Listener {
                 }
 
                 for (LiftBlock lb : f.getRealDoorBlocks()) {
-                    Location loc;
-                    if (lb.getMat().toString().contains("DOOR")) {
-                        loc = DoorUtil.getLowerLocationOfDoor(b);
-                    } else {
-                        loc = b.getLocation();
-                    }
+                    Location loc = DoorUtil.getLowerLocationOfDoor(b);
                     if (lb.getWorld().equals(Objects.requireNonNull(loc.getWorld(), "World is null at BlockBreakListener").getName())
                             && lb.getX() == loc.getBlockX()
                             && lb.getY() == loc.getBlockY()

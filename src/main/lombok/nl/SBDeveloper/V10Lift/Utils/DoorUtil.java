@@ -86,6 +86,8 @@ public class DoorUtil {
     }
 
     public static Location getLowerLocationOfDoor(@Nonnull Block block) {
+        if (!isDoor(block)) return block.getLocation();
+
         if (XMaterial.isNewVersion()) {
             org.bukkit.block.data.type.Door door = (org.bukkit.block.data.type.Door) block.getBlockData();
             Location lower;
@@ -116,6 +118,17 @@ public class DoorUtil {
                 lower = block.getLocation();
             }
             return lower;
+        }
+    }
+
+    public static boolean isDoor(Block b) {
+        if (b == null) {
+            return false;
+        }
+        if (XMaterial.isNewVersion()) {
+            return b.getBlockData() instanceof org.bukkit.block.data.type.Door;
+        } else {
+            return b.getState().getData() instanceof org.bukkit.material.Door;
         }
     }
 
