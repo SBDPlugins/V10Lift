@@ -571,7 +571,7 @@ public class V10LiftCommand implements CommandExecutor {
         String floor = null;
         if (args.length < 4) {
             Block b = p.getLocation().getBlock();
-            Floor f = new Floor(b.getY() - 1, Objects.requireNonNull(b.getWorld(), "World was null at doorCommand").getName());
+            Floor f = new Floor(b.getY() - 1, Objects.requireNonNull(b.getWorld(), "World was null at whitelistCommand").getName());
             if (!lift.getFloors().containsValue(f)) {
                 sender.sendMessage(ChatColor.RED + "Automatic floor detection failed!");
                 return true;
@@ -667,7 +667,7 @@ public class V10LiftCommand implements CommandExecutor {
             }
         }
         DataManager.addDoorEditPlayer(p.getUniqueId(), floor);
-        sender.sendMessage(ChatColor.GREEN + "Now right-click on the door blocks!");
+        sender.sendMessage(ChatColor.GREEN + "Now right-click on the door blocks! (If it are real blocks, click on the bottom block)");
         sender.sendMessage(ChatColor.GREEN + "Then do /v10lift door to save it.");
         return true;
     }

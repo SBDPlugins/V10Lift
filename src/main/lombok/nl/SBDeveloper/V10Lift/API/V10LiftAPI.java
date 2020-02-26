@@ -8,6 +8,7 @@ import nl.SBDeveloper.V10Lift.Managers.DataManager;
 import nl.SBDeveloper.V10Lift.Managers.ForbiddenBlockManager;
 import nl.SBDeveloper.V10Lift.Utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.Utils.DirectionUtil;
+import nl.SBDeveloper.V10Lift.Utils.DoorUtil;
 import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import nl.SBDevelopment.SBUtilities.Utils.LocationSerializer;
@@ -387,6 +388,11 @@ public class V10LiftAPI {
             block.setType(Material.AIR);
         }
 
+        for (LiftBlock lb : f.getRealDoorBlocks()) {
+            Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at openDoor").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
+            DoorUtil.openDoor(block);
+        }
+
         lift.setDoorOpen(f);
 
         if (lift.isRealistic()) {
@@ -414,6 +420,11 @@ public class V10LiftAPI {
         for (LiftBlock lb : f.getDoorBlocks()) {
             Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at openDoor").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
             block.setType(Material.AIR);
+        }
+
+        for (LiftBlock lb : f.getRealDoorBlocks()) {
+            Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at openDoor").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
+            DoorUtil.openDoor(block);
         }
 
         lift.setDoorOpen(f);
@@ -456,6 +467,19 @@ public class V10LiftAPI {
                 }
                 if (blocked) break;
             }
+
+            for (LiftBlock lb : lift.getDoorOpen().getRealDoorBlocks()) {
+                Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at closeDoor").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
+                for (Entity ent : block.getChunk().getEntities()) {
+                    Location loc = ent.getLocation();
+
+                    if (loc.getBlockX() == lb.getX() && loc.getBlockY() == lb.getY() && loc.getBlockZ() == lb.getZ()) {
+                        blocked = true;
+                        break;
+                    }
+                }
+                if (blocked) break;
+            }
         }
 
         if (!blocked) {
@@ -467,6 +491,10 @@ public class V10LiftAPI {
                     state.setRawData(lb.getData());
                 }
                 state.update(true);
+            }
+            for (LiftBlock lb : lift.getDoorOpen().getRealDoorBlocks()) {
+                Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at closeDoor").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
+                DoorUtil.closeDoor(block);
             }
             lift.setDoorOpen(null);
             if (lift.getDoorCloser() != null) lift.getDoorCloser().stop();

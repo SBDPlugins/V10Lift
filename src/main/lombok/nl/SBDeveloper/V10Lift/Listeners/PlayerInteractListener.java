@@ -6,6 +6,7 @@ import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
 import nl.SBDeveloper.V10Lift.Managers.VaultManager;
 import nl.SBDeveloper.V10Lift.Utils.ConfigUtil;
+import nl.SBDeveloper.V10Lift.Utils.DoorUtil;
 import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import org.bukkit.Bukkit;
@@ -292,12 +293,21 @@ public class PlayerInteractListener implements Listener {
                 }
                 Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
                 Floor floor = lift.getFloors().get(DataManager.getDoorEditPlayer(p.getUniqueId()));
-                if (floor.getDoorBlocks().contains(lb)) {
-                    floor.getDoorBlocks().remove(lb);
-                    p.sendMessage(ChatColor.GOLD + "Door removed.");
-                    return;
+                if (DoorUtil.isOpenable(block)) {
+                    if (floor.getRealDoorBlocks().contains(lb)) {
+                        floor.getRealDoorBlocks().remove(lb);
+                        p.sendMessage(ChatColor.GOLD + "Door removed.");
+                        return;
+                    }
+                    floor.getRealDoorBlocks().add(lb);
+                } else {
+                    if (floor.getDoorBlocks().contains(lb)) {
+                        floor.getDoorBlocks().remove(lb);
+                        p.sendMessage(ChatColor.GOLD + "Door removed.");
+                        return;
+                    }
+                    floor.getDoorBlocks().add(lb);
                 }
-                floor.getDoorBlocks().add(lb);
                 p.sendMessage(ChatColor.GREEN + "Door created.");
             } else if (DataManager.containsWhoisREQPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
