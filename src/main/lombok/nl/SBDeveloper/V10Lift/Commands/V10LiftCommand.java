@@ -157,11 +157,6 @@ public class V10LiftCommand implements CommandExecutor {
             }
         } else if (args[0].equalsIgnoreCase("whois") && (args.length == 1 || args.length == 2)) {
             //v10lift whois || v10lift whois <Name>
-            //@TODO Make non-player
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
-                return true;
-            }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return whoisCommand(sender, args);
             } else {
@@ -220,11 +215,6 @@ public class V10LiftCommand implements CommandExecutor {
             }
         } else if (args[0].equalsIgnoreCase("repair") && args.length == 2) {
             //v10lift repair <Name>
-            //@TODO Make non-player
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
-                return true;
-            }
             if (sender.hasPermission("v10lift.repair") || sender.hasPermission("v10lift.admin")) {
                 return repairCommand(sender, args);
             } else {
@@ -238,24 +228,14 @@ public class V10LiftCommand implements CommandExecutor {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
             }
         } else if (args[0].equalsIgnoreCase("start")) {
-            //@TODO Make non-player
             //v10lift start <Name> <Floor>
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
-                return true;
-            }
             if (sender.hasPermission("v10lift.start") || sender.hasPermission("v10lift.admin")) {
                 return startCommand(sender, args);
             } else {
                 sender.sendMessage(ChatColor.RED + "You don't have the permission to do this!");
             }
         } else if (args[0].equalsIgnoreCase("stop")) {
-            //@TODO Make non-player
             //v10lift stop <Name>
-            if (!(sender instanceof Player)) {
-                sender.sendMessage(ChatColor.RED + "You have to be a player to do this.");
-                return true;
-            }
             if (sender.hasPermission("v10lift.stop") || sender.hasPermission("v10lift.admin")) {
                 return stopCommand(sender, args);
             } else {
@@ -453,7 +433,6 @@ public class V10LiftCommand implements CommandExecutor {
     }
 
     private boolean repairCommand(CommandSender sender, @Nonnull String[] args) {
-        Player p = (Player) sender;
         String liftName = args[1];
         if (!DataManager.containsLift(liftName)) {
             sender.sendMessage(ChatColor.RED + "Lift " + args[1] + " doesn't exists!");
@@ -467,23 +446,26 @@ public class V10LiftCommand implements CommandExecutor {
             return true;
         }
 
-        int masterAmount = V10LiftPlugin.getSConfig().getFile().getInt("MasterRepairAmount");
-        Optional<XMaterial> mat = XMaterial.matchXMaterial(Objects.requireNonNull(V10LiftPlugin.getSConfig().getFile().getString("MasterRepairItem"), "MasterRepairItem is null"));
-        if (!mat.isPresent()) {
-            Bukkit.getLogger().severe("[V10Lift] The material for MasterRepairItem is undefined!");
-            return true;
-        }
-        Material masterItem = mat.get().parseMaterial();
-        if (masterItem == null) {
-            Bukkit.getLogger().severe("[V10Lift] The material for MasterRepairItem is undefined!");
-            return true;
-        }
-        if (p.getGameMode() != GameMode.CREATIVE && masterAmount > 0) {
-            if (!p.getInventory().contains(masterItem)) {
-                sender.sendMessage(ChatColor.RED + "You need " + masterAmount + "x " + masterItem.toString().toLowerCase() + "!");
+        if (sender instanceof Player) {
+            Player p = (Player) sender;
+            int masterAmount = V10LiftPlugin.getSConfig().getFile().getInt("MasterRepairAmount");
+            Optional<XMaterial> mat = XMaterial.matchXMaterial(Objects.requireNonNull(V10LiftPlugin.getSConfig().getFile().getString("MasterRepairItem"), "MasterRepairItem is null"));
+            if (!mat.isPresent()) {
+                Bukkit.getLogger().severe("[V10Lift] The material for MasterRepairItem is undefined!");
                 return true;
             }
-            p.getInventory().remove(new ItemStack(masterItem, masterAmount));
+            Material masterItem = mat.get().parseMaterial();
+            if (masterItem == null) {
+                Bukkit.getLogger().severe("[V10Lift] The material for MasterRepairItem is undefined!");
+                return true;
+            }
+            if (p.getGameMode() != GameMode.CREATIVE && masterAmount > 0) {
+                if (!p.getInventory().contains(masterItem)) {
+                    sender.sendMessage(ChatColor.RED + "You need " + masterAmount + "x " + masterItem.toString().toLowerCase() + "!");
+                    return true;
+                }
+                p.getInventory().remove(new ItemStack(masterItem, masterAmount));
+            }
         }
         V10LiftPlugin.getAPI().setDefective(liftName, false);
         sender.sendMessage(ChatColor.GREEN + "Lift repaired!");
@@ -536,9 +518,14 @@ public class V10LiftCommand implements CommandExecutor {
     }
 
     private boolean whoisCommand(CommandSender sender, @Nonnull String[] args) {
-        Player p = (Player) sender;
         if (args.length < 2) {
+            if (!(sender instanceof Player)) {
+                sender.sendMessage(ChatColor.RED + "You need to be a player to use this command without name.");
+                return true;
+            }
+
             //Without name
+            Player p = (Player) sender;
             DataManager.addWhoisREQPlayer(p.getUniqueId());
             sender.sendMessage(ChatColor.GREEN + "Now right-click on the block you want to check.");
         } else {
@@ -546,7 +533,7 @@ public class V10LiftCommand implements CommandExecutor {
             if (!DataManager.containsLift(liftName)) {
                 sender.sendMessage(ChatColor.RED + "Lift " + liftName + " not found!");
             } else {
-                V10LiftPlugin.getAPI().sendLiftInfo(p, liftName);
+                V10LiftPlugin.getAPI().sendLiftInfo(sender, liftName);
             }
         }
         return true;

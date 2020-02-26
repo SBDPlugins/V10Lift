@@ -16,6 +16,7 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 
@@ -809,64 +810,63 @@ public class V10LiftAPI {
 
     /**
      * Send info about a lift to a player
-     * @param p The player
+     * @param send Where you want to send it to
      * @param liftName The name of the lift
      */
-    public void sendLiftInfo(Player p, String liftName) {
-        sendLiftInfo(p, liftName, DataManager.getLift(liftName));
+    public void sendLiftInfo(Object send, String liftName) {
+        sendLiftInfo(send, liftName, DataManager.getLift(liftName));
     }
 
     /**
      * Send info about a lift to a player
-     * @param p The player
+     * @param send Where you want to send it to
      * @param liftName The name of the lift
      * @param lift The lift
      */
-    public void sendLiftInfo(@Nonnull Player p, String liftName, @Nonnull Lift lift) {
-        if (!lift.getOwners().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
-            p.sendMessage(ChatColor.RED + "You don't have the permission to check this lift!");
+    public void sendLiftInfo(@Nonnull Object send, String liftName, @Nonnull Lift lift) {
+
+        CommandSender ent = (CommandSender) send;
+
+        ent.sendMessage(ChatColor.GOLD + "Elevator: " + ChatColor.YELLOW + liftName);
+        ent.sendMessage(ChatColor.GOLD + "Settings:");
+        ent.sendMessage(ChatColor.GREEN + "  Speed: " + ChatColor.YELLOW + lift.getSpeed());
+        ent.sendMessage(ChatColor.GREEN + "  Realistic Mode: " + ChatColor.YELLOW + lift.isRealistic());
+        ent.sendMessage(ChatColor.GREEN + "  Malfunction: " + ChatColor.YELLOW + lift.isDefective());
+        ent.sendMessage(ChatColor.GOLD + "Floors:");
+        if (lift.getFloors().isEmpty()) {
+            ent.sendMessage(ChatColor.RED + "None.");
         } else {
-            p.sendMessage(ChatColor.GOLD + "Elevator: " + ChatColor.YELLOW + liftName);
-            p.sendMessage(ChatColor.GOLD + "Settings:");
-            p.sendMessage(ChatColor.GREEN + "  Speed: " + ChatColor.YELLOW + lift.getSpeed());
-            p.sendMessage(ChatColor.GREEN + "  Realistic Mode: " + ChatColor.YELLOW + lift.isRealistic());
-            p.sendMessage(ChatColor.GREEN + "  Malfunction: " + ChatColor.YELLOW + lift.isDefective());
-            p.sendMessage(ChatColor.GOLD + "Floors:");
-            if (lift.getFloors().isEmpty()) {
-                p.sendMessage(ChatColor.RED + "None.");
-            } else {
-                for (Map.Entry<String, Floor> entry : lift.getFloors().entrySet()) {
-                    p.sendMessage(ChatColor.GREEN + "  " + entry.getKey() + ":");
-                    Floor f = entry.getValue();
-                    p.sendMessage(ChatColor.YELLOW + "    World: " + ChatColor.GREEN + f.getWorld());
-                    p.sendMessage(ChatColor.YELLOW + "    Height: " + ChatColor.GREEN + f.getY());
-                    p.sendMessage(ChatColor.YELLOW + "    Whitelist:");
-                    if (f.getUserWhitelist().isEmpty() && f.getGroupWhitelist().isEmpty()) {
-                        p.sendMessage(ChatColor.GOLD + "      None.");
-                    } else {
-                        ChatColor color = ChatColor.DARK_PURPLE;
-                        Iterator<UUID> iter = f.getUserWhitelist().iterator();
-                        Iterator<String> iter2 = f.getGroupWhitelist().iterator();
-                        StringBuilder sb = new StringBuilder();
-                        sb.append("      ").append(color).append(Bukkit.getOfflinePlayer(iter.next()).getName());
-                        while (iter.hasNext()) {
-                            if (color == ChatColor.DARK_PURPLE) {
-                                color = ChatColor.LIGHT_PURPLE;
-                            } else {
-                                color = ChatColor.DARK_PURPLE;
-                            }
-                            sb.append(ChatColor.AQUA).append(", ").append(color).append(Bukkit.getOfflinePlayer(iter.next()).getName());
+            for (Map.Entry<String, Floor> entry : lift.getFloors().entrySet()) {
+                ent.sendMessage(ChatColor.GREEN + "  " + entry.getKey() + ":");
+                Floor f = entry.getValue();
+                ent.sendMessage(ChatColor.YELLOW + "    World: " + ChatColor.GREEN + f.getWorld());
+                ent.sendMessage(ChatColor.YELLOW + "    Height: " + ChatColor.GREEN + f.getY());
+                ent.sendMessage(ChatColor.YELLOW + "    Whitelist:");
+                if (f.getUserWhitelist().isEmpty() && f.getGroupWhitelist().isEmpty()) {
+                    ent.sendMessage(ChatColor.GOLD + "      None.");
+                } else {
+                    ChatColor color = ChatColor.DARK_PURPLE;
+                    Iterator<UUID> iter = f.getUserWhitelist().iterator();
+                    Iterator<String> iter2 = f.getGroupWhitelist().iterator();
+                    StringBuilder sb = new StringBuilder();
+                    sb.append("      ").append(color).append(Bukkit.getOfflinePlayer(iter.next()).getName());
+                    while (iter.hasNext()) {
+                        if (color == ChatColor.DARK_PURPLE) {
+                            color = ChatColor.LIGHT_PURPLE;
+                        } else {
+                            color = ChatColor.DARK_PURPLE;
                         }
-                        while (iter2.hasNext()) {
-                            if (color == ChatColor.DARK_PURPLE) {
-                                color = ChatColor.LIGHT_PURPLE;
-                            } else {
-                                color = ChatColor.DARK_PURPLE;
-                            }
-                            sb.append(ChatColor.AQUA).append(", ").append(color).append("Group: ").append(iter2.next());
-                        }
-                        p.sendMessage(sb.toString());
+                        sb.append(ChatColor.AQUA).append(", ").append(color).append(Bukkit.getOfflinePlayer(iter.next()).getName());
                     }
+                    while (iter2.hasNext()) {
+                        if (color == ChatColor.DARK_PURPLE) {
+                            color = ChatColor.LIGHT_PURPLE;
+                        } else {
+                            color = ChatColor.DARK_PURPLE;
+                        }
+                        sb.append(ChatColor.AQUA).append(", ").append(color).append("Group: ").append(iter2.next());
+                    }
+                    ent.sendMessage(sb.toString());
                 }
             }
         }
