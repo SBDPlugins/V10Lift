@@ -448,23 +448,25 @@ public class V10LiftCommand implements CommandExecutor {
 
         if (sender instanceof Player) {
             Player p = (Player) sender;
-            int masterAmount = V10LiftPlugin.getSConfig().getFile().getInt("MasterRepairAmount");
-            Optional<XMaterial> mat = XMaterial.matchXMaterial(Objects.requireNonNull(V10LiftPlugin.getSConfig().getFile().getString("MasterRepairItem"), "MasterRepairItem is null"));
-            if (!mat.isPresent()) {
-                Bukkit.getLogger().severe("[V10Lift] The material for MasterRepairItem is undefined!");
-                return true;
-            }
-            Material masterItem = mat.get().parseMaterial();
-            if (masterItem == null) {
-                Bukkit.getLogger().severe("[V10Lift] The material for MasterRepairItem is undefined!");
-                return true;
-            }
-            if (p.getGameMode() != GameMode.CREATIVE && masterAmount > 0) {
-                if (!p.getInventory().contains(masterItem)) {
-                    sender.sendMessage(ChatColor.RED + "You need " + masterAmount + "x " + masterItem.toString().toLowerCase() + "!");
+            if (!p.hasPermission("v10lift.admin")) {
+                int masterAmount = V10LiftPlugin.getSConfig().getFile().getInt("MasterRepairAmount");
+                Optional<XMaterial> mat = XMaterial.matchXMaterial(Objects.requireNonNull(V10LiftPlugin.getSConfig().getFile().getString("MasterRepairItem"), "MasterRepairItem is null"));
+                if (!mat.isPresent()) {
+                    Bukkit.getLogger().severe("[V10Lift] The material for MasterRepairItem is undefined!");
                     return true;
                 }
-                p.getInventory().remove(new ItemStack(masterItem, masterAmount));
+                Material masterItem = mat.get().parseMaterial();
+                if (masterItem == null) {
+                    Bukkit.getLogger().severe("[V10Lift] The material for MasterRepairItem is undefined!");
+                    return true;
+                }
+                if (p.getGameMode() != GameMode.CREATIVE && masterAmount > 0) {
+                    if (!p.getInventory().contains(masterItem)) {
+                        sender.sendMessage(ChatColor.RED + "You need " + masterAmount + "x " + masterItem.toString().toLowerCase() + "!");
+                        return true;
+                    }
+                    p.getInventory().remove(new ItemStack(masterItem, masterAmount));
+                }
             }
         }
         V10LiftPlugin.getAPI().setDefective(liftName, false);
