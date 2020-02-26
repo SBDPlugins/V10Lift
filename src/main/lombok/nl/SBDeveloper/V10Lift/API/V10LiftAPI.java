@@ -579,76 +579,60 @@ public class V10LiftAPI {
         boolean oldState = lift.isDefective();
         if (oldState == state) return -2;
         lift.setDefective(state);
-        Iterator<LiftSign> liter = lift.getSigns().iterator();
         if (state) {
             //SET DEFECTIVE
-            int max = lift.getSigns().size();
-            if (max == 0) return -3;
-            LiftSign ls;
-            if (max == 1) {
-                //If one sign, update that one.
-                ls = liter.next();
-            } else {
-                //If multiple signs, get random one.
-                int r = new Random().nextInt(max);
-                for (int i = 0; i < r; i++) {
-                    liter.next();
-                }
-                ls = liter.next();
-            }
-
             //Update sign
-            Block block = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at setDefective").getBlockAt(ls.getX(), ls.getY(), ls.getZ());
-            BlockState bs = block.getState();
-            if (!(bs instanceof Sign)) {
-                Bukkit.getLogger().severe("[V10Lift] Wrong sign removed at: " + LocationSerializer.serialize(block.getLocation()));
-                liter.remove();
-                return -4;
+            for (LiftSign ls : lift.getSigns()) {
+                Block block = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at setDefective").getBlockAt(ls.getX(), ls.getY(), ls.getZ());
+                BlockState bs = block.getState();
+                if (!(bs instanceof Sign)) {
+                    Bukkit.getLogger().severe("[V10Lift] Wrong sign removed at: " + LocationSerializer.serialize(block.getLocation()));
+                    return -4;
+                }
+
+                Sign s = (Sign) bs;
+                ls.setOldText(s.getLine(3));
+                s.setLine(3, ConfigUtil.getColored("DefectText"));
+                s.update();
             }
 
-            Sign s = (Sign) bs;
-            ls.setOldText(s.getLine(3));
-            s.setLine(3, ConfigUtil.getColored("DefectText"));
-            s.update();
-
-            //Update all other signs
+            //Update all cab signs
             for (LiftBlock lb : lift.getBlocks()) {
-                bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at setDefective").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
+                BlockState bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at setDefective").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
                 if (!(bs instanceof Sign)) continue;
 
-                s = (Sign) bs;
+                Sign s = (Sign) bs;
                 lift.setSignText(s.getLine(3));
                 s.setLine(3, ConfigUtil.getColored("DefectText"));
                 s.update();
             }
         } else {
-            LiftSign ls;
-            BlockState bs;
-            Sign s;
-            while (liter.hasNext()) {
-                ls = liter.next();
-                bs = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at setDefective").getBlockAt(ls.getX(), ls.getY(), ls.getZ()).getState();
-                if (!(bs instanceof Sign)) {
-                    Bukkit.getLogger().severe("[V10Lift] Wrong sign removed at: " + LocationSerializer.serialize(bs.getBlock().getLocation()));
-                    liter.remove();
-                    continue;
-                }
-                s = (Sign) bs;
-                if (s.getLine(3).equals(ConfigUtil.getColored("DefectText"))) {
-                    s.setLine(3, ls.getOldText());
-                    s.update();
-                    ls.setOldText(null);
-                    for (LiftBlock lb : lift.getBlocks()) {
-                        bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at setDefective").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
-                        if (!(bs instanceof Sign)) continue;
 
-                        s = (Sign) bs;
-                        s.setLine(3, lift.getSignText());
-                        s.update();
-                        lift.setSignText(null);
-                    }
+            //Update sign
+            for (LiftSign ls : lift.getSigns()) {
+                Block block = Objects.requireNonNull(Bukkit.getWorld(ls.getWorld()), "World is null at setDefective").getBlockAt(ls.getX(), ls.getY(), ls.getZ());
+                BlockState bs = block.getState();
+                if (!(bs instanceof Sign)) {
+                    Bukkit.getLogger().severe("[V10Lift] Wrong sign removed at: " + LocationSerializer.serialize(block.getLocation()));
+                    return -4;
                 }
+
+                Sign s = (Sign) bs;
+                s.setLine(3, ls.getOldText());
+                ls.setOldText(null);
+                s.update();
             }
+
+            //Update all cab signs
+            for (LiftBlock lb : lift.getBlocks()) {
+                BlockState bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at setDefective").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
+                if (!(bs instanceof Sign)) continue;
+
+                Sign s = (Sign) bs;
+                s.setLine(3, lift.getSignText());
+                s.update();
+            }
+            lift.setSignText(null);
         }
         return 0;
     }
