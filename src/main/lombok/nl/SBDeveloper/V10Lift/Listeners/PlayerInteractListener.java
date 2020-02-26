@@ -62,6 +62,7 @@ public class PlayerInteractListener implements Listener {
                 for (LiftBlock lb : lift.getInputs()) {
                     if (world.equals(lb.getWorld()) && x == lb.getX() && y == lb.getY() && z == lb.getZ()) {
                         V10LiftPlugin.getAPI().addToQueue(entry.getKey(), lift.getFloors().get(lb.getFloor()), lb.getFloor());
+                        e.setCancelled(true);
                         return;
                     }
                 }

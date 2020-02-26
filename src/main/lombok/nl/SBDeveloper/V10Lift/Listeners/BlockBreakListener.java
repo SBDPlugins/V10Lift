@@ -3,10 +3,11 @@ package nl.SBDeveloper.V10Lift.Listeners;
 import nl.SBDeveloper.V10Lift.API.Objects.Floor;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
-import nl.SBDeveloper.V10Lift.API.Objects.LiftSign;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
+import nl.SBDeveloper.V10Lift.Utils.DoorUtil;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import org.bukkit.ChatColor;
+import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
 import org.bukkit.event.EventHandler;
@@ -15,6 +16,7 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
 
 import java.util.Map;
+import java.util.Objects;
 
 public class BlockBreakListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
@@ -40,6 +42,23 @@ public class BlockBreakListener implements Listener {
                     e.getPlayer().sendMessage(ChatColor.RED + "You can't do this! Remove the door first.");
                     e.setCancelled(true);
                     return;
+                }
+
+                for (LiftBlock lb : f.getRealDoorBlocks()) {
+                    Location loc;
+                    if (lb.getMat().toString().contains("DOOR")) {
+                        loc = DoorUtil.getLowerLocationOfDoor(b);
+                    } else {
+                        loc = b.getLocation();
+                    }
+                    if (lb.getWorld().equals(Objects.requireNonNull(loc.getWorld(), "World is null at BlockBreakListener").getName())
+                            && lb.getX() == loc.getBlockX()
+                            && lb.getY() == loc.getBlockY()
+                            && lb.getZ() == loc.getBlockZ()) {
+                        e.getPlayer().sendMessage(ChatColor.RED + "You can't do this! Remove the door first.");
+                        e.setCancelled(true);
+                        return;
+                    }
                 }
             }
 

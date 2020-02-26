@@ -667,7 +667,7 @@ public class V10LiftCommand implements CommandExecutor {
             }
         }
         DataManager.addDoorEditPlayer(p.getUniqueId(), floor);
-        sender.sendMessage(ChatColor.GREEN + "Now right-click on the door blocks! (If it are real blocks, click on the bottom block)");
+        sender.sendMessage(ChatColor.GREEN + "Now right-click on the door blocks! (If it are real doors/gates, click on the bottom block)");
         sender.sendMessage(ChatColor.GREEN + "Then do /v10lift door to save it.");
         return true;
     }
