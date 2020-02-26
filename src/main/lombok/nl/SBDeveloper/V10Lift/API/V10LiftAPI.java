@@ -810,22 +810,20 @@ public class V10LiftAPI {
 
     /**
      * Send info about a lift to a player
-     * @param send Where you want to send it to
+     * @param sender Where you want to send it to
      * @param liftName The name of the lift
      */
-    public void sendLiftInfo(Object send, String liftName) {
-        sendLiftInfo(send, liftName, DataManager.getLift(liftName));
+    public void sendLiftInfo(CommandSender sender, String liftName) {
+        sendLiftInfo(sender, liftName, DataManager.getLift(liftName));
     }
 
     /**
      * Send info about a lift to a player
-     * @param send Where you want to send it to
+     * @param ent Where you want to send it to
      * @param liftName The name of the lift
      * @param lift The lift
      */
-    public void sendLiftInfo(@Nonnull Object send, String liftName, @Nonnull Lift lift) {
-
-        CommandSender ent = (CommandSender) send;
+    public void sendLiftInfo(@Nonnull CommandSender ent, String liftName, @Nonnull Lift lift) {
 
         ent.sendMessage(ChatColor.GOLD + "Elevator: " + ChatColor.YELLOW + liftName);
         ent.sendMessage(ChatColor.GOLD + "Settings:");
