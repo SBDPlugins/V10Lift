@@ -207,6 +207,9 @@ public class V10LiftAPI {
             } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
                 Bukkit.getLogger().info("Block instanceof Dir 1.13");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block));
+            } else if (block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
+                Bukkit.getLogger().info("Block not instanceof Dir 1.13 but instanceof bisected");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), DirectionUtil.getBisected(block));
             } else {
                 Bukkit.getLogger().info("Block not instanceof Dir 1.13");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
@@ -261,6 +264,9 @@ public class V10LiftAPI {
             } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
                 Bukkit.getLogger().info("Block instanceof Dir 1.13");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block));
+            } else if (block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
+                Bukkit.getLogger().info("Block not instanceof Dir 1.13 but instanceof bisected");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), DirectionUtil.getBisected(block));
             } else {
                 Bukkit.getLogger().info("Block not instanceof Dir 1.13");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
@@ -315,6 +321,9 @@ public class V10LiftAPI {
             } else if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
                 Bukkit.getLogger().info("Block instanceof Dir 1.13");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block));
+            } else if (block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
+                Bukkit.getLogger().info("Block not instanceof Dir 1.13 but instanceof bisected");
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), DirectionUtil.getBisected(block));
             } else {
                 Bukkit.getLogger().info("Block not instanceof Dir 1.13");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);

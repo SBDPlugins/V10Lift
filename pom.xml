@@ -5,7 +5,7 @@
     <groupId>nl.SBDeveloper</groupId>
     <artifactId>V10Lift2</artifactId>
     <name>V10Lift</name>
-    <version>0.5.7</version>
+    <version>0.5.8</version>
 
     <distributionManagement>
         <repository>

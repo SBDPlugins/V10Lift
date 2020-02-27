@@ -134,6 +134,20 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.bisected = null;
     }
 
+    /* 1.13 liftblock (no dir but bisec) */
+    public LiftBlock(String world, int x, int y, int z, Material mat, String bisected) {
+        this.world = world;
+        this.x = x;
+        this.y = y;
+        this.z = z;
+        this.mat = mat;
+        this.face = null;
+        this.data = 0;
+        this.signLines = null;
+        this.floor = null;
+        this.bisected = bisected;
+    }
+
     @Override
     public int compareTo(@Nonnull LiftBlock lb) {
         int ret = Integer.compare(y, lb.y);
