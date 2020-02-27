@@ -39,6 +39,14 @@
                     <include>config.yml</include>
                 </includes>
             </resource>
+            <resource>
+                <targetPath>.</targetPath>
+                <filtering>true</filtering>
+                <directory>src/main/resources</directory>
+                <includes>
+                    <include>messages.yml</include>
+                </includes>
+            </resource>
         </resources>
         <directory>target</directory>
         <finalName>V10Lift v${project.version}</finalName>
