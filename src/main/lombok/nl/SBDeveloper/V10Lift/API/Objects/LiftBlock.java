@@ -45,6 +45,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.signLines = null;
         this.floor = floor;
         this.bisected = null;
+        this.slabtype = null;
     }
 
     /** 1.12 liftblocks **/
@@ -61,6 +62,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.signLines = null;
         this.floor = null;
         this.bisected = null;
+        this.slabtype = null;
     }
 
     /* 1.12 liftblock (sign) */
@@ -75,6 +77,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.signLines = signLines;
         this.floor = null;
         this.bisected = null;
+        this.slabtype = null;
     }
 
     /** 1.13 liftblocks **/
@@ -91,6 +94,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.signLines = null;
         this.floor = null;
         this.bisected = null;
+        this.slabtype = null;
     }
 
     /* 1.13 liftblock (Directional) */
@@ -105,6 +109,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.signLines = null;
         this.floor = null;
         this.bisected = null;
+        this.slabtype = null;
     }
 
     /* 1.13 liftblock (dir & bisec) */
@@ -119,6 +124,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.signLines = null;
         this.floor = null;
         this.bisected = bisected;
+        this.slabtype = null;
     }
 
     /* 1.13 liftblock (sign) */
@@ -133,6 +139,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.signLines = signLines;
         this.floor = null;
         this.bisected = null;
+        this.slabtype = null;
     }
 
     /* 1.13 liftblock (slab) */
@@ -146,6 +153,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.data = 0;
         this.signLines = null;
         this.floor = null;
+        this.bisected = null;
         this.slabtype = slabtype;
     }
 

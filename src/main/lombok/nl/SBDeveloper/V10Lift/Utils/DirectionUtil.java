@@ -46,6 +46,7 @@ public class DirectionUtil {
             try {
                 half = org.bukkit.block.data.Bisected.Half.valueOf(bisected);
             } catch (IllegalArgumentException e) {
+                e.printStackTrace();
                 return;
             }
 
@@ -74,6 +75,7 @@ public class DirectionUtil {
             try {
                 type = org.bukkit.block.data.type.Slab.Type.valueOf(slabtype);
             } catch (IllegalArgumentException e) {
+                e.printStackTrace();
                 return;
             }
 

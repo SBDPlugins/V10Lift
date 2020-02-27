@@ -209,7 +209,7 @@ public class V10LiftAPI {
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block));
             } else if (block.getBlockData() instanceof org.bukkit.block.data.type.Slab) {
                 Bukkit.getLogger().info("Block instanceof Slab 1.13");
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), DirectionUtil.getSlabType(block));
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getSlabType(block));
             } else {
                 Bukkit.getLogger().info("Block not instanceof Dir 1.13");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
@@ -266,7 +266,7 @@ public class V10LiftAPI {
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block));
             } else if (block.getBlockData() instanceof org.bukkit.block.data.type.Slab) {
                 Bukkit.getLogger().info("Block instanceof Slab 1.13");
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), DirectionUtil.getSlabType(block));
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getSlabType(block));
             } else {
                 Bukkit.getLogger().info("Block not instanceof Dir 1.13");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
@@ -323,7 +323,7 @@ public class V10LiftAPI {
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block));
             } else if (block.getBlockData() instanceof org.bukkit.block.data.type.Slab) {
                 Bukkit.getLogger().info("Block instanceof Slab 1.13");
-                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), DirectionUtil.getSlabType(block));
+                lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getSlabType(block));
             } else {
                 Bukkit.getLogger().info("Block not instanceof Dir 1.13");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type);
