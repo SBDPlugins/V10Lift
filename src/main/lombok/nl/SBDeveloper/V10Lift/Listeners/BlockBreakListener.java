@@ -4,9 +4,9 @@ import nl.SBDeveloper.V10Lift.API.Objects.Floor;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftBlock;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
+import nl.SBDeveloper.V10Lift.Utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.Utils.DoorUtil;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
-import org.bukkit.ChatColor;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -23,7 +23,7 @@ public class BlockBreakListener implements Listener {
     public void onBlockBreak(BlockBreakEvent e) {
         Block b = e.getBlock();
         if (V10LiftPlugin.getAPI().isRope(b)) {
-            e.getPlayer().sendMessage(ChatColor.RED + "You can't do this! Remove the rope first.");
+            ConfigUtil.sendMessage(e.getPlayer(), "General.RemoveRopeFirst");
             e.setCancelled(true);
             return;
         }
@@ -32,14 +32,14 @@ public class BlockBreakListener implements Listener {
         for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
             Lift lift = entry.getValue();
             if (lift.getBlocks().contains(tlb)) {
-                e.getPlayer().sendMessage(ChatColor.RED + "You can't do this! Remove the lift first.");
+                ConfigUtil.sendMessage(e.getPlayer(), "General.RemoveLiftFirst");
                 e.setCancelled(true);
                 return;
             }
 
             for (Floor f : lift.getFloors().values()) {
                 if (f.getDoorBlocks().contains(tlb)) {
-                    e.getPlayer().sendMessage(ChatColor.RED + "You can't do this! Remove the door first.");
+                    ConfigUtil.sendMessage(e.getPlayer(), "General.RemoveDoorFirst");
                     e.setCancelled(true);
                     return;
                 }
@@ -50,7 +50,7 @@ public class BlockBreakListener implements Listener {
                             && lb.getX() == loc.getBlockX()
                             && lb.getY() == loc.getBlockY()
                             && lb.getZ() == loc.getBlockZ()) {
-                        e.getPlayer().sendMessage(ChatColor.RED + "You can't do this! Remove the door first.");
+                        ConfigUtil.sendMessage(e.getPlayer(), "General.RemoveDoorFirst");
                         e.setCancelled(true);
                         return;
                     }
@@ -62,11 +62,11 @@ public class BlockBreakListener implements Listener {
             if (!lift.getSigns().contains(tlb)) continue;
 
             if (!lift.getOwners().contains(e.getPlayer().getUniqueId()) && !e.getPlayer().hasPermission("v10lift.admin")) {
-                e.getPlayer().sendMessage(ChatColor.RED + "You can't do this!");
+                ConfigUtil.sendMessage(e.getPlayer(), "General.NoPermission");
                 e.setCancelled(true);
             } else {
                 lift.getSigns().remove(tlb);
-                e.getPlayer().sendMessage(ChatColor.YELLOW + "Lift sign removed!");
+                ConfigUtil.sendMessage(e.getPlayer(), "LiftSign.Removed");
             }
         }
     }

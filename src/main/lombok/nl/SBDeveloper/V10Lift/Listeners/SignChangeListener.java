@@ -3,6 +3,7 @@ package nl.SBDeveloper.V10Lift.Listeners;
 import nl.SBDeveloper.V10Lift.API.Objects.Lift;
 import nl.SBDeveloper.V10Lift.API.Objects.LiftSign;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
+import nl.SBDeveloper.V10Lift.Utils.ConfigUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -20,18 +21,18 @@ public class SignChangeListener implements Listener {
 
         Player p = e.getPlayer();
         if (lines[1].isEmpty()) {
-            p.sendMessage(ChatColor.RED + "No lift name given!");
+            ConfigUtil.sendMessage(e.getPlayer(), "LiftSign.NoName");
             return;
         }
 
         if (!DataManager.containsLift(lines[1])) {
-            p.sendMessage(ChatColor.RED + "Lift " + lines[1] + " doesn't exists!");
+            ConfigUtil.sendMessage(e.getPlayer(), "General.DoesntExists");
             return;
         }
 
         Lift lift = DataManager.getLift(lines[1]);
         if (!lift.getOwners().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
-            p.sendMessage(ChatColor.RED + "You can't do this!");
+            ConfigUtil.sendMessage(e.getPlayer(), "General.NoPermission");
             e.setCancelled(true);
             return;
         }
@@ -47,7 +48,7 @@ public class SignChangeListener implements Listener {
 
         Block b = e.getBlock();
         lift.getSigns().add(new LiftSign(b.getWorld().getName(), b.getX(), b.getY(), b.getZ(), type, (byte) 0));
-        p.sendMessage(ChatColor.GREEN + "Lift sign created!");
+        ConfigUtil.sendMessage(e.getPlayer(), "LiftSign.Created");
     }
 
 }

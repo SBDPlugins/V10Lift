@@ -110,19 +110,19 @@ public class PlayerInteractListener implements Listener {
         String f = ChatColor.stripColor(sign.getLine(3));
 
         if (!lift.getFloors().containsKey(f)) {
-            p.sendMessage(ChatColor.RED + "Floor not found!");
+            ConfigUtil.sendMessage(e.getPlayer(), "General.FloorDoesntExists");
             return;
         }
 
         Floor floor = lift.getFloors().get(f);
         if (!floor.getUserWhitelist().isEmpty() && !floor.getUserWhitelist().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
-            p.sendMessage(ChatColor.RED + "You can't go to that floor!");
+            ConfigUtil.sendMessage(e.getPlayer(), "General.NoWhitelistPermission");
             e.setCancelled(true);
             return;
         }
 
         if (!floor.getGroupWhitelist().isEmpty() && !VaultManager.userHasAnyGroup(p, floor.getGroupWhitelist()) && !p.hasPermission("v10lift.admin")) {
-            p.sendMessage(ChatColor.RED + "You can't go to that floor!");
+            ConfigUtil.sendMessage(e.getPlayer(), "General.NoWhitelistPermission");
             e.setCancelled(true);
             return;
         }
@@ -143,16 +143,16 @@ public class PlayerInteractListener implements Listener {
                 int res = V10LiftPlugin.getAPI().switchBlockAtLift(DataManager.getPlayer(p.getUniqueId()), e.getClickedBlock());
                 switch (res) {
                     case 0:
-                        p.sendMessage(ChatColor.GREEN + "Block added to the elevator.");
+                        ConfigUtil.sendMessage(e.getPlayer(), "Build.BlockAdded");
                         break;
                     case 1:
-                        p.sendMessage(ChatColor.GOLD + "Block removed from the elevator.");
+                        ConfigUtil.sendMessage(e.getPlayer(), "Build.BlockRemoved");
                         break;
                     case -2:
-                        p.sendMessage(ChatColor.RED + "The material " + e.getClickedBlock().getType().toString() + " cannot be used!");
+                        ConfigUtil.sendMessage(e.getPlayer(), "Build.BlacklistedMaterial", Collections.singletonMap("%Name%", e.getClickedBlock().getType().toString().toLowerCase()));
                         break;
                     default:
-                        p.sendMessage(ChatColor.RED + "Internal error.");
+                        ConfigUtil.sendMessage(e.getPlayer(), "General.InternalError");
                         break;
                 }
             } else if (DataManager.containsInputEditsPlayer(p.getUniqueId())) {
@@ -162,12 +162,12 @@ public class PlayerInteractListener implements Listener {
                 Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
                 e.setCancelled(true);
                 if (lift.getInputs().contains(tlb)) {
-                    p.sendMessage(ChatColor.RED + "This block has already been chosen as an input. Choose another block!");
+                    ConfigUtil.sendMessage(e.getPlayer(), "Input.AlreadyAdded");
                     return;
                 }
                 lift.getInputs().add(tlb);
                 DataManager.removeInputEditsPlayer(p.getUniqueId());
-                p.sendMessage(ChatColor.GREEN + "Input created!");
+                ConfigUtil.sendMessage(e.getPlayer(), "Input.Created");
             } else if (DataManager.containsOfflineEditsPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 Block block = e.getClickedBlock();
@@ -175,12 +175,12 @@ public class PlayerInteractListener implements Listener {
                 Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
                 e.setCancelled(true);
                 if (lift.getOfflineInputs().contains(tlb)) {
-                    p.sendMessage(ChatColor.RED + "This block has already been chosen as an input. Choose another block!");
+                    ConfigUtil.sendMessage(e.getPlayer(), "OfflineInput.AlreadyAdded");
                     return;
                 }
                 lift.getOfflineInputs().add(tlb);
                 DataManager.removeOfflineEditsPlayer(p.getUniqueId());
-                p.sendMessage(ChatColor.GREEN + "Offline input created!");
+                ConfigUtil.sendMessage(e.getPlayer(), "OfflineInput.Created");
             } else if (DataManager.containsInputRemovesPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 Block block = e.getClickedBlock();
@@ -190,10 +190,10 @@ public class PlayerInteractListener implements Listener {
                 if (lift.getInputs().contains(tlb)) {
                     lift.getInputs().remove(tlb);
                     DataManager.removeInputRemovesPlayer(p.getUniqueId());
-                    p.sendMessage(ChatColor.GREEN + "Input removed!");
+                    ConfigUtil.sendMessage(e.getPlayer(), "Input.Removed");
                     return;
                 }
-                p.sendMessage(ChatColor.RED + "This block is not an input. Choose another block!");
+                ConfigUtil.sendMessage(e.getPlayer(), "Input.NoInput");
             } else if (DataManager.containsOfflineRemovesPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 Block block = e.getClickedBlock();
@@ -203,26 +203,26 @@ public class PlayerInteractListener implements Listener {
                 if (lift.getOfflineInputs().contains(tlb)) {
                     lift.getOfflineInputs().remove(tlb);
                     DataManager.removeOfflineRemovesPlayer(p.getUniqueId());
-                    p.sendMessage(ChatColor.GREEN + "Offline input removed!");
+                    ConfigUtil.sendMessage(e.getPlayer(), "OfflineInput.Removed");
                     return;
                 }
-                p.sendMessage(ChatColor.RED + "This block is not an offline input. Choose another block!");
+                ConfigUtil.sendMessage(e.getPlayer(), "OfflineInput.NoInput");
             } else if (DataManager.containsBuilderPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 e.setCancelled(true);
                 int res = V10LiftPlugin.getAPI().switchBlockAtLift(DataManager.getEditPlayer(p.getUniqueId()), e.getClickedBlock());
                 switch (res) {
                     case 0:
-                        p.sendMessage(ChatColor.GREEN + "Block added to the elevator.");
+                        ConfigUtil.sendMessage(e.getPlayer(), "Build.BlockAdded");
                         break;
                     case 1:
-                        p.sendMessage(ChatColor.GOLD + "Block removed from the elevator.");
+                        ConfigUtil.sendMessage(e.getPlayer(), "Build.BlockRemoved");
                         break;
                     case -2:
-                        p.sendMessage(ChatColor.RED + "The material " + e.getClickedBlock().getType().toString() + " cannot be used!");
+                        ConfigUtil.sendMessage(e.getPlayer(), "Build.BlacklistedMaterial", Collections.singletonMap("%Name%", e.getClickedBlock().getType().toString().toLowerCase()));
                         break;
                     default:
-                        p.sendMessage(ChatColor.RED + "Internal error.");
+                        ConfigUtil.sendMessage(e.getPlayer(), "General.InternalError");
                         break;
                 }
             } else if (DataManager.containsRopeEditPlayer(p.getUniqueId())) {
@@ -231,33 +231,32 @@ public class PlayerInteractListener implements Listener {
                 LiftBlock start = DataManager.getRopeEditPlayer(p.getUniqueId());
                 Block now = e.getClickedBlock();
                 if (start == null) {
-                    p.sendMessage(ChatColor.GOLD + "Now right-click on the end of the rope!");
+                    ConfigUtil.sendMessage(e.getPlayer(), "Rope.Delete");
                     DataManager.addRopeEditPlayer(p.getUniqueId(), new LiftBlock(now.getWorld().getName(), now.getX(), now.getY(), now.getZ(), (String) null));
                 } else if (start.equals(new LiftBlock(now.getWorld().getName(), now.getX(), now.getY(), now.getZ(), (String) null))) {
                     DataManager.addRopeEditPlayer(p.getUniqueId(), null);
-                    p.sendMessage(ChatColor.GOLD + "Start removed!");
-                    p.sendMessage(ChatColor.GOLD + "Now right-click on the end of the rope!");
+                    ConfigUtil.sendMessage(e.getPlayer(), "Rope.PartRemoved");
                 } else {
                     if (start.getX() != now.getX() || start.getZ() != now.getZ()) {
-                        p.sendMessage(ChatColor.RED + "A rope can only go up!");
+                        ConfigUtil.sendMessage(e.getPlayer(), "Rope.OnlyUp");
                         return;
                     }
                     int res = V10LiftPlugin.getAPI().addRope(DataManager.getEditPlayer(p.getUniqueId()), now.getWorld(), start.getX(), now.getY(), start.getY(), start.getZ());
                     switch (res) {
                         case 0:
-                            p.sendMessage(ChatColor.GREEN + "Rope created.");
+                            ConfigUtil.sendMessage(e.getPlayer(), "Rope.Created");
                             break;
                         case -2:
-                            p.sendMessage(ChatColor.RED + "The rope must be of the same material!");
+                            ConfigUtil.sendMessage(e.getPlayer(), "Rope.OnlyOneMaterial");
                             break;
                         case -3:
-                            p.sendMessage(ChatColor.RED + "Part of the rope is already part of another rope!");
+                            ConfigUtil.sendMessage(e.getPlayer(), "Rope.AlreadyARope");
                             break;
                         case -4:
-                            p.sendMessage(ChatColor.RED + "The rope is build of blacklisted blocks!");
+                            ConfigUtil.sendMessage(e.getPlayer(), "Rope.BlacklistedMaterial");
                             break;
                         default:
-                            p.sendMessage(ChatColor.RED + "Internal error.");
+                            ConfigUtil.sendMessage(e.getPlayer(), "General.InternalError");
                             break;
                     }
                     DataManager.removeRopeEditPlayer(p.getUniqueId());
@@ -268,18 +267,18 @@ public class PlayerInteractListener implements Listener {
                 Block block = e.getClickedBlock();
                 String liftName = DataManager.getEditPlayer(p.getUniqueId());
                 if (!V10LiftPlugin.getAPI().containsRope(liftName, block)) {
-                    p.sendMessage(ChatColor.RED + "This block is not part of the rope.");
+                    ConfigUtil.sendMessage(e.getPlayer(), "Rope.NotARope");
                     return;
                 }
                 V10LiftPlugin.getAPI().removeRope(liftName, block);
                 DataManager.removeRopeRemovesPlayer(p.getUniqueId());
-                p.sendMessage(ChatColor.GREEN + "Rope removed.");
+                ConfigUtil.sendMessage(e.getPlayer(), "Rope.Removed");
             } else if (DataManager.containsDoorEditPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 e.setCancelled(true);
                 Block block = e.getClickedBlock();
                 if (V10LiftPlugin.getAPI().getFBM().isForbidden(block.getType())) {
-                    p.sendMessage(ChatColor.RED + "The material " + e.getClickedBlock().getType().toString() + " is currently not supported!");
+                    ConfigUtil.sendMessage(e.getPlayer(), "Door.BlacklistedMaterial", Collections.singletonMap("%Name%", e.getClickedBlock().getType().toString().toLowerCase()));
                     return;
                 }
                 LiftBlock lb;
@@ -293,19 +292,19 @@ public class PlayerInteractListener implements Listener {
                 if (DoorUtil.isOpenable(block)) {
                     if (floor.getRealDoorBlocks().contains(lb)) {
                         floor.getRealDoorBlocks().remove(lb);
-                        p.sendMessage(ChatColor.GOLD + "Door removed.");
+                        ConfigUtil.sendMessage(e.getPlayer(), "Door.Removed");
                         return;
                     }
                     floor.getRealDoorBlocks().add(lb);
                 } else {
                     if (floor.getDoorBlocks().contains(lb)) {
                         floor.getDoorBlocks().remove(lb);
-                        p.sendMessage(ChatColor.GOLD + "Door removed.");
+                        ConfigUtil.sendMessage(e.getPlayer(), "Door.Removed");
                         return;
                     }
                     floor.getDoorBlocks().add(lb);
                 }
-                p.sendMessage(ChatColor.GREEN + "Door created.");
+                ConfigUtil.sendMessage(e.getPlayer(), "Door.Created");
             } else if (DataManager.containsWhoisREQPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 e.setCancelled(true);
@@ -319,7 +318,7 @@ public class PlayerInteractListener implements Listener {
                         return;
                     }
                 }
-                p.sendMessage(ChatColor.RED + "This block is not part of a lift.");
+                ConfigUtil.sendMessage(e.getPlayer(), "Whois.NotALift");
             } else {
                 Action a = e.getAction();
                 if (a != Action.RIGHT_CLICK_BLOCK && a != Action.LEFT_CLICK_BLOCK) return;
@@ -353,7 +352,10 @@ public class PlayerInteractListener implements Listener {
                         }
                         if (p.getGameMode() != GameMode.CREATIVE && masterAmount > 0) {
                             if (!p.getInventory().contains(masterItem)) {
-                                p.sendMessage(ChatColor.RED + "You need " + masterAmount + "x " + masterItem.toString().toLowerCase() + "!");
+                                Map<String, String> replacements = new HashMap<>();
+                                replacements.put("%Amount%", String.valueOf(masterAmount));
+                                replacements.put("%ItemName%", masterItem.toString().toLowerCase());
+                                ConfigUtil.sendMessage(e.getPlayer(), "Repair.ItemsNeeded", replacements);
                                 return;
                             }
                             p.getInventory().remove(new ItemStack(masterItem, masterAmount));
@@ -373,7 +375,7 @@ public class PlayerInteractListener implements Listener {
                     Iterator<String> iter = lift.getFloors().keySet().iterator();
                     if (!lift.getFloors().containsKey(f)) {
                         if (!iter.hasNext()) {
-                            p.sendMessage(ChatColor.RED + "This elevator has no floors!");
+                            ConfigUtil.sendMessage(e.getPlayer(), "General.NoFloors");
                             return;
                         }
                         f = iter.next();
@@ -397,19 +399,19 @@ public class PlayerInteractListener implements Listener {
                     sign.update();
                 } else {
                     if (!lift.getFloors().containsKey(f)) {
-                        p.sendMessage(ChatColor.RED + "Floor not found!");
+                        ConfigUtil.sendMessage(e.getPlayer(), "General.FloorDoesntExists");
                         return;
                     }
 
                     Floor floor = lift.getFloors().get(f);
                     if (!floor.getUserWhitelist().isEmpty() && !floor.getUserWhitelist().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
-                        p.sendMessage(ChatColor.RED + "You can't go to that floor!");
+                        ConfigUtil.sendMessage(e.getPlayer(), "General.NoWhitelistPermission");
                         e.setCancelled(true);
                         return;
                     }
 
                     if (!floor.getGroupWhitelist().isEmpty() && !VaultManager.userHasAnyGroup(p, floor.getGroupWhitelist()) && !p.hasPermission("v10lift.admin")) {
-                        p.sendMessage(ChatColor.RED + "You can't go to that floor!");
+                        ConfigUtil.sendMessage(e.getPlayer(), "General.NoWhitelistPermission");
                         e.setCancelled(true);
                         return;
                     }

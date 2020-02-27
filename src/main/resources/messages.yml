@@ -108,6 +108,7 @@ Whitelist:
     Removed: "&aUser removed from whitelist!"
 
 Whois:
+  UseWithoutName: "&cYou need to be a player to use this command without name."
   NotALift: "&cThis block is not part of a lift."
   WithoutName: "&aNow right-click on the block you want to check."
 

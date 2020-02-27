@@ -2,6 +2,7 @@ package nl.SBDeveloper.V10Lift.API.Runnables;
 
 import nl.SBDeveloper.V10Lift.API.Objects.*;
 import nl.SBDeveloper.V10Lift.Managers.DataManager;
+import nl.SBDeveloper.V10Lift.Utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.Utils.DirectionUtil;
 import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import nl.SBDeveloper.V10Lift.Utils.XSound;
@@ -283,7 +284,7 @@ public class MoveLift implements Runnable {
                 }
                 sign = (Sign) bs;
                 if (ls.getType() == 0) {
-                    sign.setLine(3, ChatColor.GREEN + "up");
+                    sign.setLine(3, ConfigUtil.getConfigText("UpText"));
                 } else {
                     sign.setLine(3, ChatColor.GRAY + ChatColor.stripColor(sign.getLine(3)));
                 }
@@ -397,7 +398,7 @@ public class MoveLift implements Runnable {
                 }
                 sign = (Sign) bs;
                 if (ls.getType() == 0) {
-                    sign.setLine(3, ChatColor.GREEN + "down");
+                    sign.setLine(3, ConfigUtil.getConfigText("DownText"));
                 } else {
                     sign.setLine(3, ChatColor.GRAY + ChatColor.stripColor(sign.getLine(3)));
                 }

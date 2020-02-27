@@ -5,7 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nonnull;
-import java.util.HashMap;
+import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -48,9 +48,8 @@ public class ConfigUtil {
      * @param p The commandsender to send it to
      * @param path The path to look for
      * @param replacement The replacements -> key: %Name% = value: TheName
-     * @return The message with replacements
      */
-    public static void sendMessage(CommandSender p, @Nonnull String path, HashMap<String, String> replacement) {
+    public static void sendMessage(CommandSender p, @Nonnull String path, Map<String, String> replacement) {
         String fileMessage = V10LiftPlugin.getMessages().getFile().getString(path);
         if (fileMessage == null) {
             throw new NullPointerException("Message " + path + " not found in messages.yml!");
