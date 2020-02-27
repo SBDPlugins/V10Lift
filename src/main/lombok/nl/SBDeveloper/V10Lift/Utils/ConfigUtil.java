@@ -5,6 +5,7 @@ import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
 
 import javax.annotation.Nonnull;
+import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
 import java.util.regex.Matcher;
@@ -55,6 +56,11 @@ public class ConfigUtil {
             throw new NullPointerException("Message " + path + " not found in messages.yml!");
         }
 
+        Map<String, String> fixedMap = new HashMap<>();
+        for (Map.Entry<String, String> ent : replacement.entrySet()) {
+            fixedMap.put(ent.getKey().replaceAll("%", ""), ent.getValue());
+        }
+
         String[] messages = fileMessage.split("\n");
         for (String message : messages) {
             Pattern pattern = Pattern.compile("%(.*?)%");
@@ -62,7 +68,7 @@ public class ConfigUtil {
             StringBuilder builder = new StringBuilder();
             int i = 0;
             while (matcher.find()) {
-                String repl = replacement.get(matcher.group(1));
+                String repl = fixedMap.get(matcher.group(1));
                 builder.append(message, i, matcher.start());
                 if (repl == null)
                     builder.append(matcher.group(0));

@@ -7,14 +7,20 @@ import org.bukkit.block.data.Bisected;
 
 import javax.annotation.Nonnull;
 
+/* Openable codes sponsored by MrWouter <3 */
 public class DoorUtil {
 
-    /* Gate codes sponsored by MrWouter <3 */
+    /**
+     * Open a door, with 1.12.x < and 1.13.x > support
+     * @param b The block (door)
+     * @return true if opened, false if not opened
+     */
     public static boolean openDoor(@Nonnull Block b) {
         if (b.getType() == XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_IRON_DOOR_OPEN.playSound(b.getLocation());
         if (b.getType().toString().contains("DOOR") && b.getType() != XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_WOODEN_DOOR_OPEN.playSound(b.getLocation());
         if (b.getType().toString().contains("GATE")) XSound.BLOCK_FENCE_GATE_OPEN.playSound(b.getLocation());
         if (XMaterial.isNewVersion()) {
+            //1.13+
             org.bukkit.block.data.BlockData blockData = b.getBlockData();
             if (isOpenable(b)) {
                 org.bukkit.block.data.Openable op = (org.bukkit.block.data.Openable) blockData;
@@ -26,6 +32,7 @@ public class DoorUtil {
                 return true;
             }
         } else {
+            //1.12-
             BlockState state = b.getState();
             if (isOpenable(b)) {
                 org.bukkit.material.Openable openable = (org.bukkit.material.Openable) state.getData();
@@ -41,12 +48,17 @@ public class DoorUtil {
         return false;
     }
 
-    /* Gate codes sponsored by MrWouter <3 */
+    /**
+     * Close a door, with 1.12.x < and 1.13.x > support
+     * @param b The block (door)
+     * @return true if opened, false if not opened
+     */
     public static boolean closeDoor(@Nonnull Block b) {
         if (b.getType() == XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_IRON_DOOR_CLOSE.playSound(b.getLocation());
         if (b.getType().toString().contains("DOOR") && b.getType() != XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_WOODEN_DOOR_CLOSE.playSound(b.getLocation());
         if (b.getType().toString().contains("GATE")) XSound.BLOCK_FENCE_GATE_CLOSE.playSound(b.getLocation());
         if (XMaterial.isNewVersion()) {
+            //1.13+
             org.bukkit.block.data.BlockData blockData = b.getBlockData();
             if (isOpenable(b)) {
                 org.bukkit.block.data.Openable op = (org.bukkit.block.data.Openable) blockData;
@@ -58,6 +70,7 @@ public class DoorUtil {
                 return true;
             }
         } else {
+            //1.12-
             BlockState state = b.getState();
             if (isOpenable(b)) {
                 org.bukkit.material.Openable openable = (org.bukkit.material.Openable) state.getData();
@@ -73,22 +86,36 @@ public class DoorUtil {
         return false;
     }
 
-    /* Gate codes sponsored by MrWouter <3 */
+    /**
+     * Check if a block instanceof Openable
+     *
+     * @param b The block
+     * @return true if Openable, false if not
+     */
     public static boolean isOpenable(Block b) {
         if (b == null) {
             return false;
         }
         if (XMaterial.isNewVersion()) {
+            //1.13+
             return b.getBlockData() instanceof org.bukkit.block.data.Openable;
         } else {
+            //1.12-
             return b.getState().getData() instanceof org.bukkit.material.Openable;
         }
     }
 
+    /**
+     * Get the lower location of a door
+     *
+     * @param block The location of a door
+     * @return The lower location of a door
+     */
     public static Location getLowerLocationOfDoor(@Nonnull Block block) {
         if (!isDoor(block)) return block.getLocation();
 
         if (XMaterial.isNewVersion()) {
+            //1.13+
             org.bukkit.block.data.type.Door door = (org.bukkit.block.data.type.Door) block.getBlockData();
             Location lower;
             if (door.getHalf() == Bisected.Half.TOP) {
@@ -104,6 +131,7 @@ public class DoorUtil {
             }
             return lower;
         } else {
+            //1.12-
             org.bukkit.material.Door door = (org.bukkit.material.Door) block.getState().getData();
             Location lower;
             if (door.isTopHalf()) {
@@ -121,13 +149,21 @@ public class DoorUtil {
         }
     }
 
+    /**
+     * Check if a block instanceof Door
+     *
+     * @param b The block
+     * @return true if a Door, false if not
+     */
     public static boolean isDoor(Block b) {
         if (b == null) {
             return false;
         }
         if (XMaterial.isNewVersion()) {
+            //1.13+
             return b.getBlockData() instanceof org.bukkit.block.data.type.Door;
         } else {
+            //1.12-
             return b.getState().getData() instanceof org.bukkit.material.Door;
         }
     }
