@@ -25,6 +25,7 @@ public class V10LiftPlugin extends JavaPlugin {
     private static V10LiftPlugin instance;
     private static YamlFile config;
     private static DBManager dbManager;
+    private static YamlFile messages;
     private static V10LiftAPI api;
     private static boolean vault = false;
 
@@ -38,6 +39,10 @@ public class V10LiftPlugin extends JavaPlugin {
         //Load the config
         config = new YamlFile("config");
         config.loadDefaults();
+
+        //Load the messages
+        messages = new YamlFile("messages");
+        messages.loadDefaults();
 
         //Load the database
         dbManager = new DBManager("data");
@@ -108,6 +113,10 @@ public class V10LiftPlugin extends JavaPlugin {
 
     public static DBManager getDBManager() {
         return dbManager;
+    }
+
+    public static YamlFile getMessages() {
+        return messages;
     }
 
     public static V10LiftAPI getAPI() {

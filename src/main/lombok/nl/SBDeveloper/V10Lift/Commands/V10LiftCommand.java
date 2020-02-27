@@ -942,7 +942,7 @@ public class V10LiftCommand implements CommandExecutor {
                     bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at edit command").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
                     if (!(bs instanceof Sign)) continue;
                     sign = (Sign) bs;
-                    if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) continue;
+                    if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getConfigText("SignText"))) continue;
                     sign.setLine(3, "");
                     sign.update();
                 }
@@ -990,7 +990,7 @@ public class V10LiftCommand implements CommandExecutor {
                 bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at edit command").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
                 if (!(bs instanceof Sign)) continue;
                 sign = (Sign) bs;
-                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) continue;
+                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getConfigText("SignText"))) continue;
                 sign.setLine(3, ChatColor.RED + "Maintenance");
                 sign.update();
             }
@@ -1006,7 +1006,7 @@ public class V10LiftCommand implements CommandExecutor {
                 }
                 sign = (Sign) bs;
                 ls.setOldText(sign.getLine(3));
-                sign.setLine(3, ConfigUtil.getColored("MaintenanceText"));
+                sign.setLine(3, ConfigUtil.getConfigText("MaintenanceText"));
                 sign.update();
             }
             sender.sendMessage(ChatColor.GREEN + "Editor turned on!");

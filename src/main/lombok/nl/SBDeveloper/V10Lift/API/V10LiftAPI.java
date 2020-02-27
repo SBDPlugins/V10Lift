@@ -620,7 +620,7 @@ public class V10LiftAPI {
 
                 Sign s = (Sign) bs;
                 ls.setOldText(s.getLine(3));
-                s.setLine(3, ConfigUtil.getColored("DefectText"));
+                s.setLine(3, ConfigUtil.getConfigText("DefectText"));
                 s.update();
             }
 
@@ -631,7 +631,7 @@ public class V10LiftAPI {
 
                 Sign s = (Sign) bs;
                 lift.setSignText(s.getLine(3));
-                s.setLine(3, ConfigUtil.getColored("DefectText"));
+                s.setLine(3, ConfigUtil.getConfigText("DefectText"));
                 s.update();
             }
         } else {
@@ -733,8 +733,8 @@ public class V10LiftAPI {
                 bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at setOffline").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
                 if (!(bs instanceof Sign)) continue;
                 sign = (Sign) bs;
-                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) continue;
-                sign.setLine(3, ConfigUtil.getColored("DisabledText"));
+                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getConfigText("SignText"))) continue;
+                sign.setLine(3, ConfigUtil.getConfigText("DisabledText"));
                 sign.update();
             }
 
@@ -748,7 +748,7 @@ public class V10LiftAPI {
                 }
                 sign = (Sign) bs;
                 ls.setOldText(sign.getLine(3));
-                sign.setLine(3, ConfigUtil.getColored("DisabledText"));
+                sign.setLine(3, ConfigUtil.getConfigText("DisabledText"));
                 sign.update();
             }
         } else {
@@ -756,7 +756,7 @@ public class V10LiftAPI {
                 bs = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at setOffline").getBlockAt(lb.getX(), lb.getY(), lb.getZ()).getState();
                 if (!(bs instanceof Sign)) continue;
                 sign = (Sign) bs;
-                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) continue;
+                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getConfigText("SignText"))) continue;
                 sign.setLine(3, "");
                 sign.update();
             }

@@ -88,7 +88,7 @@ public class PlayerInteractListener implements Listener {
         }
 
         Sign sign = (Sign) bs;
-        if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) return;
+        if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getConfigText("SignText"))) return;
 
         String liftName = sign.getLine(1);
         if (!DataManager.containsLift(liftName)) return;
@@ -328,7 +328,7 @@ public class PlayerInteractListener implements Listener {
                 if (!(bs instanceof Sign)) return;
 
                 Sign sign = (Sign) bs;
-                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getColored("SignText"))) return;
+                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getConfigText("SignText"))) return;
 
                 String liftName = sign.getLine(1);
                 if (!DataManager.containsLift(liftName)) return;
@@ -339,7 +339,7 @@ public class PlayerInteractListener implements Listener {
                 }
 
                 if (lift.isDefective()) {
-                    if (sign.getLine(3).equals(ConfigUtil.getColored("DefectText")) && p.hasPermission("v10lift.repair") && a == Action.RIGHT_CLICK_BLOCK) {
+                    if (sign.getLine(3).equals(ConfigUtil.getConfigText("DefectText")) && p.hasPermission("v10lift.repair") && a == Action.RIGHT_CLICK_BLOCK) {
                         int masterAmount = V10LiftPlugin.getSConfig().getFile().getInt("RepairAmount");
                         Optional<XMaterial> mat = XMaterial.matchXMaterial(Objects.requireNonNull(V10LiftPlugin.getSConfig().getFile().getString("RepairItem"), "RepairItem is null"));
                         if (!mat.isPresent()) {
