@@ -207,6 +207,7 @@ public class MoveLift implements Runnable {
                 if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
                     DirectionUtil.setBisected(block, lib.getBisected());
+                    DirectionUtil.setSlabType(block, lib.getSlabtype());
                 }
                 lb = lift.getBlocks().first();
                 for (Entity ent : Objects.requireNonNull(Bukkit.getWorld(lib.getWorld()), "World is null at MoveLift").getBlockAt(lib.getX(), lib.getY(), lib.getZ()).getChunk().getEntities()) {
@@ -252,6 +253,7 @@ public class MoveLift implements Runnable {
                 if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
                     DirectionUtil.setBisected(block, lib.getBisected());
+                    DirectionUtil.setSlabType(block, lib.getSlabtype());
                 }
                 lift.getBlocks().add(lib);
                 if (lib.getSignLines() != null) {
@@ -342,6 +344,7 @@ public class MoveLift implements Runnable {
                 if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
                     DirectionUtil.setBisected(block, lib.getBisected());
+                    DirectionUtil.setSlabType(block, lib.getSlabtype());
                 }
             }
             veiter = lift.getToMove().iterator();
@@ -367,6 +370,7 @@ public class MoveLift implements Runnable {
                 if (XMaterial.isNewVersion()) {
                     DirectionUtil.setDirection(block, lib.getFace());
                     DirectionUtil.setBisected(block, lib.getBisected());
+                    DirectionUtil.setSlabType(block, lib.getSlabtype());
                 }
                 lift.getBlocks().add(lib);
                 if (lib.getSignLines() != null) {

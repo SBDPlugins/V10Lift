@@ -55,4 +55,32 @@ public class DirectionUtil {
             block.setBlockData(bd);
         }
     }
+
+    @Nullable
+    public static String getSlabType(@Nonnull Block block) {
+        if (!XMaterial.isNewVersion()) return null;
+        if (block.getBlockData() instanceof org.bukkit.block.data.type.Slab) {
+            org.bukkit.block.data.type.Slab slab = (org.bukkit.block.data.type.Slab) block.getBlockData();
+            return slab.getType().toString();
+        }
+        return null;
+    }
+
+    public static void setSlabType(@Nonnull Block block, String slabtype) {
+        if (!XMaterial.isNewVersion()) return;
+        if (slabtype != null && block.getBlockData() instanceof org.bukkit.block.data.type.Slab) {
+
+            org.bukkit.block.data.type.Slab.Type type;
+            try {
+                type = org.bukkit.block.data.type.Slab.Type.valueOf(slabtype);
+            } catch (IllegalArgumentException e) {
+                return;
+            }
+
+            org.bukkit.block.data.BlockData bd = block.getBlockData();
+            org.bukkit.block.data.type.Slab slab = (org.bukkit.block.data.type.Slab) bd;
+            slab.setType(type);
+            block.setBlockData(bd);
+        }
+    }
 }
