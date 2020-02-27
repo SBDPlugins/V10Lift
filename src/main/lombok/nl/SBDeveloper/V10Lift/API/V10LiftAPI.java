@@ -229,7 +229,7 @@ public class V10LiftAPI {
      *
      * @param blocks The blockset
      * @param block The LiftBlock
-     * @return 0 if added, -1 if null or doesn't exists, -2 if forbidden, -3 if already added
+     * @return 0 if added, -2 if forbidden, -3 if already added
      */
     public int addBlockToLift(@Nonnull Set<LiftBlock> blocks, @Nonnull LiftBlock block) {
         if (getFBM().isForbidden(block.getMat())) return -2;

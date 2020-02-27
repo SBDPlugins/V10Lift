@@ -1,0 +1,154 @@
+General:
+  #General
+  NoPermission: "&cYou don't have the permission to do this."
+  PlayerOnly: "&cYou have to be a player to do this."
+  IncorrectUsage: "&cPlease use %Command%"
+  InternalError: "&cInternal error!"
+
+  #General lift
+  DoesntExists: "&cA lift with that name doesn't exists."
+  AlreadyExists: "&cA lift with that name already exists."
+  SwitchOnEdit: "&cFirst switch on the editor mode!"
+  DetectionFailed: "&cAutomatic floor detection failed!"
+  FloorDoesntExists: "&cThe floor %Name% doesn't exists!"
+
+  #Control lift
+  NoWhitelistPermission: "&cYou can't go to that floor!"
+  NoFloors: "&cThis elevator has no floors!"
+
+  #Anti break
+  RemoveLiftFirst: "&cYou can't do this! Remove the lift first."
+  RemoveRopeFirst: "&cYou can't do this! Remove the rope first."
+  RemoveDoorFirst: "&cYou can't do this! Remove the door first."
+
+Create:
+  AddBlocks: "&aOkay, now add all the blocks from the cab by right-clicking on the blocks.\n&aThen type: /v10lift create <Name>"
+  NoBlocks: "&cAdd blocks first."
+  Created: "&aThe lift %Name% is successfully created."
+
+Delete:
+  NotRemoved: "&cThe lift %Name% couldn't be removed."
+  Removed: "&aThe lift %Name% is successfully removed."
+
+Rename:
+  Renamed: "&aLift successfully renamed!"
+
+Edit:
+  StillInEditMode: "&cYou are still in editor mode."
+  TurnedOn: "&aEditor turned on."
+  TurnedOff: "&aEditor turned off."
+
+Floor:
+  ToHigh: "&cThat floor is too high!"
+  AlreadyExists: "&cThat floor already exists!"
+  DoesntExists: "&cThat floor doesn't exists!"
+  Added: "&aFloor successfully added!"
+  Removed: "&aFloor successfully removed!"
+  Renamed: "&aFloor successfully renamed!"
+
+Input:
+  StillAdjusting: "&cYou are still adjusting an input!"
+  NothingToRemove: "&cThere is no input to remove!"
+  AlreadyAdded: "&cThis block has already been chosen as an input. Choose another block!"
+  NoInput: "&cThis block is not an input. Choose another block!"
+  RightClick: "&aNow right click on the input block!"
+  Created: "&aInput created!"
+  Removed: "&aInput removed!"
+
+OfflineInput:
+  StillAdjusting: "&cYou are still adjusting an offline input!"
+  NothingToRemove: "&cThere is no offline input to remove!"
+  AlreadyAdded: "&cThis block has already been chosen as an offline input. Choose another block!"
+  NoInput: "&cThis block is not an offline input. Choose another block!"
+  RightClick: "&aNow right click on the offline input block!"
+  Created: "&aOffline input created!"
+  Removed: "&aOffline input removed!"
+
+Build:
+  Disabled: "&aConstruction mode disabled!"
+  Enabled: "&aNow right-click on the elevator blocks!\n&aThen do /v10lift build to save it!"
+  BlockAdded: "&aBlock added to the elevator."
+  BlockRemoved: "&6Block removed from the elevator."
+  BlacklistedMaterial: "&cThe material %Name% cannot be used!"
+
+Rope:
+  StillAdjusting: "&cYou are still adjusting a rope."
+  OnlyUp: "&cA rope can only go up!"
+  OnlyOneMaterial: "&cThe rope must be of the same material!"
+  AlreadyARope: "&cPart of the rope is already part of another rope!"
+  NotARope: "&cThis block is not part of the rope."
+  BlacklistedMaterial: "&cThe rope is build of blacklisted blocks!"
+  Add: "&aNow right-click on the beginning and the end of the rope."
+  Delete: "&aNow right-click on the rope."
+  ClickOnEnd: "&6Now right-click on the end of the rope!"
+  PartRemoved: "&6Start removed!\n&6Now right-click on the end of the rope!"
+  Created: "&aRope created."
+  Removed: "&aRope removed."
+
+Door:
+  BlacklistedMaterial: "&cThe material %Name% is currently not supported!"
+  Disabled: "&aDoor editor mode disabled!"
+  Enabled: "&aNow right-click on the door blocks! (If it are real doors, click on the bottom block)\n&aThen do /v10lift door to save it."
+  Created: "&aDoor created."
+  Removed: "&6Door removed."
+
+Whitelist:
+  Group:
+    VaultNotFound: "&cYou can't add a group when Vault is not found."
+    NotFound: "&cThe group %Name% is not found."
+    AlreadyContains: "&cWhitelist already contains this group!"
+    DoesntContains: "&cWhitelist doesn't contain this group!"
+    Added: "&aGroup added to whitelist!"
+    Removed: "&aGroup removed from whitelist!"
+  Player:
+    NotFound: "&cThe player %Name% is not found."
+    AlreadyContains: "Whitelist already contains this user!"
+    DoesntContains: "&cWhitelist doesn't contain this user!"
+    Added: "&aUser added to whitelist!"
+    Removed: "&aUser removed from whitelist!"
+
+Whois:
+  NotALift: "&cThis block is not part of a lift."
+  WithoutName: "&aNow right-click on the block you want to check."
+
+Speed:
+  WrongSpeed: "&cThe speed %Speed% is incorrect."
+  Changed: "&aLift speed changed!"
+
+Sound:
+  TurnedOn: "&aSound mode turned on!"
+  TurnedOff: "&aSound mode turned off!"
+
+Realistic:
+  TurnedOn: "&aRealistic mode turned on!"
+  TurnedOff: "&aRealistic mode turned off!"
+
+Disable:
+  AlreadyDefective: "&cThis lift is already defective!"
+  Disabled: "&aLift disabled!"
+
+Repair:
+  NotDefective: "&cThis lift isn't defective!"
+  ItemsNeeded: "&cYou need %Amount%x %ItemName%!"
+  Repaired: "&aLift repaired!"
+
+Abort:
+  NothingToCancel: "&cOops! You can't cancel anything."
+  Cancelled: "&6Cancelled."
+
+Reload:
+ Reloaded: "&6Plugin reloaded successfully!"
+
+Start:
+  NonPlayer: "&cPlease give a name as non-player!"
+  Started: "&aLift %Name% started."
+
+Stop:
+  NonPlayer: "&cPlease give a name as non-player!"
+  NoMovingTasks: "&cLift %Name% doesn't contain any movingtasks!"
+  Started: "&aLift %Name% stopped."
+
+LiftSign:
+  NoName: "&cNo lift name given!"
+  Created: "&aLift sign created!"
+  Removed: "&6Lift sign removed!"

@@ -365,7 +365,7 @@ public class V10LiftCommand implements CommandExecutor {
             e.printStackTrace();
         }
 
-        sender.sendMessage(ChatColor.YELLOW + "Plugin reset successful!");
+        sender.sendMessage(ChatColor.YELLOW + "Plugin reloaded successfully!");
         return true;
     }
 
@@ -566,6 +566,10 @@ public class V10LiftCommand implements CommandExecutor {
         } else {
             OfflinePlayer wp = Bukkit.getOfflinePlayer(args[2]);
             wpu = wp.getUniqueId();
+            if (!wp.hasPlayedBefore()) {
+                sender.sendMessage(ChatColor.RED + "Player " + args[2] + " not found!");
+                return true;
+            }
         }
 
         String floor = null;

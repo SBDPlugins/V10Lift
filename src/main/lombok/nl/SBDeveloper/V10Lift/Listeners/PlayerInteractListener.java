@@ -266,10 +266,6 @@ public class PlayerInteractListener implements Listener {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 e.setCancelled(true);
                 Block block = e.getClickedBlock();
-                if (V10LiftPlugin.getAPI().getFBM().isForbidden(block.getType())) {
-                    p.sendMessage(ChatColor.RED + "The material " + e.getClickedBlock().getType().toString() + " is currently not supported!");
-                    return;
-                }
                 String liftName = DataManager.getEditPlayer(p.getUniqueId());
                 if (!V10LiftPlugin.getAPI().containsRope(liftName, block)) {
                     p.sendMessage(ChatColor.RED + "This block is not part of the rope.");
