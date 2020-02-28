@@ -20,21 +20,26 @@ General:
   RemoveLiftFirst: '&cYou can''t do this! Remove the lift first.'
   RemoveRopeFirst: '&cYou can''t do this! Remove the rope first.'
   RemoveDoorFirst: '&cYou can''t do this! Remove the door first.'
+
 Create:
   AddBlocks: |-
     &aOkay, now add all the blocks from the cab by right-clicking them.
     &awhen finished, type: /v10lift create <Name>
   NoBlocks: '&cYou must add blocks first.'
   Created: '&aSuccessfully created lift %Name%.'
+
 Delete:
   NotRemoved: '&cThe lift %Name% couldn''t be removed.'
   Removed: '&aSuccessfully removed lift %Name%.'
+
 Rename:
   Renamed: '&aLift successfully renamed!'
+
 Edit:
   StillInEditMode: '&cYou are still in editor mode.'
   TurnedOn: '&aEnabled editor.'
   TurnedOff: '&aDisabled editor.'
+
 Floor:
   ToHigh: '&cThat floor is too high!'
   AlreadyExists: '&cThat floor already exists!'
@@ -42,6 +47,7 @@ Floor:
   Added: '&aFloor successfully added!'
   Removed: '&aFloor successfully removed!'
   Renamed: '&aFloor successfully renamed!'
+
 Input:
   StillAdjusting: '&cYou are still adjusting an input!'
   NothingToRemove: '&cThere is no input to remove!'
@@ -51,6 +57,7 @@ Input:
   RightClick: '&aNow right click on the input block!'
   Created: '&aInput created!'
   Removed: '&aInput removed!'
+
 OfflineInput:
   StillAdjusting: '&cYou are still adjusting an offline input!'
   NothingToRemove: '&cThere is no offline input to remove!'
@@ -60,6 +67,7 @@ OfflineInput:
   RightClick: '&aNow right click on the offline input block!'
   Created: '&aOffline input created!'
   Removed: '&aOffline input removed!'
+
 Build:
   Disabled: '&aConstruction mode disabled!'
   Enabled: |-
@@ -68,6 +76,7 @@ Build:
   BlockAdded: '&aBlock added to the elevator.'
   BlockRemoved: '&6Block removed from the elevator.'
   BlacklistedMaterial: '&cThe material %Name% cannot be used!'
+
 Rope:
   StillAdjusting: '&cYou are still adjusting a rope.'
   OnlyUp: '&cA rope can only go up!'
@@ -83,6 +92,7 @@ Rope:
     &6Now right-click on the end of the rope!
   Created: '&aRope created.'
   Removed: '&aRope removed.'
+
 Door:
   BlacklistedMaterial: '&cThe material %Name% is currently not supported!'
   Disabled: '&aDoor editor mode disabled!'
@@ -91,6 +101,7 @@ Door:
     &aThen do /v10lift door to save it.
   Created: '&aDoor created.'
   Removed: '&6Door removed.'
+
 Whitelist:
   Group:
     VaultNotFound: '&cYou can''t add a group when Vault is not found.'
@@ -105,38 +116,49 @@ Whitelist:
     DoesntContains: '&cThis user isn''t on the whitelist'
     Added: '&aUser added to whitelist!'
     Removed: '&aUser removed from whitelist!'
+
 Whois:
   UseWithoutName: '&cYou need to be a player to use this command without name.'
   NotALift: '&cThis block is not part of a lift.'
   WithoutName: '&aNow right-click on the block you want to check.'
+
 Speed:
   WrongSpeed: '&cThe speed %Speed% is incorrect.'
   Changed: '&aUpdated lift speed!'
+
 Sound:
   TurnedOn: '&aSounds are now turned on!'
   TurnedOff: '&aSounds are now turned off!'
+
 Realistic:
   TurnedOn: '&aRealistic mode turned on!'
   TurnedOff: '&aRealistic mode turned off!'
+
 Disable:
   AlreadyDefective: '&cThis lift is already defective!'
   Disabled: '&aLift disabled!'
+
 Repair:
   NotDefective: '&cThis lift isn''t defective!'
   ItemsNeeded: '&cYou need %Amount%x %ItemName%!'
   Repaired: '&aYou successfully repaired the lift!'
+
 Abort:
   NothingToCancel: '&cOops! You can''t cancel anything.'
   Cancelled: '&6Cancelled.'
+
 Reload:
   Reloaded: '&6Plugin reloaded successfully!'
+
 Start:
   NonPlayer: '&cPlease give a name as non-player!'
   Started: '&aLift %Name% started.'
+
 Stop:
   NonPlayer: '&cPlease give a name as non-player!'
   NoMovingTasks: '&cLift %Name% doesn''t contain any movingtasks!'
   Started: '&aLift %Name% stopped.'
+
 LiftSign:
   NoName: '&cNo lift name given!'
   Created: '&aLift sign created!'
