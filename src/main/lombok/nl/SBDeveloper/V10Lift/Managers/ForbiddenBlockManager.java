@@ -3,20 +3,14 @@ package nl.SBDeveloper.V10Lift.Managers;
 import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import org.bukkit.Material;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class ForbiddenBlockManager {
-    private ArrayList<XMaterial> forbidden = new ArrayList<>();
+    private HashSet<XMaterial> forbidden = new HashSet<>();
 
     public ForbiddenBlockManager() {
         //TODO Add more forbidden materials
-        /*forbidden.add(XMaterial.ACACIA_DOOR);
-        forbidden.add(XMaterial.BIRCH_DOOR);
-        forbidden.add(XMaterial.DARK_OAK_DOOR);
-        forbidden.add(XMaterial.IRON_DOOR);
-        forbidden.add(XMaterial.JUNGLE_DOOR);
-        forbidden.add(XMaterial.OAK_DOOR);
-        forbidden.add(XMaterial.SPRUCE_DOOR);*/
+        //TODO Add to config
         forbidden.add(XMaterial.BLACK_BED);
         forbidden.add(XMaterial.BLUE_BED);
         forbidden.add(XMaterial.BROWN_BED);

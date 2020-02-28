@@ -32,14 +32,18 @@ public class ConfigUtil {
      * @param path The path to look for
      */
     public static void sendMessage(CommandSender p, @Nonnull String path) {
-        String fileMessage = V10LiftPlugin.getMessages().getFile().getString(path);
-        if (fileMessage == null) {
+        if (V10LiftPlugin.getMessages().getFile().get(path) == null) {
             throw new NullPointerException("Message " + path + " not found in messages.yml!");
         }
 
-        String[] messages = fileMessage.split("\n");
-        for (String message : messages) {
-            p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+        if (V10LiftPlugin.getMessages().getFile().isList(path)) {
+            //Multi line message
+            for (String message : V10LiftPlugin.getMessages().getFile().getStringList(path)) {
+                p.sendMessage(ChatColor.translateAlternateColorCodes('&', message));
+            }
+        } else {
+            //Single line message
+            p.sendMessage(ChatColor.translateAlternateColorCodes('&', Objects.requireNonNull(V10LiftPlugin.getMessages().getFile().getString(path))));
         }
     }
 
@@ -51,33 +55,43 @@ public class ConfigUtil {
      * @param replacement The replacements -> key: %Name% = value: TheName
      */
     public static void sendMessage(CommandSender p, @Nonnull String path, Map<String, String> replacement) {
-        String fileMessage = V10LiftPlugin.getMessages().getFile().getString(path);
-        if (fileMessage == null) {
+        if (V10LiftPlugin.getMessages().getFile().get(path) == null) {
             throw new NullPointerException("Message " + path + " not found in messages.yml!");
         }
 
+        if (V10LiftPlugin.getMessages().getFile().isList(path)) {
+            //Multi line message
+            for (String message : V10LiftPlugin.getMessages().getFile().getStringList(path)) {
+                p.sendMessage(formatMessage(message, replacement));
+            }
+        } else {
+            //Single line message
+            String message = V10LiftPlugin.getMessages().getFile().getString(path);
+            p.sendMessage(formatMessage(message, replacement));
+        }
+    }
+
+    @Nonnull
+    private static String formatMessage(String message, @Nonnull Map<String, String> replacement) {
         Map<String, String> fixedMap = new HashMap<>();
         for (Map.Entry<String, String> ent : replacement.entrySet()) {
             fixedMap.put(ent.getKey().replaceAll("%", ""), ent.getValue());
         }
 
-        String[] messages = fileMessage.split("\n");
-        for (String message : messages) {
-            Pattern pattern = Pattern.compile("%(.*?)%");
-            Matcher matcher = pattern.matcher(message);
-            StringBuilder builder = new StringBuilder();
-            int i = 0;
-            while (matcher.find()) {
-                String repl = fixedMap.get(matcher.group(1));
-                builder.append(message, i, matcher.start());
-                if (repl == null)
-                    builder.append(matcher.group(0));
-                else
-                    builder.append(repl);
-                i = matcher.end();
-            }
-            builder.append(message.substring(i));
-            p.sendMessage(ChatColor.translateAlternateColorCodes('&', builder.toString()));
+        Pattern pattern = Pattern.compile("%(.*?)%");
+        Matcher matcher = pattern.matcher(Objects.requireNonNull(message));
+        StringBuilder builder = new StringBuilder();
+        int i = 0;
+        while (matcher.find()) {
+            String repl = fixedMap.get(matcher.group(1));
+            builder.append(message, i, matcher.start());
+            if (repl == null)
+                builder.append(matcher.group(0));
+            else
+                builder.append(repl);
+            i = matcher.end();
         }
+        builder.append(message.substring(i));
+        return ChatColor.translateAlternateColorCodes('&', builder.toString());
     }
 }

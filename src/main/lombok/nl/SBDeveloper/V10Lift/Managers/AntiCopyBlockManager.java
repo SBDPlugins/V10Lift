@@ -3,13 +3,14 @@ package nl.SBDeveloper.V10Lift.Managers;
 import nl.SBDeveloper.V10Lift.Utils.XMaterial;
 import org.bukkit.Material;
 
-import java.util.ArrayList;
+import java.util.HashSet;
 
 public class AntiCopyBlockManager {
-    private ArrayList<XMaterial> antiCopy = new ArrayList<>();
+    private HashSet<XMaterial> antiCopy = new HashSet<>();
 
     public AntiCopyBlockManager() {
         //TODO Add more anti copy materials
+        //TODO Add to config
         antiCopy.add(XMaterial.REDSTONE_TORCH);
         antiCopy.add(XMaterial.REDSTONE_WALL_TORCH);
         antiCopy.add(XMaterial.REPEATER);
@@ -56,6 +57,26 @@ public class AntiCopyBlockManager {
         antiCopy.add(XMaterial.DETECTOR_RAIL);
         antiCopy.add(XMaterial.ACTIVATOR_RAIL);
         antiCopy.add(XMaterial.LADDER);
+
+        /* Because of datatypes */
+        antiCopy.add(XMaterial.BEEHIVE);
+        antiCopy.add(XMaterial.BELL);
+        antiCopy.add(XMaterial.BREWING_STAND);
+        antiCopy.add(XMaterial.BUBBLE_COLUMN);
+        antiCopy.add(XMaterial.CAKE);
+        antiCopy.add(XMaterial.CAMPFIRE);
+        antiCopy.add(XMaterial.COCOA);
+        antiCopy.add(XMaterial.COMMAND_BLOCK);
+        antiCopy.add(XMaterial.CHAIN_COMMAND_BLOCK);
+        antiCopy.add(XMaterial.REPEATING_COMMAND_BLOCK);
+        antiCopy.add(XMaterial.DAYLIGHT_DETECTOR);
+        antiCopy.add(XMaterial.DISPENSER);
+        antiCopy.add(XMaterial.END_PORTAL_FRAME);
+        antiCopy.add(XMaterial.FARMLAND);
+        antiCopy.add(XMaterial.FIRE);
+        antiCopy.add(XMaterial.FURNACE);
+        antiCopy.add(XMaterial.HOPPER);
+        antiCopy.add(XMaterial.JUKEBOX);
     }
 
     public boolean isAntiCopy(Material mat) {
