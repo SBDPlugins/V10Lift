@@ -19,6 +19,7 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.*;
 
+/** The MoveLift runnable, used for moving a lift. */
 public class MoveLift implements Runnable {
 
     private final String liftName;

@@ -24,6 +24,7 @@ import org.bukkit.entity.Player;
 import javax.annotation.Nonnull;
 import java.util.*;
 
+/** The Main API class, for all the API methods */
 public class V10LiftAPI {
     /* Load managers... */
     private static ForbiddenBlockManager fbm;

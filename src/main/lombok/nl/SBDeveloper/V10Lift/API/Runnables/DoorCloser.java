@@ -4,6 +4,7 @@ import nl.SBDeveloper.V10Lift.Managers.DataManager;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import org.bukkit.Bukkit;
 
+/** The doorcloser runnable, used for checking if the door can be closed. */
 public class DoorCloser implements Runnable {
     private final String liftName;
     private int pid;
