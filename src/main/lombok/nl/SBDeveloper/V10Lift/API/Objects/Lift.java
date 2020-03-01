@@ -7,6 +7,7 @@ import nl.SBDeveloper.V10Lift.API.Runnables.DoorCloser;
 
 import java.util.*;
 
+/** A lift object, to create a lift. */
 @NoArgsConstructor
 public class Lift {
     @Getter @Setter private String worldName;
@@ -31,12 +32,26 @@ public class Lift {
     @Getter @Setter private Floor doorOpen = null;
     @Getter @Setter private DoorCloser doorCloser = null;
 
+    /**
+     * Construct a new Lift with multiple owners
+     *
+     * @param owners The owners, by uuid
+     * @param speed The speed, 1 is slowest, higher is faster
+     * @param realistic Realistic lift, or not
+     */
     public Lift(HashSet<UUID> owners, int speed, boolean realistic) {
         this.owners = owners;
         this.speed = speed;
         this.realistic = realistic;
     }
 
+    /**
+     * Construct a new Lift with one owners
+     *
+     * @param owner The owner, by uuid
+     * @param speed The speed, 1 is slowest, higher is faster
+     * @param realistic Realistic lift, or not
+     */
     public Lift(UUID owner, int speed, boolean realistic) {
         HashSet<UUID> hs = new HashSet<>();
         hs.add(owner);

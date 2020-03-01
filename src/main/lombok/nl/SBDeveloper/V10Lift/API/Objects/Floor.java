@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
 
+/** A floor object, for a floor in the lift. */
 @Getter @Setter @NoArgsConstructor
 public class Floor {
     private String world;
@@ -17,6 +18,12 @@ public class Floor {
     private HashSet<UUID> userWhitelist = new HashSet<>();
     private HashSet<String> groupWhitelist = new HashSet<>();
 
+    /**
+     * Construct a new Floor
+     *
+     * @param y The y/height of the floor
+     * @param world The world of the floor
+     */
     public Floor(int y, String world) {
         this.y = y;
         this.world = world;

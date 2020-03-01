@@ -10,6 +10,7 @@ import javax.annotation.Nonnull;
 import java.util.Arrays;
 import java.util.Map;
 
+/** A liftblock object, for a block in a lift. */
 @NoArgsConstructor
 public class LiftBlock implements Comparable<LiftBlock> {
 
@@ -33,7 +34,15 @@ public class LiftBlock implements Comparable<LiftBlock> {
     //Only used for chests
     public Map<String, Object>[] serializedItemStacks = null;
 
-    /* Floor based liftblock, no material */
+    /**
+     * A floor based liftblock, without material (no caching)
+     *
+     * @param world The world
+     * @param x The x-pos
+     * @param y The y-pos
+     * @param z The z-pos
+     * @param floor The floorname of the block
+     */
     public LiftBlock(String world, int x, int y, int z, String floor) {
         this.world = world;
         this.x = x;
@@ -48,9 +57,16 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.slabtype = null;
     }
 
-    /** 1.12 liftblocks **/
-
-    /* 1.12 liftblock (Directional) */
+    /**
+     * 1.12 liftblock, with material and data [NO SIGN]
+     *
+     * @param world The world
+     * @param x The x-pos
+     * @param y The y-pos
+     * @param z The z-pos
+     * @param mat The Material of the block
+     * @param data The data of the block
+     */
     public LiftBlock(String world, int x, int y, int z, Material mat, byte data) {
         this.world = world;
         this.x = x;
@@ -65,7 +81,17 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.slabtype = null;
     }
 
-    /* 1.12 liftblock (sign) */
+    /**
+     * 1.12 liftblock (signs)
+     *
+     * @param world The world
+     * @param x The x-pos
+     * @param y The y-pos
+     * @param z The z-pos
+     * @param mat The Material of the block
+     * @param data The data of the block
+     * @param signLines The lines of the sign
+     */
     public LiftBlock(String world, int x, int y, int z, Material mat, byte data, String[] signLines) {
         this.world = world;
         this.x = x;
@@ -80,9 +106,15 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.slabtype = null;
     }
 
-    /** 1.13 liftblocks **/
-
-    /* 1.13 liftblock (no Dir) */
+    /**
+     * 1.13 liftblock, without a direction
+     *
+     * @param world The world
+     * @param x The x-pos
+     * @param y The y-pos
+     * @param z The z-pos
+     * @param mat The Material of the block
+     */
     public LiftBlock(String world, int x, int y, int z, Material mat) {
         this.world = world;
         this.x = x;
@@ -97,7 +129,16 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.slabtype = null;
     }
 
-    /* 1.13 liftblock (Directional) */
+    /**
+     * 1.13 liftblock with a direction
+     *
+     * @param world The world
+     * @param x The x-pos
+     * @param y The y-pos
+     * @param z The z-pos
+     * @param mat The Material of the block
+     * @param face The blockface of the block
+     */
     public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face) {
         this.world = world;
         this.x = x;
@@ -112,7 +153,17 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.slabtype = null;
     }
 
-    /* 1.13 liftblock (dir & bisec) */
+    /**
+     * 1.13 liftblock, with a direction and a bisected
+     *
+     * @param world The world
+     * @param x The x-pos
+     * @param y The y-pos
+     * @param z The z-pos
+     * @param mat The Material of the block
+     * @param face The blockface of the block
+     * @param bisected The bisected of the block
+     */
     public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face, String bisected) {
         this.world = world;
         this.x = x;
@@ -127,7 +178,17 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.slabtype = null;
     }
 
-    /* 1.13 liftblock (sign) */
+    /**
+     * 1/13 liftblock (sign)
+     *
+     * @param world The world
+     * @param x The x-pos
+     * @param y The y-pos
+     * @param z The z-pos
+     * @param mat The Material of the block
+     * @param face The blockface of the block
+     * @param signLines The lines of the sign
+     */
     public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face, String[] signLines) {
         this.world = world;
         this.x = x;
@@ -142,7 +203,16 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.slabtype = null;
     }
 
-    /* 1.13 liftblock (slab) */
+    /**
+     * 1.13 liftblock (slab)
+     *
+     * @param world The world
+     * @param x The x-pos
+     * @param y The y-pos
+     * @param z The z-pos
+     * @param mat The Material of the block
+     * @param slabtype The typ of slab (low, high, double)
+     */
     public LiftBlock(String world, int x, int y, int z, Material mat, String slabtype) {
         this.world = world;
         this.x = x;

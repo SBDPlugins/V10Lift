@@ -9,6 +9,7 @@ import org.bukkit.entity.Entity;
 
 import java.util.UUID;
 
+/** A v10entity object, for a entity in the lift. */
 @Getter @NoArgsConstructor
 public class V10Entity {
     private UUID entityUUID;
@@ -19,6 +20,16 @@ public class V10Entity {
     private int y;
     @Setter private short step;
 
+    /**
+     * Construct a new V10LiftEntity
+     *
+     * @param entityUUID The UUID of the entity
+     * @param worldName The world
+     * @param x The x-pos
+     * @param y The y-pos
+     * @param z The z-pos
+     * @param cury The current y-pos
+     */
     public V10Entity(UUID entityUUID, String worldName, int x, int y, int z, int cury) {
         this.entityUUID = entityUUID;
         this.world = worldName;
@@ -29,6 +40,9 @@ public class V10Entity {
         this.step = 0;
     }
 
+    /**
+     * Move a entity up
+     */
     public void moveUp() {
         if (entityUUID == null) return;
         Entity entity = Bukkit.getEntity(entityUUID);
@@ -37,6 +51,9 @@ public class V10Entity {
         entity.teleport(new Location(Bukkit.getWorld(world), locX, locY, locZ));
     }
 
+    /**
+     * Move a entity down
+     */
     public void moveDown() {
         if (entityUUID == null) return;
         Entity entity = Bukkit.getEntity(entityUUID);

@@ -8,6 +8,7 @@ import org.bukkit.block.BlockFace;
 
 import java.util.Objects;
 
+/** A liftrope object, for a rope in the lift. */
 @Getter @Setter @NoArgsConstructor
 public class LiftRope {
     private Material type;
@@ -19,6 +20,17 @@ public class LiftRope {
     private int z;
     private int currently;
 
+    /**
+     * Construct a new liftrope
+     *
+     * @param type The material of the rope
+     * @param face The face of the rope
+     * @param world The world
+     * @param x The x-pos
+     * @param minY The starting x-pos
+     * @param maxY The stopping x-pos
+     * @param z The z-pos
+     */
     public LiftRope(Material type, BlockFace face, String world, int x, int minY, int maxY, int z) {
         this.type = type;
         this.face = face;

@@ -4,6 +4,7 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
+/** A liftsign object, for a info sign for the lift. */
 @Getter @Setter @NoArgsConstructor
 public class LiftSign {
     private String world;
@@ -14,6 +15,16 @@ public class LiftSign {
     private byte type;
     private byte state;
 
+    /**
+     * Construct a new liftsign
+     *
+     * @param world The world
+     * @param x The x-pos
+     * @param y The y-pos
+     * @param z The z-pos
+     * @param type The type of the sign
+     * @param state The state of the sign
+     */
     public LiftSign(String world, int x, int y, int z, byte type, byte state) {
         this.world = world;
         this.x = x;
