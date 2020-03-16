@@ -162,9 +162,9 @@ public class V10LiftCommand implements CommandExecutor {
             } else {
                 ConfigUtil.sendMessage(sender, "General.NoPermission");
             }
-        } else if (args[0].equalsIgnoreCase("speed") && args.length == 2) {
-            //v10lift speed <Speed>
-            if (!(sender instanceof Player)) {
+        } else if (args[0].equalsIgnoreCase("speed") && (args.length == 2 || args.length == 3)) {
+            //v10lift speed <Speed> [Name]
+            if (args.length == 2 && !(sender instanceof Player)) {
                 ConfigUtil.sendMessage(sender, "General.PlayerOnly");
                 return true;
             }
@@ -512,14 +512,24 @@ public class V10LiftCommand implements CommandExecutor {
         return true;
     }
 
-    private boolean speedCommand(CommandSender sender, String[] args) {
-        Player p = (Player) sender;
-        if (!DataManager.containsEditPlayer(p.getUniqueId())) {
-            ConfigUtil.sendMessage(sender, "General.SwitchOnEdit");
-            return true;
+    private boolean speedCommand(CommandSender sender, @Nonnull String[] args) {
+        Lift lift;
+        if (args.length == 3) {
+            if (!DataManager.containsLift(args[2])) {
+                ConfigUtil.sendMessage(sender, "General.DoesntExists");
+                return true;
+            }
+            lift = DataManager.getLift(args[2]);
+        } else {
+            Player p = (Player) sender;
+            if (!DataManager.containsEditPlayer(p.getUniqueId())) {
+                ConfigUtil.sendMessage(sender, "General.SwitchOnEdit");
+                return true;
+            }
+
+            lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
         }
 
-        Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
         try {
             int speed = Integer.parseInt(args[1]);
             lift.setSpeed(speed);
