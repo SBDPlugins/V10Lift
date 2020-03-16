@@ -4,8 +4,12 @@
 
     <groupId>nl.SBDeveloper</groupId>
     <artifactId>V10Lift2</artifactId>
+    <version>0.5.9</version>
+    <packaging>jar</packaging>
+
     <name>V10Lift</name>
-    <version>0.5.8</version>
+    <description>Realistic lifts in Minecraft!</description>
+    <url>sbdplugins.nl</url>
 
     <distributionManagement>
         <repository>
@@ -15,40 +19,19 @@
     </distributionManagement>
 
     <properties>
-        <maven.compiler.source>1.8</maven.compiler.source>
+        <java.version>1.8</java.version>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.target>1.8</maven.compiler.target>
     </properties>
 
     <build>
+        <defaultGoal>clean package</defaultGoal>
         <!-- Include yml files -->
         <resources>
             <resource>
-                <targetPath>.</targetPath>
-                <filtering>true</filtering>
                 <directory>src/main/resources</directory>
-                <includes>
-                    <include>plugin.yml</include>
-                </includes>
-            </resource>
-            <resource>
-                <targetPath>.</targetPath>
                 <filtering>true</filtering>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>config.yml</include>
-                </includes>
-            </resource>
-            <resource>
-                <targetPath>.</targetPath>
-                <filtering>true</filtering>
-                <directory>src/main/resources</directory>
-                <includes>
-                    <include>messages.yml</include>
-                </includes>
             </resource>
         </resources>
-        <directory>target</directory>
         <finalName>V10Lift v${project.version}</finalName>
         <plugins>
             <!-- Clean -->
@@ -74,6 +57,9 @@
                         <goals>
                             <goal>shade</goal>
                         </goals>
+                        <configuration>
+                            <createDependencyReducedPom>false</createDependencyReducedPom>
+                        </configuration>
                     </execution>
                 </executions>
             </plugin>
@@ -82,6 +68,8 @@
                 <artifactId>maven-compiler-plugin</artifactId>
                 <version>3.8.1</version>
                 <configuration>
+                    <source>${java.version}</source>
+                    <target>${java.version}</target>
                     <compilerArgument>-parameters</compilerArgument>
                 </configuration>
             </plugin>
