@@ -13,3 +13,4 @@ DefaultSpeed: 16
 DefaultRealistic: true
 DoorCloseTime: 100
 CheckUpdates: true
+PacketTeleport: false

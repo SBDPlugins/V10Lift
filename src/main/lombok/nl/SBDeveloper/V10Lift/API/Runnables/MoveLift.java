@@ -17,10 +17,24 @@ import org.bukkit.entity.Entity;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
+import java.lang.reflect.Method;
 import java.util.*;
+import java.util.function.Supplier;
 
 /** The MoveLift runnable, used for moving a lift. */
 public class MoveLift implements Runnable {
+
+    /* Packet teleportation method */
+    private final Method[] methods = ((Supplier<Method[]>) () -> {
+       try {
+           Method getHandle = Class.forName(Bukkit.getServer().getClass().getPackage().getName() + ".entity.CraftEntity").getDeclaredMethod("getHandle");
+           return new Method[] {
+                   getHandle, getHandle.getReturnType().getDeclaredMethod("setPositionRotation", double.class, double.class, double.class, float.class, float.class)
+           };
+       } catch (Exception ex) {
+           return null;
+       }
+    }).get();
 
     private final String liftName;
     private final int ft;
@@ -227,7 +241,15 @@ public class MoveLift implements Runnable {
 
                     if (by && loc.getBlockX() == lib.getX() && loc.getBlockZ() == lib.getZ()) {
                         loc.setY(loc.getY() + 1);
-                        ent.teleport(loc);
+                        if (V10LiftPlugin.getSConfig().getFile().getBoolean("PacketTeleport")) {
+                            try {
+                                methods[1].invoke(methods[0].invoke(ent), loc.getX(), loc.getY(), loc.getZ(), loc.getYaw(), loc.getPitch());
+                            } catch (Exception ex) {
+                                Bukkit.getLogger().severe("[V10Lift] PacketTeleportation is enabled, but couldn't get the method.");
+                            }
+                        } else {
+                            ent.teleport(loc);
+                        }
                     }
                 }
             }
