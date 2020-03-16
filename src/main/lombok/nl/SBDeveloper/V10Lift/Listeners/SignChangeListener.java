@@ -17,7 +17,7 @@ public class SignChangeListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onSignChange(SignChangeEvent e) {
         String[] lines = e.getLines();
-        if (!lines[0].equalsIgnoreCase("[v10lift]")) return;
+        if (!lines[0].equalsIgnoreCase(ConfigUtil.getConfigText("SignText"))) return;
 
         Player p = e.getPlayer();
         if (lines[1].isEmpty()) {

@@ -89,7 +89,7 @@
             <plugin>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok-maven-plugin</artifactId>
-                <version>1.18.10.0</version>
+                <version>1.18.12.0</version>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -102,7 +102,7 @@
             <!-- Build the javadoc -->
             <plugin>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.1.1</version>
+                <version>3.2.0</version>
                 <configuration>
                     <sourceFileIncludes>
                         <include>nl/SBDeveloper/V10Lift/API/*.java</include>
@@ -181,7 +181,7 @@
         <dependency>
             <groupId>nl.SBDevelopment</groupId>
             <artifactId>SBUtilities</artifactId>
-            <version>1.4</version>
+            <version>1.7</version>
             <scope>compile</scope>
         </dependency>
 
