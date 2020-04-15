@@ -42,7 +42,7 @@
             <!-- Shade JAR -->
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.2.2</version>
+                <version>3.2.3</version>
                 <configuration>
                     <relocations>
                         <relocation>
@@ -169,7 +169,7 @@
         <dependency>
             <groupId>nl.SBDevelopment</groupId>
             <artifactId>SBUtilities</artifactId>
-            <version>1.7</version>
+            <version>1.9</version>
             <scope>compile</scope>
         </dependency>
 
