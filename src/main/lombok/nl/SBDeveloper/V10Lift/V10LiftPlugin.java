@@ -80,9 +80,22 @@ public class V10LiftPlugin extends JavaPlugin {
 
         //Load the update checker
         if (!getSConfig().getFile().contains("CheckUpdates") || getSConfig().getFile().getBoolean("CheckUpdates")) {
-            new UpdateManager(this, 72317, UpdateManager.CheckType.SPIGOT).handleResponse((versionResponse, version) -> {
+            UpdateManager manager = new UpdateManager(this, 72317, UpdateManager.CheckType.SPIGOT);
+
+            manager.handleResponse((versionResponse, version) -> {
                 if (versionResponse == UpdateManager.VersionResponse.FOUND_NEW) {
                     Bukkit.getLogger().warning("[V10Lift] There is a new version available! Current: " + this.getDescription().getVersion() + " New: " + version);
+                    Bukkit.getLogger().info("[V10Lift] Trying to download...");
+
+                    manager.handleDownloadResponse((downloadResponse, path) -> {
+                        if (downloadResponse == UpdateManager.DownloadResponse.DONE) {
+                            Bukkit.getLogger().info("[V10Lift] Update done! After a restart, it should be loaded.");
+                        } else if (downloadResponse == UpdateManager.DownloadResponse.UNAVAILABLE) {
+                            Bukkit.getLogger().warning("[V10Lift] Couldn't download the update, because it's not a Spigot resource.");
+                        } else if (downloadResponse == UpdateManager.DownloadResponse.ERROR) {
+                            Bukkit.getLogger().severe("[V10Lift] Unable to download the newest file.");
+                        }
+                    }).runUpdate();
                 } else if (versionResponse == UpdateManager.VersionResponse.LATEST) {
                     Bukkit.getLogger().info("[V10Lift] You are running the latest version [" + this.getDescription().getVersion() + "]!");
                 } else if (versionResponse == UpdateManager.VersionResponse.UNAVAILABLE) {
