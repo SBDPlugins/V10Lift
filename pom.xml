@@ -4,7 +4,7 @@
 
     <groupId>nl.SBDeveloper</groupId>
     <artifactId>V10Lift2</artifactId>
-    <version>0.5.9</version>
+    <version>0.6</version>
     <packaging>jar</packaging>
 
     <name>V10Lift</name>
@@ -47,7 +47,11 @@
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>nl.SBDeveloper.V10Lift.Metrics</shadedPattern>
+                            <shadedPattern>nl.SBDeveloper.V10Lift.utils.metrics</shadedPattern>
+                        </relocation>
+                        <relocation>
+                            <pattern>com.zaxxer.hikari</pattern>
+                            <shadedPattern>nl.SBDeveloper.V10Lift.utils.hikari</shadedPattern>
                         </relocation>
                     </relocations>
                 </configuration>
@@ -153,7 +157,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.15.2-R0.1-SNAPSHOT</version>
+            <version>1.16.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -163,14 +167,6 @@
             <artifactId>lombok</artifactId>
             <version>1.18.12</version>
             <scope>provided</scope>
-        </dependency>
-
-        <!-- SBUtilities, our own Util dependency, used for all sort of things -->
-        <dependency>
-            <groupId>nl.SBDevelopment</groupId>
-            <artifactId>SBUtilities</artifactId>
-            <version>1.9</version>
-            <scope>compile</scope>
         </dependency>
 
         <!-- BStats, used for metrics -->
@@ -187,6 +183,18 @@
             <artifactId>VaultAPI</artifactId>
             <version>1.7</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.code.findbugs</groupId>
+            <artifactId>jsr305</artifactId>
+            <version>3.0.2</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.zaxxer</groupId>
+            <artifactId>HikariCP</artifactId>
+            <version>3.4.2</version>
         </dependency>
     </dependencies>
 

@@ -1,18 +1,17 @@
 package nl.SBDeveloper.V10Lift;
 
-import nl.SBDeveloper.V10Lift.API.V10LiftAPI;
-import nl.SBDeveloper.V10Lift.Commands.V10LiftCommand;
-import nl.SBDeveloper.V10Lift.Commands.V10LiftTabCompleter;
-import nl.SBDeveloper.V10Lift.Listeners.BlockBreakListener;
-import nl.SBDeveloper.V10Lift.Listeners.EntityDamageListener;
-import nl.SBDeveloper.V10Lift.Listeners.PlayerInteractListener;
-import nl.SBDeveloper.V10Lift.Listeners.SignChangeListener;
-import nl.SBDeveloper.V10Lift.Managers.DBManager;
-import nl.SBDeveloper.V10Lift.Managers.DataManager;
-import nl.SBDeveloper.V10Lift.Managers.VaultManager;
-import nl.SBDevelopment.SBUtilities.Data.YamlFile;
-import nl.SBDevelopment.SBUtilities.PrivateManagers.UpdateManager;
-import nl.SBDevelopment.SBUtilities.SBUtilities;
+import nl.SBDeveloper.V10Lift.api.V10LiftAPI;
+import nl.SBDeveloper.V10Lift.commands.V10LiftCommand;
+import nl.SBDeveloper.V10Lift.commands.V10LiftTabCompleter;
+import nl.SBDeveloper.V10Lift.listeners.BlockBreakListener;
+import nl.SBDeveloper.V10Lift.listeners.EntityDamageListener;
+import nl.SBDeveloper.V10Lift.listeners.PlayerInteractListener;
+import nl.SBDeveloper.V10Lift.listeners.SignChangeListener;
+import nl.SBDeveloper.V10Lift.managers.DBManager;
+import nl.SBDeveloper.V10Lift.managers.DataManager;
+import nl.SBDeveloper.V10Lift.managers.VaultManager;
+import nl.SBDeveloper.V10Lift.sbutils.UpdateManager;
+import nl.SBDeveloper.V10Lift.sbutils.YamlFile;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -33,9 +32,6 @@ public class V10LiftPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
-
-        //Initialize the util
-        new SBUtilities(this, "V10Lift");
 
         //Load the config
         config = new YamlFile("config");
