@@ -1,6 +1,5 @@
 package nl.SBDeveloper.V10Lift.sbutils;
 
-import com.google.gson.JsonArray;
 import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
@@ -104,13 +103,10 @@ public class UpdateManager {
                 }
                 in.close();
 
-                JsonParser parser = new JsonParser();
-
                 if (type == CheckType.SPIGOT) {
-                    JsonArray array = parser.parse(response.toString()).getAsJsonArray();
-
-                    version = array.get(0).getAsJsonObject().get("name").getAsString();
+                    version = response.toString();
                 } else if (type == CheckType.SBDPLUGINS) {
+                    JsonParser parser = new JsonParser();
                     JsonObject object = parser.parse(response.toString()).getAsJsonObject();
 
                     version = object.get("data").getAsJsonObject().get("version").getAsString();
