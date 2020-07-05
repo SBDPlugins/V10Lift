@@ -13,7 +13,7 @@ The rebuild of the V10Lift plugin!
 <dependency>
   <groupId>nl.SBDeveloper</groupId>
   <artifactId>V10Lift2</artifactId>
-  <version>0.5.4</version>
+  <version>0.6</version>
 </dependency>
 ```
 
