@@ -1,5 +1,5 @@
 name: V10Lift
-main: nl.SBDeveloper.V10Lift.V10LiftPlugin
+main: nl.SBDeveloper.v10lift.V10LiftPlugin
 version: ${project.version}
 api-version: "1.13"
 author: SBDeveloper
