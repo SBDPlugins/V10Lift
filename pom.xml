@@ -4,7 +4,7 @@
 
     <groupId>nl.SBDeveloper</groupId>
     <artifactId>V10Lift2</artifactId>
-    <version>0.6</version>
+    <version>0.7</version>
     <packaging>jar</packaging>
 
     <name>V10Lift</name>

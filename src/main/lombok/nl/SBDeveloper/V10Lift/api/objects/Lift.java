@@ -21,7 +21,7 @@ public class Lift {
     @Getter private HashSet<LiftBlock> offlineInputs = new HashSet<>();
     @Getter @Setter private LinkedHashMap<String, Floor> queue = null;
     @Getter private final HashSet<LiftRope> ropes = new HashSet<>();
-    @Getter private final ArrayList<V10Entity> toMove = new ArrayList<>();
+    @Getter private transient final ArrayList<V10Entity> toMove = new ArrayList<>();
     @Getter @Setter private int speed;
     @Getter @Setter private boolean realistic;
     @Getter @Setter private boolean offline = false;
