@@ -285,7 +285,7 @@ public class MoveLift implements Runnable {
                         sign = (Sign) bs;
                         for (int i = 0; i < 3; i++) {
                             sign.setLine(i, lib.getSignLines()[i]);
-                            if (i == 0 && lib.getSignLines()[i].equalsIgnoreCase("[v10lift]") && lib.getSignLines()[1].equals(liftName)) {
+                            if (i == 0 && lib.getSignLines()[i].equalsIgnoreCase(ConfigUtil.getConfigText("SignText")) && lib.getSignLines()[1].equals(liftName)) {
                                 sign.setLine(1, liftName);
                                 sign.setLine(3, ChatColor.GOLD + fl);
                             }
@@ -402,7 +402,7 @@ public class MoveLift implements Runnable {
                         sign = (Sign) bs;
                         for (int i = 0; i < 3; i++) {
                             sign.setLine(i, lib.getSignLines()[i]);
-                            if (i == 0 && lib.getSignLines()[i].equalsIgnoreCase("[v10lift]") && lib.getSignLines()[1].equals(liftName)) {
+                            if (i == 0 && lib.getSignLines()[i].equalsIgnoreCase(ConfigUtil.getConfigText("SignText")) && lib.getSignLines()[1].equals(liftName)) {
                                 sign.setLine(1, liftName);
                                 sign.setLine(3, ChatColor.GOLD + fl);
                             }
@@ -497,7 +497,7 @@ public class MoveLift implements Runnable {
                     continue;
                 }
                 sign = (Sign) bs;
-                if (!sign.getLine(0).equalsIgnoreCase("[v10lift]")) continue;
+                if (!sign.getLine(0).equalsIgnoreCase(ConfigUtil.getConfigText("SignText"))) continue;
                 sign.setLine(1, liftName);
                 sign.setLine(3, ChatColor.GREEN + fl);
                 sign.update();
