@@ -60,8 +60,8 @@ public class V10LiftPlugin extends JavaPlugin {
         }
 
         //Load the command
-        Objects.requireNonNull(getCommand("v10lift"), "Internal error! Command not found.").setExecutor(new V10LiftCommand());
-        Objects.requireNonNull(getCommand("v10lift"), "Internal error! Command not found.").setTabCompleter(new V10LiftTabCompleter());
+        getCommand("v10lift").setExecutor(new V10LiftCommand());
+        getCommand("v10lift").setTabCompleter(new V10LiftTabCompleter());
 
         //Register the listeners
         Bukkit.getPluginManager().registerEvents(new PlayerInteractListener(), this);
@@ -101,11 +101,6 @@ public class V10LiftPlugin extends JavaPlugin {
         }
 
         Bukkit.getLogger().info("[V10Lift] Plugin loaded successfully!");
-
-        //1 month sponsored advertising
-        if (LocalDate.now().getMonthValue() == 3) {
-            Bukkit.getLogger().info("[V10Lift] FrogNetwork! Een server met Minetopia, F1 Racing en #soon meer! Join via play.frognetwork.eu");
-        }
     }
 
     @Override
