@@ -3,6 +3,8 @@
 
 The rebuild of the V10Lift plugin!
 
+*Original source: [Click here](https://github.com/shinyquagsire23/V10Lift)*
+
 ## Maven
 ```xml
 <repository>
