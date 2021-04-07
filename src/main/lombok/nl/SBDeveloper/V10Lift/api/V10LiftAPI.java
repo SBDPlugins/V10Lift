@@ -1,5 +1,6 @@
 package nl.SBDeveloper.V10Lift.api;
 
+import com.cryptomorin.xseries.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import nl.SBDeveloper.V10Lift.api.objects.*;
 import nl.SBDeveloper.V10Lift.api.runnables.DoorCloser;
@@ -11,7 +12,6 @@ import nl.SBDeveloper.V10Lift.sbutils.LocationSerializer;
 import nl.SBDeveloper.V10Lift.utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.utils.DirectionUtil;
 import nl.SBDeveloper.V10Lift.utils.DoorUtil;
-import nl.SBDeveloper.V10Lift.utils.XMaterial;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -405,13 +405,7 @@ public class V10LiftAPI {
 
         lift.setDoorOpen(f);
 
-        if (lift.isRealistic()) {
-            lift.setDoorCloser(new DoorCloser(liftName));
-            long doorCloseTime = V10LiftPlugin.getSConfig().getFile().getLong("DoorCloseTime");
-
-            int pid = Bukkit.getScheduler().scheduleSyncRepeatingTask(V10LiftPlugin.getInstance(), lift.getDoorCloser(), doorCloseTime, doorCloseTime);
-            lift.getDoorCloser().setPid(pid);
-        }
+        if (lift.isRealistic()) lift.setDoorCloser(new DoorCloser(liftName));
         return true;
     }
 
@@ -439,13 +433,7 @@ public class V10LiftAPI {
 
         lift.setDoorOpen(f);
 
-        if (lift.isRealistic()) {
-            lift.setDoorCloser(new DoorCloser(liftName));
-            long doorCloseTime = V10LiftPlugin.getSConfig().getFile().getLong("DoorCloseTime");
-
-            int pid = Bukkit.getScheduler().scheduleSyncRepeatingTask(V10LiftPlugin.getInstance(), lift.getDoorCloser(), doorCloseTime, doorCloseTime);
-            lift.getDoorCloser().setPid(pid);
-        }
+        if (lift.isRealistic()) lift.setDoorCloser(new DoorCloser(liftName));
         return true;
     }
 
@@ -502,10 +490,12 @@ public class V10LiftAPI {
                 }
                 state.update(true);
             }
+
             for (LiftBlock lb : lift.getDoorOpen().getRealDoorBlocks()) {
                 Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at closeDoor").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
                 DoorUtil.closeDoor(block);
             }
+
             lift.setDoorOpen(null);
             if (lift.getDoorCloser() != null) lift.getDoorCloser().stop();
         }

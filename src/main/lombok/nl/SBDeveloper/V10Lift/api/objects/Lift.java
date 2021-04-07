@@ -3,12 +3,13 @@ package nl.SBDeveloper.V10Lift.api.objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import nl.SBDeveloper.V10Lift.api.runnables.DoorCloser;
 
 import java.util.*;
 
 /** A lift object, to create a lift. */
-@NoArgsConstructor
+@NoArgsConstructor @ToString
 public class Lift {
     @Getter @Setter private String worldName;
     @Getter @Setter private int y;
@@ -58,31 +59,5 @@ public class Lift {
         this.owners = hs;
         this.speed = speed;
         this.realistic = realistic;
-    }
-
-    @Override
-    public String toString() {
-        return "Lift{" +
-                "worldName='" + worldName + '\'' +
-                ", y=" + y +
-                ", owners=" + owners +
-                ", blocks=" + blocks +
-                ", floors=" + floors +
-                ", signs=" + signs +
-                ", inputs=" + inputs +
-                ", offlineInputs=" + offlineInputs +
-                ", queue=" + queue +
-                ", ropes=" + ropes +
-                ", toMove=" + toMove +
-                ", speed=" + speed +
-                ", realistic=" + realistic +
-                ", offline=" + offline +
-                ", sound=" + sound +
-                ", defective=" + defective +
-                ", signText='" + signText + '\'' +
-                ", counter=" + counter +
-                ", doorOpen=" + doorOpen +
-                ", doorCloser=" + doorCloser +
-                '}';
     }
 }

@@ -1,5 +1,6 @@
 package nl.SBDeveloper.V10Lift.managers;
 
+import lombok.Getter;
 import nl.SBDeveloper.V10Lift.api.objects.Lift;
 import nl.SBDeveloper.V10Lift.api.objects.LiftBlock;
 
@@ -7,19 +8,19 @@ import java.util.*;
 
 public class DataManager {
     /* A manager for general HashMaps */
-    private static LinkedHashMap<String, Lift> lifts = new LinkedHashMap<>();
-    private static LinkedHashMap<UUID, TreeSet<LiftBlock>> builds = new LinkedHashMap<>();
-    private static LinkedHashMap<UUID, String> editors = new LinkedHashMap<>();
-    private static LinkedHashMap<UUID, String> inputEdits = new LinkedHashMap<>();
-    private static ArrayList<UUID> inputRemoves = new ArrayList<>();
-    private static ArrayList<UUID> offlineEdits = new ArrayList<>();
-    private static ArrayList<UUID> offlineRemoves = new ArrayList<>();
-    private static ArrayList<UUID> builder = new ArrayList<>();
-    private static LinkedHashMap<UUID, LiftBlock> ropeEdits = new LinkedHashMap<>();
-    private static ArrayList<UUID> ropeRemoves = new ArrayList<>();
-    private static HashMap<UUID, String> doorEdits = new HashMap<>();
-    private static ArrayList<UUID> whoisReq = new ArrayList<>();
-    private static HashMap<String, Integer> movingTasks = new HashMap<>();
+    @Getter private static final Map<String, Lift> lifts = new LinkedHashMap<>();
+    private static final Map<UUID, TreeSet<LiftBlock>> builds = new LinkedHashMap<>();
+    @Getter private static final Map<UUID, String> editors = new LinkedHashMap<>();
+    private static final Map<UUID, String> inputEdits = new LinkedHashMap<>();
+    private static final List<UUID> inputRemoves = new ArrayList<>();
+    private static final List<UUID> offlineEdits = new ArrayList<>();
+    private static final List<UUID> offlineRemoves = new ArrayList<>();
+    private static final List<UUID> builder = new ArrayList<>();
+    private static final Map<UUID, LiftBlock> ropeEdits = new LinkedHashMap<>();
+    private static final List<UUID> ropeRemoves = new ArrayList<>();
+    private static final Map<UUID, String> doorEdits = new HashMap<>();
+    private static final List<UUID> whoisReq = new ArrayList<>();
+    private static final Map<String, Integer> movingTasks = new HashMap<>();
 
     /* HashMap methods */
 
@@ -39,8 +40,6 @@ public class DataManager {
     public static Lift getLift(String liftName) {
         return lifts.get(liftName);
     }
-
-    public static LinkedHashMap<String, Lift> getLifts() { return lifts; }
 
     // //
     public static boolean containsPlayer(UUID player) {
@@ -113,8 +112,6 @@ public class DataManager {
     public static String getEditPlayer(UUID player) {
         return editors.get(player);
     }
-
-    public static LinkedHashMap<UUID, String> getEditors() { return editors; }
 
     // //
     public static void addMovingTask(String liftName, int taskid) {

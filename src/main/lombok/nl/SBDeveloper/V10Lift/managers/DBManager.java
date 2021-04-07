@@ -12,7 +12,6 @@ import java.sql.SQLException;
 import java.util.Map;
 
 public class DBManager {
-
     private static SQLiteDB data;
     private static Connection con;
 
@@ -121,5 +120,4 @@ public class DBManager {
     public void closeConnection() {
         data.closeSource();
     }
-
 }

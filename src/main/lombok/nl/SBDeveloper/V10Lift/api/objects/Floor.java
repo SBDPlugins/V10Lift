@@ -3,13 +3,14 @@ package nl.SBDeveloper.V10Lift.api.objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
 
 /** A floor object, for a floor in the lift. */
-@Getter @Setter @NoArgsConstructor
+@Getter @Setter @NoArgsConstructor @ToString
 public class Floor {
     private String world;
     private int y;
@@ -48,17 +49,5 @@ public class Floor {
         result = prime * result + ((world == null) ? 0 : world.hashCode());
         result = prime * result + y;
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "Floor{" +
-                "world='" + world + '\'' +
-                ", y=" + y +
-                ", doorBlocks=" + doorBlocks +
-                ", realDoorBlocks=" + realDoorBlocks +
-                ", userWhitelist=" + userWhitelist +
-                ", groupWhitelist=" + groupWhitelist +
-                '}';
     }
 }

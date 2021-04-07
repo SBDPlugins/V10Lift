@@ -10,15 +10,16 @@ import nl.SBDeveloper.V10Lift.listeners.SignChangeListener;
 import nl.SBDeveloper.V10Lift.managers.DBManager;
 import nl.SBDeveloper.V10Lift.managers.DataManager;
 import nl.SBDeveloper.V10Lift.managers.VaultManager;
+import nl.SBDeveloper.V10Lift.sbutils.ConfigUpdater;
 import nl.SBDeveloper.V10Lift.sbutils.UpdateManager;
 import nl.SBDeveloper.V10Lift.sbutils.YamlFile;
 import org.bstats.bukkit.Metrics;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.IOException;
 import java.sql.SQLException;
-import java.time.LocalDate;
-import java.util.Objects;
+import java.util.Collections;
 
 public class V10LiftPlugin extends JavaPlugin {
 
@@ -37,6 +38,14 @@ public class V10LiftPlugin extends JavaPlugin {
         config = new YamlFile("config");
         config.loadDefaults();
 
+        //And update config
+        try {
+            ConfigUpdater.update(this, "config.yml", config.getJavaFile(), Collections.emptyList());
+        } catch (IOException e) {
+            Bukkit.getLogger().warning("[V10Lift] Couldn't update the config.yml. Please check the stacktrace below.");
+            e.printStackTrace();
+        }
+
         //Load the messages
         messages = new YamlFile("messages");
         messages.loadDefaults();
@@ -46,6 +55,7 @@ public class V10LiftPlugin extends JavaPlugin {
         try {
             dbManager.load();
         } catch (SQLException e) {
+            Bukkit.getLogger().warning("[V10Lift] Couldn't connect to the SQLite database. Please check the stacktrace below.");
             e.printStackTrace();
         }
 
@@ -53,10 +63,9 @@ public class V10LiftPlugin extends JavaPlugin {
         api = new V10LiftAPI();
 
         //Load vault if found
-        if (Bukkit.getServer().getPluginManager().getPlugin("Vault") != null) {
+        if (VaultManager.setupPermissions()) {
             Bukkit.getLogger().info("[V10Lift] Loading Vault hook for group whitelist support.");
             vault = true;
-            VaultManager.setupPermissions();
         }
 
         //Load the command
@@ -75,27 +84,40 @@ public class V10LiftPlugin extends JavaPlugin {
         metrics.addCustomChart(new Metrics.SingleLineChart("lifts", () -> DataManager.getLifts().size()));
 
         //Load the update checker
-        if (!getSConfig().getFile().contains("CheckUpdates") || getSConfig().getFile().getBoolean("CheckUpdates")) {
-            UpdateManager manager = new UpdateManager(this, 72317, UpdateManager.CheckType.SPIGOT);
+        if (getSConfig().getFile().getBoolean("UpdateChecker.Enabled")) {
+            UpdateManager updateManager = new UpdateManager(this, 72317);
 
-            manager.handleResponse((versionResponse, version) -> {
-                if (versionResponse == UpdateManager.VersionResponse.FOUND_NEW) {
-                    Bukkit.getLogger().warning("[V10Lift] There is a new version available! Current: " + this.getDescription().getVersion() + " New: " + version);
-                    Bukkit.getLogger().info("[V10Lift] Trying to download...");
+            updateManager.handleResponse((versionResponse, version) -> {
+                switch (versionResponse) {
+                    case FOUND_NEW:
+                        Bukkit.getLogger().warning("[V10Lift] There is a new version available! Current: " + this.getDescription().getVersion() + " New: " + version.get());
+                        if (getSConfig().getFile().getBoolean("UpdateChecker.DownloadOnUpdate")) {
+                            Bukkit.getLogger().info("[V10Lift] Trying to download the update. This could take some time...");
 
-                    manager.handleDownloadResponse((downloadResponse, path) -> {
-                        if (downloadResponse == UpdateManager.DownloadResponse.DONE) {
-                            Bukkit.getLogger().info("[V10Lift] Update done! After a restart, it should be loaded.");
-                        } else if (downloadResponse == UpdateManager.DownloadResponse.UNAVAILABLE) {
-                            Bukkit.getLogger().warning("[V10Lift] Couldn't download the update, because it's not a Spigot resource.");
-                        } else if (downloadResponse == UpdateManager.DownloadResponse.ERROR) {
-                            Bukkit.getLogger().severe("[V10Lift] Unable to download the newest file.");
+                            updateManager.handleDownloadResponse((downloadResponse, fileName) -> {
+                                switch (downloadResponse) {
+                                    case DONE:
+                                        Bukkit.getLogger().info("[V10Lift] Update downloaded! If you restart your server, it will be loaded. Filename: " + fileName);
+                                        break;
+                                    case ERROR:
+                                        Bukkit.getLogger().severe("[V10Lift] Something went wrong when trying downloading the latest version.");
+                                        break;
+                                    case UNAVAILABLE:
+                                        Bukkit.getLogger().warning("[V10Lift] Unable to download the latest version.");
+                                        break;
+                                }
+                            }).runUpdate();
                         }
-                    }).runUpdate();
-                } else if (versionResponse == UpdateManager.VersionResponse.LATEST) {
-                    Bukkit.getLogger().info("[V10Lift] You are running the latest version [" + this.getDescription().getVersion() + "]!");
-                } else if (versionResponse == UpdateManager.VersionResponse.UNAVAILABLE) {
-                    Bukkit.getLogger().severe("[V10Lift] Unable to perform an update check.");
+                        break;
+                    case LATEST:
+                        Bukkit.getLogger().info("[V10Lift] You are running the latest version [" + this.getDescription().getVersion() + "]!");
+                        break;
+                    case THIS_NEWER:
+                        Bukkit.getLogger().info("[V10Lift] You are running a newer version [" + this.getDescription().getVersion() + "]! This is probably fine.");
+                        break;
+                    case UNAVAILABLE:
+                        Bukkit.getLogger().severe("[V10Lift] Unable to perform an update check.");
+                        break;
                 }
             }).check();
         }
@@ -105,7 +127,7 @@ public class V10LiftPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        V10LiftPlugin.getDBManager().removeFromData();
+        dbManager.removeFromData(); //TODO Find a better way, override?
 
         dbManager.save();
         dbManager.closeConnection();

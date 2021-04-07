@@ -13,11 +13,9 @@ import java.nio.charset.StandardCharsets;
 import java.util.Objects;
 
 public class YamlFile {
-    //SBYamlFile file = new SBYamlFile(this, "data");
-
+    private final String name;
     private FileConfiguration fileConfiguration;
     private File file;
-    private String name;
 
     public YamlFile(String name) {
         this.name = name;
@@ -51,6 +49,10 @@ public class YamlFile {
         getFile().setDefaults(defConfig1);
         getFile().options().copyDefaults(true);
         saveFile();
+    }
+
+    public File getJavaFile() {
+        return this.file;
     }
 
     public FileConfiguration getFile() {

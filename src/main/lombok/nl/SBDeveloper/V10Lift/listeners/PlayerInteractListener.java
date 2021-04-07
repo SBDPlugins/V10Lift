@@ -1,5 +1,7 @@
 package nl.SBDeveloper.V10Lift.listeners;
 
+import com.cryptomorin.xseries.XMaterial;
+import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import nl.SBDeveloper.V10Lift.api.objects.Floor;
 import nl.SBDeveloper.V10Lift.api.objects.Lift;
 import nl.SBDeveloper.V10Lift.api.objects.LiftBlock;
@@ -7,8 +9,6 @@ import nl.SBDeveloper.V10Lift.managers.DataManager;
 import nl.SBDeveloper.V10Lift.managers.VaultManager;
 import nl.SBDeveloper.V10Lift.utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.utils.DoorUtil;
-import nl.SBDeveloper.V10Lift.utils.XMaterial;
-import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -29,8 +29,7 @@ import org.bukkit.inventory.ItemStack;
 import java.util.*;
 
 public class PlayerInteractListener implements Listener {
-
-    private ArrayList<UUID> rightClicked = new ArrayList<>();
+    private final ArrayList<UUID> rightClicked = new ArrayList<>();
 
     //BUTTON CLICK
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

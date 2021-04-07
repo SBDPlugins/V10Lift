@@ -12,8 +12,7 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class SQLiteDB {
-
-    private String dbName;
+    private final String dbName;
     private HikariDataSource source;
     private Connection con;
 

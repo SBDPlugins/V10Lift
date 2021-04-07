@@ -7,7 +7,6 @@ import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 
 public class LocationSerializer {
-
     /**
      * Deserialize a serialized location, without {@link Location#getYaw()} and {@link Location#getPitch()}
      *
@@ -77,5 +76,4 @@ public class LocationSerializer {
         if (loc.getWorld() == null) return null;
         return loc.getWorld().getName() + "_" + loc.getX() + "_" + loc.getY() + "_" + loc.getZ() + "_" + loc.getYaw() + "_" + loc.getPitch();
     }
-
 }

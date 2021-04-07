@@ -1,14 +1,14 @@
 package nl.SBDeveloper.V10Lift.managers;
 
-import nl.SBDeveloper.V10Lift.utils.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 
 import java.util.HashSet;
 
 public class ForbiddenBlockManager {
-    private HashSet<XMaterial> forbidden = new HashSet<>();
+    private static final HashSet<XMaterial> forbidden = new HashSet<>();
 
-    public ForbiddenBlockManager() {
+    static {
         //TODO Add more forbidden materials
         //TODO Add to config
         forbidden.add(XMaterial.BLACK_BED);
@@ -41,7 +41,7 @@ public class ForbiddenBlockManager {
         forbidden.add(XMaterial.STICKY_PISTON);
     }
 
-    public boolean isForbidden(Material mat) {
+    public static boolean isForbidden(Material mat) {
         XMaterial xmat = XMaterial.matchXMaterial(mat);
         return forbidden.contains(xmat);
     }

@@ -1,14 +1,14 @@
 package nl.SBDeveloper.V10Lift.managers;
 
-import nl.SBDeveloper.V10Lift.utils.XMaterial;
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.Material;
 
 import java.util.HashSet;
 
 public class AntiCopyBlockManager {
-    private HashSet<XMaterial> antiCopy = new HashSet<>();
+    private static final HashSet<XMaterial> antiCopy = new HashSet<>();
 
-    public AntiCopyBlockManager() {
+    static {
         //TODO Add more anti copy materials
         //TODO Add to config
         antiCopy.add(XMaterial.REDSTONE_TORCH);
@@ -79,7 +79,7 @@ public class AntiCopyBlockManager {
         antiCopy.add(XMaterial.JUKEBOX);
     }
 
-    public boolean isAntiCopy(Material mat) {
+    public static boolean isAntiCopy(Material mat) {
         XMaterial xmat = XMaterial.matchXMaterial(mat);
         return antiCopy.contains(xmat);
     }

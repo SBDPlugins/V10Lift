@@ -1,5 +1,6 @@
 package nl.SBDeveloper.V10Lift.commands;
 
+import com.cryptomorin.xseries.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import nl.SBDeveloper.V10Lift.api.objects.Floor;
 import nl.SBDeveloper.V10Lift.api.objects.Lift;
@@ -9,7 +10,6 @@ import nl.SBDeveloper.V10Lift.managers.DataManager;
 import nl.SBDeveloper.V10Lift.managers.VaultManager;
 import nl.SBDeveloper.V10Lift.sbutils.LocationSerializer;
 import nl.SBDeveloper.V10Lift.utils.ConfigUtil;
-import nl.SBDeveloper.V10Lift.utils.XMaterial;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;

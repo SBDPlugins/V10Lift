@@ -1,22 +1,18 @@
 General:
-  #General
   NoPermission: '&cYou don''t have the permission to do this.'
   PlayerOnly: '&cOnly players can do this.'
   IncorrectUsage: '&cPlease use %Command% instead'
   InternalError: '&cSomething went wrong internally.'
 
-  #Lift general
   DoesntExists: '&cThere are no lifts with that name.'
   AlreadyExists: '&cA lift with that name already exists.'
   SwitchOnEdit: '&cEnable editor mode before doing this.'
   DetectionFailed: '&cAutomatic floor detection failed!'
   FloorDoesntExists: '&cThe floor %Name% doesn''t exists!'
 
-  #Lift control
   NoWhitelistPermission: '&cYou can''t go to that floor!'
   NoFloors: '&cThis elevator has no floors!'
 
-  #Protection
   RemoveLiftFirst: '&cYou can''t do this! Remove the lift first.'
   RemoveRopeFirst: '&cYou can''t do this! Remove the rope first.'
   RemoveDoorFirst: '&cYou can''t do this! Remove the door first.'

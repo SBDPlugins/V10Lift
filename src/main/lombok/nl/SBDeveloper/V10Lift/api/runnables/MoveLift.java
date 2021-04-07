@@ -1,13 +1,13 @@
 package nl.SBDeveloper.V10Lift.api.runnables;
 
+import com.cryptomorin.xseries.XMaterial;
+import com.cryptomorin.xseries.XSound;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import nl.SBDeveloper.V10Lift.api.objects.*;
 import nl.SBDeveloper.V10Lift.managers.DataManager;
 import nl.SBDeveloper.V10Lift.sbutils.LocationSerializer;
 import nl.SBDeveloper.V10Lift.utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.utils.DirectionUtil;
-import nl.SBDeveloper.V10Lift.utils.XMaterial;
-import nl.SBDeveloper.V10Lift.utils.XSound;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
