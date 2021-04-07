@@ -1,5 +1,6 @@
 package nl.SBDeveloper.V10Lift.utils;
 
+import com.cryptomorin.xseries.XMaterial;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
