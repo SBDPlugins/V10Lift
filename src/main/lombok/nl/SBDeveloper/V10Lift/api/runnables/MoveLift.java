@@ -4,6 +4,7 @@ import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import nl.SBDeveloper.V10Lift.api.objects.*;
+import nl.SBDeveloper.V10Lift.managers.AntiCopyBlockManager;
 import nl.SBDeveloper.V10Lift.managers.DataManager;
 import nl.SBDeveloper.V10Lift.sbutils.LocationSerializer;
 import nl.SBDeveloper.V10Lift.utils.ConfigUtil;
@@ -176,7 +177,7 @@ public class MoveLift implements Runnable {
             iter = lift.getBlocks().iterator();
             while (iter.hasNext()) {
                 lb = iter.next();
-                if (V10LiftPlugin.getAPI().getACBM().isAntiCopy(lb.getMat())) {
+                if (AntiCopyBlockManager.isAntiCopy(lb.getMat())) {
                     tb.add(lb);
                     iter.remove();
                     block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at MoveLift").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
@@ -322,7 +323,7 @@ public class MoveLift implements Runnable {
             iter = lift.getBlocks().iterator();
             while (iter.hasNext()) {
                 lb = iter.next();
-                if (V10LiftPlugin.getAPI().getACBM().isAntiCopy(lb.getMat())) {
+                if (AntiCopyBlockManager.isAntiCopy(lb.getMat())) {
                     tb.add(lb);
                     iter.remove();
                     block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at MoveLift").getBlockAt(lb.getX(), lb.getY(), lb.getZ());

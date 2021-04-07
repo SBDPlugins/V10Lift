@@ -6,6 +6,7 @@ import nl.SBDeveloper.V10Lift.api.objects.Floor;
 import nl.SBDeveloper.V10Lift.api.objects.Lift;
 import nl.SBDeveloper.V10Lift.api.objects.LiftBlock;
 import nl.SBDeveloper.V10Lift.managers.DataManager;
+import nl.SBDeveloper.V10Lift.managers.ForbiddenBlockManager;
 import nl.SBDeveloper.V10Lift.managers.VaultManager;
 import nl.SBDeveloper.V10Lift.utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.utils.DoorUtil;
@@ -276,7 +277,7 @@ public class PlayerInteractListener implements Listener {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 e.setCancelled(true);
                 Block block = e.getClickedBlock();
-                if (V10LiftPlugin.getAPI().getFBM().isForbidden(block.getType())) {
+                if (ForbiddenBlockManager.isForbidden(block.getType())) {
                     ConfigUtil.sendMessage(e.getPlayer(), "Door.BlacklistedMaterial", Collections.singletonMap("%Name%", e.getClickedBlock().getType().toString().toLowerCase()));
                     return;
                 }

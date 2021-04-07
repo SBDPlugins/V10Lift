@@ -5,7 +5,6 @@ import nl.SBDeveloper.V10Lift.V10LiftPlugin;
 import nl.SBDeveloper.V10Lift.api.objects.*;
 import nl.SBDeveloper.V10Lift.api.runnables.DoorCloser;
 import nl.SBDeveloper.V10Lift.api.runnables.MoveLift;
-import nl.SBDeveloper.V10Lift.managers.AntiCopyBlockManager;
 import nl.SBDeveloper.V10Lift.managers.DataManager;
 import nl.SBDeveloper.V10Lift.managers.ForbiddenBlockManager;
 import nl.SBDeveloper.V10Lift.sbutils.LocationSerializer;
@@ -26,33 +25,6 @@ import java.util.*;
 
 /** The Main API class, for all the API methods */
 public class V10LiftAPI {
-    /* Load managers... */
-    private static ForbiddenBlockManager fbm;
-    private static AntiCopyBlockManager acbm;
-
-    public V10LiftAPI() {
-        fbm = new ForbiddenBlockManager();
-        acbm = new AntiCopyBlockManager();
-    }
-
-    /**
-     * Get the ForbiddenBlockManager, to check if a material is forbidden
-     *
-     * @return {@link ForbiddenBlockManager}
-     */
-    public ForbiddenBlockManager getFBM() {
-        return fbm;
-    }
-
-    /**
-     * Get the AntiCopyBlockManager, to check if we can copy a material
-     *
-     * @return {@link AntiCopyBlockManager}
-     */
-    public AntiCopyBlockManager getACBM() {
-        return acbm;
-    }
-
     /* Private API methods */
     private void sortFloors(@Nonnull Lift lift) {
         ArrayList<Map.Entry<String, Floor>> as = new ArrayList<>(lift.getFloors().entrySet());
@@ -236,7 +208,7 @@ public class V10LiftAPI {
      * @return 0 if added, -2 if forbidden, -3 if already added
      */
     public int addBlockToLift(@Nonnull Set<LiftBlock> blocks, @Nonnull LiftBlock block) {
-        if (getFBM().isForbidden(block.getMat())) return -2;
+        if (ForbiddenBlockManager.isForbidden(block.getMat())) return -2;
         if (blocks.contains(block)) return -3;
         blocks.add(block);
         return 0;
@@ -310,7 +282,7 @@ public class V10LiftAPI {
     public int switchBlockAtLift(TreeSet<LiftBlock> blocks, Block block) {
         if  (blocks == null || block == null) return -1;
         Material type = block.getType();
-        if (getFBM().isForbidden(type)) return -2;
+        if (ForbiddenBlockManager.isForbidden(type)) return -2;
         LiftBlock lb;
         if (XMaterial.isNewVersion()) {
             if (type.toString().contains("SIGN")) {
@@ -906,7 +878,7 @@ public class V10LiftAPI {
         Block block = world.getBlockAt(x, minY, z);
         if (isRope(block)) return -3;
         Material mat = block.getType();
-        if (getFBM().isForbidden(mat)) return -4;
+        if (ForbiddenBlockManager.isForbidden(mat)) return -4;
 
         for (int i = minY + 1; i <= maxY; i++) {
             block = world.getBlockAt(x, i, z);

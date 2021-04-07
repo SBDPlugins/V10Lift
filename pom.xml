@@ -120,8 +120,8 @@
                 <version>3.2.0</version>
                 <configuration>
                     <sourceFileIncludes>
-                        <include>nl/SBDeveloper/V10Lift/API/*.java</include>
-                        <include>nl/SBDeveloper/V10Lift/API/Objects/*.java</include>
+                        <include>nl/SBDeveloper/V10Lift/api/*.java</include>
+                        <include>nl/SBDeveloper/V10Lift/api/objects/*.java</include>
                     </sourceFileIncludes>
                 </configuration>
             </plugin>
