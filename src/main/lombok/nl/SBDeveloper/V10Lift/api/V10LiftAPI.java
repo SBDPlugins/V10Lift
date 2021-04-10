@@ -11,6 +11,7 @@ import nl.SBDeveloper.V10Lift.sbutils.LocationSerializer;
 import nl.SBDeveloper.V10Lift.utils.ConfigUtil;
 import nl.SBDeveloper.V10Lift.utils.DirectionUtil;
 import nl.SBDeveloper.V10Lift.utils.DoorUtil;
+import org.apache.commons.collections4.map.LinkedMap;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
@@ -941,7 +942,7 @@ public class V10LiftAPI {
         if (liftName == null || queue == null || !DataManager.containsLift(liftName)) return false;
 
         Lift lift = DataManager.getLift(liftName);
-        lift.setQueue(new LinkedHashMap<>());
+        lift.setQueue(new LinkedMap<>());
         for (Map.Entry<String, Floor> e : queue.entrySet()) {
             addToQueue(liftName, e.getValue(), e.getKey());
         }
@@ -989,7 +990,7 @@ public class V10LiftAPI {
 
         Lift l = DataManager.getLift(lift);
         if (l.getQueue() == null) {
-            l.setQueue(new LinkedHashMap<>());
+            l.setQueue(new LinkedMap<>());
         }
 
         if (!l.getQueue().containsValue(floor)) {

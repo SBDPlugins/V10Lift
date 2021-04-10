@@ -14,12 +14,11 @@ public class Lift {
     @Getter @Setter private String worldName;
     @Getter @Setter private int y;
     @Getter private HashSet<UUID> owners;
-    //@Getter @Setter private ArrayList<String> whitelist;
     @Getter private final TreeSet<LiftBlock> blocks = new TreeSet<>();
     @Getter private final LinkedHashMap<String, Floor> floors = new LinkedHashMap<>();
     @Getter private final HashSet<LiftSign> signs = new HashSet<>();
     @Getter private final HashSet<LiftBlock> inputs = new HashSet<>();
-    @Getter private HashSet<LiftBlock> offlineInputs = new HashSet<>();
+    @Getter private final HashSet<LiftBlock> offlineInputs = new HashSet<>();
     @Getter @Setter private LinkedHashMap<String, Floor> queue = null;
     @Getter private final HashSet<LiftRope> ropes = new HashSet<>();
     @Getter private transient final ArrayList<V10Entity> toMove = new ArrayList<>();
