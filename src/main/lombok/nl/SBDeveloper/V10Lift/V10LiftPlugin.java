@@ -14,6 +14,7 @@ import nl.SBDeveloper.V10Lift.sbutils.ConfigUpdater;
 import nl.SBDeveloper.V10Lift.sbutils.UpdateManager;
 import nl.SBDeveloper.V10Lift.sbutils.YamlFile;
 import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -81,7 +82,7 @@ public class V10LiftPlugin extends JavaPlugin {
         //Load metrics
         Bukkit.getLogger().info("[V10Lift] Loading metrics. Can be disabled in the global bStats config.");
         Metrics metrics = new Metrics(this, 6564);
-        metrics.addCustomChart(new Metrics.SingleLineChart("lifts", () -> DataManager.getLifts().size()));
+        metrics.addCustomChart(new SingleLineChart("lifts", () -> DataManager.getLifts().size()));
 
         //Load the update checker
         if (getSConfig().getFile().getBoolean("UpdateChecker.Enabled")) {
