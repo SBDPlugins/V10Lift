@@ -320,7 +320,7 @@ public class MoveLift implements Runnable {
                 ls.setState((byte) signState);
             }
 
-            if (direction == LiftDirection.DOWN) { //TODO Fix for down
+            if (direction == LiftDirection.DOWN) {
                 //MOVE ROPES
                 for (LiftRope rope : lift.getRopes()) {
                     boolean stopAfter = false;

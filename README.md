@@ -1,7 +1,7 @@
 # V10Lift2
 ![Build status](https://travis-ci.org/stijnb1234/V10Lift2.svg?branch=master)
 
-The rebuild of the V10Lift plugin!
+The recode of the V10Lift plugin!
 
 *Original source: [Click here](https://github.com/shinyquagsire23/V10Lift)*
 
