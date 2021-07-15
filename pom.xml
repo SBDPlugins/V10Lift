@@ -5,7 +5,7 @@
 
     <groupId>nl.SBDeveloper</groupId>
     <artifactId>V10Lift2</artifactId>
-    <version>0.7.2</version>
+    <version>0.7.3</version>
     <packaging>jar</packaging>
 
     <name>V10Lift</name>
@@ -174,7 +174,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.16.5-R0.1-SNAPSHOT</version>
+            <version>1.17-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -206,7 +206,7 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>7.9.1.1</version>
+            <version>8.0.0</version>
         </dependency>
 
         <dependency>
