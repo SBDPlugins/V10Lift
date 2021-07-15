@@ -128,8 +128,6 @@ public class V10LiftPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        dbManager.removeFromData(); //TODO Find a better way, override?
-
         dbManager.save();
         dbManager.closeConnection();
 

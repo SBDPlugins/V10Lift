@@ -954,7 +954,7 @@ public class V10LiftCommand implements CommandExecutor {
                 DataManager.removeRopeRemovesPlayer(p.getUniqueId());
                 DataManager.removeDoorEditPlayer(p.getUniqueId());
 
-                V10LiftPlugin.getDBManager().save();
+                V10LiftPlugin.getDBManager().saveLift(liftName, lift);
 
                 BlockState bs;
                 Sign sign;
