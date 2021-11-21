@@ -1,7 +1,5 @@
-package nl.SBDeveloper.V10Lift.sbutils;
+package nl.sbdeveloper.vehiclesplus.sbutils;
 
-import com.google.gson.JsonArray;
-import com.google.gson.JsonObject;
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.Plugin;
@@ -10,7 +8,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import javax.net.ssl.HttpsURLConnection;
 import java.io.*;
 import java.lang.reflect.Method;
-import java.net.HttpURLConnection;
 import java.net.URL;
 import java.nio.channels.Channels;
 import java.nio.channels.FileChannel;
@@ -20,16 +17,18 @@ import java.util.function.BiConsumer;
 
 /**
  * Update class for SBDevelopment
+ *
  * @author Stijn [SBDeveloper]
- * @since 05-03-2020
- * @version 2.0 [26-12-2020] - This class supports the v2 Update API
+ * @version 2.1 [19-11-2021] - This class supports both the v2 Spiget and v2 SBDUpdate API
  *
  * <p>&copy; Stijn Bannink [stijnbannink23@gmail.com] - All rights reserved.</p>
+ * @since 05-03-2020
  */
 public class UpdateManager {
+    private static final JsonParser parser = new JsonParser();
 
-    private static final String SPIGOT_API = "https://api.spigotmc.org/legacy/update.php?resource=%d";
-    private static final String SPIGOT_DOWNLOAD = "http://api.spiget.org/v2/resources/%s/download";
+    private static final String SPIGOT_API = "https://api.spiget.org/v2/resources/%s/versions/latest";
+    private static final String SPIGOT_DOWNLOAD = "https://api.spiget.org/v2/resources/%s/download";
 
     private static final String SBDPLUGINS_API = "https://updates.sbdplugins.nl/api/v2/plugins/%d";
     private static final String SBDPLUGINS_DOWNLOAD = "https://updates.sbdplugins.nl/api/v2/download/%d";
@@ -46,7 +45,7 @@ public class UpdateManager {
     /**
      * Construct a new UpdateManager for Spigot
      *
-     * @param plugin The javaplugin (Main class)
+     * @param plugin     The javaplugin (Main class)
      * @param resourceID The resourceID on spigot/sbdplugins
      */
     public UpdateManager(Plugin plugin, int resourceID) {
@@ -60,9 +59,9 @@ public class UpdateManager {
     /**
      * Construct a new UpdateManager for SBDPlugins
      *
-     * @param plugin The javaplugin (Main class)
+     * @param plugin     The javaplugin (Main class)
      * @param resourceID The resourceID on spigot/sbdplugins
-     * @param license The license for the download
+     * @param license    The license for the download
      */
     public UpdateManager(Plugin plugin, int resourceID, String license) {
         this.plugin = plugin;
@@ -74,6 +73,7 @@ public class UpdateManager {
 
     /**
      * Handle the response given by check();
+     *
      * @param versionResponse The response
      * @return The updatemanager
      */
@@ -110,8 +110,6 @@ public class UpdateManager {
 
                 if (in == null) return;
 
-                String version;
-
                 String inputLine;
                 StringBuilder response = new StringBuilder();
                 while ((inputLine = in.readLine()) != null) {
@@ -119,18 +117,7 @@ public class UpdateManager {
                 }
                 in.close();
 
-                JsonParser parser = new JsonParser();
-
-                if (type == CheckType.SPIGOT) {
-                    JsonArray array = parser.parse(response.toString()).getAsJsonArray();
-
-                    version = array.get(0).getAsJsonObject().get("name").getAsString();
-                } else {
-                    JsonObject object = parser.parse(response.toString()).getAsJsonObject();
-
-                    version = object.get("version").getAsString();
-                }
-
+                String version = parser.parse(response.toString()).getAsJsonObject().get(type == CheckType.SPIGOT ? "name" : "version").getAsString();
                 if (version == null) return;
 
                 Version onlineVersion = new Version(version);
@@ -168,8 +155,9 @@ public class UpdateManager {
                 //https://stackoverflow.com/questions/921262/how-to-download-and-save-a-file-from-internet-using-java
                 int response;
                 InputStream stream;
+                HttpsURLConnection connection;
                 if (type == CheckType.SBDPLUGINS) {
-                    HttpURLConnection connection = (HttpURLConnection) new URL(String.format(SBDPLUGINS_DOWNLOAD, this.resourceID)).openConnection();
+                    connection = (HttpsURLConnection) new URL(String.format(SBDPLUGINS_DOWNLOAD, this.resourceID)).openConnection();
 
                     String urlParameters = "license=" + license + "&port=" + Bukkit.getPort();
                     byte[] postData = urlParameters.getBytes(StandardCharsets.UTF_8);
@@ -185,16 +173,13 @@ public class UpdateManager {
                     DataOutputStream wr = new DataOutputStream(connection.getOutputStream());
                     wr.write(postData);
                     wr.close();
-
-                    response = connection.getResponseCode();
-                    stream = connection.getInputStream();
                 } else {
-                    HttpsURLConnection connection = (HttpsURLConnection) new URL(String.format(SPIGOT_DOWNLOAD, this.resourceID)).openConnection();
+                    connection = (HttpsURLConnection) new URL(String.format(SPIGOT_DOWNLOAD, this.resourceID)).openConnection();
                     connection.setRequestProperty("User-Agent", "Mozilla/5.0");
-
-                    response = connection.getResponseCode();
-                    stream = connection.getInputStream();
                 }
+
+                response = connection.getResponseCode();
+                stream = connection.getInputStream();
 
                 if (response != 200) {
                     BufferedReader in = new BufferedReader(new InputStreamReader(stream));
@@ -249,7 +234,9 @@ public class UpdateManager {
     }
 
     private File getPluginFile() {
-        if (!(this.plugin instanceof JavaPlugin)) { return null; }
+        if (!(this.plugin instanceof JavaPlugin)) {
+            return null;
+        }
         try {
             Method method = JavaPlugin.class.getDeclaredMethod("getFile");
             method.setAccessible(true);
@@ -278,16 +265,16 @@ public class UpdateManager {
 
         private final String version;
 
-        public final String get() {
-            return this.version;
-        }
-
         private Version(String version) {
-            if(version == null)
+            if (version == null)
                 throw new IllegalArgumentException("Version can not be null");
-            if(!version.matches("[0-9]+(\\.[0-9]+)*"))
+            if (!version.matches("[0-9]+(\\.[0-9]+)*"))
                 throw new IllegalArgumentException("Invalid version format");
             this.version = version;
+        }
+
+        public final String get() {
+            return this.version;
         }
 
         private VersionResponse check(Version that) {
@@ -298,9 +285,9 @@ public class UpdateManager {
             for (int i = 0; i < length; i++) {
                 int thisPart = i < thisParts.length ? Integer.parseInt(thisParts[i]) : 0;
                 int thatPart = i < thatParts.length ? Integer.parseInt(thatParts[i]) : 0;
-                if(thisPart < thatPart)
+                if (thisPart < thatPart)
                     return VersionResponse.FOUND_NEW;
-                if(thisPart > thatPart)
+                if (thisPart > thatPart)
                     return VersionResponse.THIS_NEWER;
             }
             return VersionResponse.LATEST;
