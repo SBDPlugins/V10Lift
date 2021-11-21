@@ -1,4 +1,4 @@
-package nl.sbdeveloper.vehiclesplus.sbutils;
+package nl.SBDeveloper.V10Lift.sbutils;
 
 import com.google.gson.JsonParser;
 import org.bukkit.Bukkit;
