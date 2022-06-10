@@ -19,4 +19,4 @@ The recode of the V10Lift plugin!
 </dependency>
 ```
 
-© Stijn Bannink - 2019/2020
+© Stijn Bannink - 2019/2022

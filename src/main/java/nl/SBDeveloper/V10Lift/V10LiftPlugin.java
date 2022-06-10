@@ -1,6 +1,5 @@
 package nl.SBDeveloper.V10Lift;
 
-import nl.SBDeveloper.V10Lift.api.V10LiftAPI;
 import nl.SBDeveloper.V10Lift.commands.V10LiftCommand;
 import nl.SBDeveloper.V10Lift.commands.V10LiftTabCompleter;
 import nl.SBDeveloper.V10Lift.listeners.BlockBreakListener;
