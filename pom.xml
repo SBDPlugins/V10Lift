@@ -85,6 +85,7 @@
                     </execution>
                 </executions>
             </plugin>
+
             <!-- Compile JAR -->
             <plugin>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -94,11 +95,17 @@
                     <compilerArgument>-parameters</compilerArgument>
                 </configuration>
             </plugin>
+
             <!-- Delombok the source for the javadoc -->
             <plugin>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok-maven-plugin</artifactId>
                 <version>1.18.20.0</version>
+                <configuration>
+                    <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
+                    <outputDirectory>${project.build.directory}/delombok</outputDirectory>
+                    <addOutputDirectory>false</addOutputDirectory>
+                </configuration>
                 <executions>
                     <execution>
                         <phase>generate-sources</phase>
@@ -108,17 +115,26 @@
                     </execution>
                 </executions>
             </plugin>
+
             <!-- Build the javadoc -->
             <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
                 <version>3.3.0</version>
                 <configuration>
-                    <sourceFileIncludes>
-                        <include>nl/SBDeveloper/V10Lift/api/*.java</include>
-                        <include>nl/SBDeveloper/V10Lift/api/objects/*.java</include>
-                    </sourceFileIncludes>
+                    <sourcepath>${project.build.directory}/delombok</sourcepath>
+
+                    <!-- Exclude all non-API packages -->
+                    <sourceFileExcludes>
+                        <exclude>nl/SBDeveloper/V10Lift/*.java</exclude>
+                        <exclude>nl/SBDeveloper/V10Lift/commands/*.java</exclude>
+                        <exclude>nl/SBDeveloper/V10Lift/listeners/*.java</exclude>
+                        <exclude>nl/SBDeveloper/V10Lift/sbutils/*.java</exclude>
+                        <exclude>nl/SBDeveloper/V10Lift/utils/*.java</exclude>
+                    </sourceFileExcludes>
                 </configuration>
             </plugin>
+
             <!-- SKIP the maven deploy -->
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
@@ -127,6 +143,7 @@
                     <skip>true</skip>
                 </configuration>
             </plugin>
+
             <!-- Deploy to nexus -->
             <plugin>
                 <groupId>org.sonatype.plugins</groupId>

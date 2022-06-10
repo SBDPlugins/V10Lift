@@ -3,6 +3,7 @@ package nl.SBDeveloper.V10Lift.api.runnables;
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
+import nl.SBDeveloper.V10Lift.api.V10LiftAPI;
 import nl.SBDeveloper.V10Lift.api.enums.LiftDirection;
 import nl.SBDeveloper.V10Lift.api.objects.*;
 import nl.SBDeveloper.V10Lift.managers.AntiCopyBlockManager;
@@ -119,7 +120,7 @@ public class MoveLift implements Runnable {
         if (changeOfDefect > 0.0D) {
             double chance = ThreadLocalRandom.current().nextDouble(100);
             if (chance < changeOfDefect) {
-                V10LiftPlugin.getAPI().setDefective(liftName, true);
+                V10LiftAPI.getInstance().setDefective(liftName, true);
                 return;
             }
         }
@@ -141,7 +142,7 @@ public class MoveLift implements Runnable {
         List<LiftBlock> antiCopyBlocks = new ArrayList<>();
 
         if (direction == LiftDirection.UP || direction == LiftDirection.DOWN) {
-            if (!V10LiftPlugin.getAPI().closeDoor(liftName)) return;
+            if (!V10LiftAPI.getInstance().closeDoor(liftName)) return;
 
             if (direction == LiftDirection.UP) {
                 //MOVE ROPES
@@ -149,7 +150,7 @@ public class MoveLift implements Runnable {
                     if (rope.getCurrently() > rope.getMaxY()) {
                         Bukkit.getLogger().info("[V10Lift] Lift " + liftName + " reaches the upper rope end but won't stop!!");
 
-                        V10LiftPlugin.getAPI().setDefective(liftName, true);
+                        V10LiftAPI.getInstance().setDefective(liftName, true);
                         lift.getToMove().clear();
                         queueIterator.remove();
                         return;
@@ -328,7 +329,7 @@ public class MoveLift implements Runnable {
                     if (rope.getCurrently() < rope.getMinY()) {
                         Bukkit.getLogger().info("[V10Lift] Lift " + liftName + " reaches the upper rope end but won't stop!!");
 
-                        V10LiftPlugin.getAPI().setDefective(liftName, true);
+                        V10LiftAPI.getInstance().setDefective(liftName, true);
                         lift.getToMove().clear();
                         queueIterator.remove();
 
@@ -420,7 +421,7 @@ public class MoveLift implements Runnable {
                 ls.setState((byte) 0);
             }
 
-            V10LiftPlugin.getAPI().openDoor(lift, liftName, floorTo);
+            V10LiftAPI.getInstance().openDoor(lift, liftName, floorTo);
 
             if (lift.isRealistic()) lift.setCounter(ft);
 

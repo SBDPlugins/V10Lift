@@ -1,6 +1,7 @@
 package nl.SBDeveloper.V10Lift.api.runnables;
 
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
+import nl.SBDeveloper.V10Lift.api.V10LiftAPI;
 import nl.SBDeveloper.V10Lift.managers.DataManager;
 import org.bukkit.Bukkit;
 
@@ -18,7 +19,7 @@ public class DoorCloser implements Runnable {
 
     @Override
     public void run() {
-        if (V10LiftPlugin.getAPI().closeDoor(liftName)) stop();
+        if (V10LiftAPI.getInstance().closeDoor(liftName)) stop();
     }
 
     public void stop() {

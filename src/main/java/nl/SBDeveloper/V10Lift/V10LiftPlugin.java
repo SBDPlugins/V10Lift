@@ -28,7 +28,6 @@ public class V10LiftPlugin extends JavaPlugin {
     private static YamlFile config;
     private static DBManager dbManager;
     private static YamlFile messages;
-    private static V10LiftAPI api;
     private static boolean vault = false;
 
     @Override
@@ -59,9 +58,6 @@ public class V10LiftPlugin extends JavaPlugin {
             Bukkit.getLogger().warning("[V10Lift] Couldn't connect to the SQLite database. Please check the stacktrace below.");
             e.printStackTrace();
         }
-
-        //Load the API
-        api = new V10LiftAPI();
 
         //Load vault if found
         if (VaultManager.setupPermissions()) {
@@ -128,7 +124,7 @@ public class V10LiftPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        dbManager.save();
+        dbManager.save(true);
         dbManager.closeConnection();
 
         instance = null;
@@ -148,10 +144,6 @@ public class V10LiftPlugin extends JavaPlugin {
 
     public static YamlFile getMessages() {
         return messages;
-    }
-
-    public static V10LiftAPI getAPI() {
-        return api;
     }
 
     public static boolean isVaultEnabled() {

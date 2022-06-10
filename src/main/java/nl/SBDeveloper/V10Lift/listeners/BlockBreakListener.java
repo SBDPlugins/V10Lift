@@ -1,5 +1,6 @@
 package nl.SBDeveloper.V10Lift.listeners;
 
+import nl.SBDeveloper.V10Lift.api.V10LiftAPI;
 import nl.SBDeveloper.V10Lift.api.objects.Floor;
 import nl.SBDeveloper.V10Lift.api.objects.Lift;
 import nl.SBDeveloper.V10Lift.api.objects.LiftBlock;
@@ -22,7 +23,7 @@ public class BlockBreakListener implements Listener {
     @EventHandler(priority = EventPriority.HIGH, ignoreCancelled = true)
     public void onBlockBreak(BlockBreakEvent e) {
         Block b = e.getBlock();
-        if (V10LiftPlugin.getAPI().isRope(b)) {
+        if (V10LiftAPI.getInstance().isRope(b)) {
             ConfigUtil.sendMessage(e.getPlayer(), "General.RemoveRopeFirst");
             e.setCancelled(true);
             return;

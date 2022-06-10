@@ -5,6 +5,9 @@ import org.bukkit.Material;
 
 import java.util.HashSet;
 
+/**
+ * This class contains a set with all the blocks who may not be placed in a lift
+ */
 public class ForbiddenBlockManager {
     private static final HashSet<XMaterial> forbidden = new HashSet<>();
 
@@ -41,6 +44,12 @@ public class ForbiddenBlockManager {
         forbidden.add(XMaterial.STICKY_PISTON);
     }
 
+    /**
+     * Check if this block may not be placed in a lift
+     *
+     * @param mat The material to check for
+     * @return true = not place this block
+     */
     public static boolean isForbidden(Material mat) {
         XMaterial xmat = XMaterial.matchXMaterial(mat);
         return forbidden.contains(xmat);

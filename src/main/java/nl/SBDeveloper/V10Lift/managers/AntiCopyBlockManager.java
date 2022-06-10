@@ -5,6 +5,9 @@ import org.bukkit.Material;
 
 import java.util.HashSet;
 
+/**
+ * This class contains a set with all the blocks who may not be copied
+ */
 public class AntiCopyBlockManager {
     private static final HashSet<XMaterial> antiCopy = new HashSet<>();
 
@@ -79,6 +82,12 @@ public class AntiCopyBlockManager {
         antiCopy.add(XMaterial.JUKEBOX);
     }
 
+    /**
+     * Check if this block may not be copied
+     *
+     * @param mat The material to check for
+     * @return true = not copy this block
+     */
     public static boolean isAntiCopy(Material mat) {
         XMaterial xmat = XMaterial.matchXMaterial(mat);
         return antiCopy.contains(xmat);

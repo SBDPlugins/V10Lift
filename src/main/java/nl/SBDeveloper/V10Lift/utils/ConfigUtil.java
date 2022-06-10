@@ -52,7 +52,7 @@ public class ConfigUtil {
      *
      * @param p The commandsender to send it to
      * @param path The path to look for
-     * @param replacement The replacements -> key: %Name% = value: TheName
+     * @param replacement The replacements - key: %Name% = value: TheName
      */
     public static void sendMessage(CommandSender p, @Nonnull String path, Map<String, String> replacement) {
         if (V10LiftPlugin.getMessages().getFile().get(path) == null) {
