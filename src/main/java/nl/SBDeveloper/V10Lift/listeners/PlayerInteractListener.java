@@ -2,6 +2,7 @@ package nl.SBDeveloper.V10Lift.listeners;
 
 import com.cryptomorin.xseries.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
+import nl.SBDeveloper.V10Lift.api.V10LiftAPI;
 import nl.SBDeveloper.V10Lift.api.objects.Floor;
 import nl.SBDeveloper.V10Lift.api.objects.Lift;
 import nl.SBDeveloper.V10Lift.api.objects.LiftBlock;
@@ -52,7 +53,7 @@ public class PlayerInteractListener implements Listener {
                 for (LiftBlock lb : lift.getOfflineInputs()) {
                     if (world.equals(lb.getWorld()) && x == lb.getX() && y == lb.getY() && z == lb.getZ()) {
                         lb.setActive(!lb.isActive());
-                        V10LiftPlugin.getAPI().setOffline(entry.getKey(), lb.isActive());
+                        V10LiftAPI.getInstance().setOffline(entry.getKey(), lb.isActive());
                         return;
                     }
                 }
@@ -61,7 +62,7 @@ public class PlayerInteractListener implements Listener {
 
                 for (LiftBlock lb : lift.getInputs()) {
                     if (world.equals(lb.getWorld()) && x == lb.getX() && y == lb.getY() && z == lb.getZ()) {
-                        V10LiftPlugin.getAPI().addToQueue(entry.getKey(), lift.getFloors().get(lb.getFloor()), lb.getFloor());
+                        V10LiftAPI.getInstance().addToQueue(entry.getKey(), lift.getFloors().get(lb.getFloor()), lb.getFloor());
                         e.setCancelled(true);
                         return;
                     }
@@ -121,13 +122,13 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        if (!floor.getGroupWhitelist().isEmpty() && !VaultManager.userHasAnyGroup(p, floor.getGroupWhitelist()) && !p.hasPermission("v10lift.admin")) {
+        if (!floor.getGroupWhitelist().isEmpty() && !VaultManager.inAnyGroup(p, floor.getGroupWhitelist()) && !p.hasPermission("v10lift.admin")) {
             ConfigUtil.sendMessage(e.getPlayer(), "General.NoWhitelistPermission");
             e.setCancelled(true);
             return;
         }
 
-        V10LiftPlugin.getAPI().addToQueue(liftName, lift.getFloors().get(f), f);
+        V10LiftAPI.getInstance().addToQueue(liftName, lift.getFloors().get(f), f);
     }
 
     //BLOCK ADD
@@ -140,7 +141,7 @@ public class PlayerInteractListener implements Listener {
             if (DataManager.containsPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 e.setCancelled(true);
-                int res = V10LiftPlugin.getAPI().switchBlockAtLift(DataManager.getPlayer(p.getUniqueId()), e.getClickedBlock());
+                int res = V10LiftAPI.getInstance().switchBlockAtLift(DataManager.getPlayer(p.getUniqueId()), e.getClickedBlock());
                 switch (res) {
                     case 0:
                         ConfigUtil.sendMessage(e.getPlayer(), "Build.BlockAdded");
@@ -210,7 +211,7 @@ public class PlayerInteractListener implements Listener {
             } else if (DataManager.containsBuilderPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 e.setCancelled(true);
-                int res = V10LiftPlugin.getAPI().switchBlockAtLift(DataManager.getEditPlayer(p.getUniqueId()), e.getClickedBlock());
+                int res = V10LiftAPI.getInstance().switchBlockAtLift(DataManager.getEditPlayer(p.getUniqueId()), e.getClickedBlock());
                 switch (res) {
                     case 0:
                         ConfigUtil.sendMessage(e.getPlayer(), "Build.BlockAdded");
@@ -241,7 +242,7 @@ public class PlayerInteractListener implements Listener {
                         ConfigUtil.sendMessage(e.getPlayer(), "Rope.OnlyUp");
                         return;
                     }
-                    int res = V10LiftPlugin.getAPI().addRope(DataManager.getEditPlayer(p.getUniqueId()), now.getWorld(), start.getX(), now.getY(), start.getY(), start.getZ());
+                    int res = V10LiftAPI.getInstance().addRope(DataManager.getEditPlayer(p.getUniqueId()), now.getWorld(), start.getX(), now.getY(), start.getY(), start.getZ());
                     switch (res) {
                         case 0:
                             ConfigUtil.sendMessage(e.getPlayer(), "Rope.Created");
@@ -266,11 +267,11 @@ public class PlayerInteractListener implements Listener {
                 e.setCancelled(true);
                 Block block = e.getClickedBlock();
                 String liftName = DataManager.getEditPlayer(p.getUniqueId());
-                if (!V10LiftPlugin.getAPI().containsRope(liftName, block)) {
+                if (!V10LiftAPI.getInstance().containsRope(liftName, block)) {
                     ConfigUtil.sendMessage(e.getPlayer(), "Rope.NotARope");
                     return;
                 }
-                V10LiftPlugin.getAPI().removeRope(liftName, block);
+                V10LiftAPI.getInstance().removeRope(liftName, block);
                 DataManager.removeRopeRemovesPlayer(p.getUniqueId());
                 ConfigUtil.sendMessage(e.getPlayer(), "Rope.Removed");
             } else if (DataManager.containsDoorEditPlayer(p.getUniqueId())) {
@@ -314,7 +315,7 @@ public class PlayerInteractListener implements Listener {
                 for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
                     Lift lift = entry.getValue();
                     if (lift.getBlocks().contains(lb) || lift.getInputs().contains(lb) || lift.getSigns().contains(lb) || lift.getRopes().contains(lb) || lift.getOfflineInputs().contains(lb)) {
-                        V10LiftPlugin.getAPI().sendLiftInfo(p, entry.getKey(), lift);
+                        V10LiftAPI.getInstance().sendLiftInfo(p, entry.getKey(), lift);
                         return;
                     }
                 }
@@ -360,7 +361,7 @@ public class PlayerInteractListener implements Listener {
                             }
                             p.getInventory().remove(new ItemStack(masterItem, masterAmount));
                         }
-                        V10LiftPlugin.getAPI().setDefective(liftName, false);
+                        V10LiftAPI.getInstance().setDefective(liftName, false);
                     }
                     e.setCancelled(true);
                     return;
@@ -391,7 +392,7 @@ public class PlayerInteractListener implements Listener {
                         sign.setLine(3, ChatColor.GREEN + f2);
                     } else if (!floor.getUserWhitelist().isEmpty() && !floor.getUserWhitelist().contains(p.getUniqueId()) && !p.hasPermission("v10lift.admin")) {
                         sign.setLine(3, ChatColor.RED + f2);
-                    } else if (!floor.getGroupWhitelist().isEmpty() && !VaultManager.userHasAnyGroup(p, floor.getGroupWhitelist()) && !p.hasPermission("v10lift.admin")) {
+                    } else if (!floor.getGroupWhitelist().isEmpty() && !VaultManager.inAnyGroup(p, floor.getGroupWhitelist()) && !p.hasPermission("v10lift.admin")) {
                         sign.setLine(3, ChatColor.RED + f2);
                     } else {
                         sign.setLine(3, ChatColor.YELLOW + f2);
@@ -410,13 +411,13 @@ public class PlayerInteractListener implements Listener {
                         return;
                     }
 
-                    if (!floor.getGroupWhitelist().isEmpty() && !VaultManager.userHasAnyGroup(p, floor.getGroupWhitelist()) && !p.hasPermission("v10lift.admin")) {
+                    if (!floor.getGroupWhitelist().isEmpty() && !VaultManager.inAnyGroup(p, floor.getGroupWhitelist()) && !p.hasPermission("v10lift.admin")) {
                         ConfigUtil.sendMessage(e.getPlayer(), "General.NoWhitelistPermission");
                         e.setCancelled(true);
                         return;
                     }
 
-                    V10LiftPlugin.getAPI().addToQueue(liftName, lift.getFloors().get(f), f);
+                    V10LiftAPI.getInstance().addToQueue(liftName, lift.getFloors().get(f), f);
                 }
             }
         }

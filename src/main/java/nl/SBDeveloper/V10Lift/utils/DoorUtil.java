@@ -13,7 +13,7 @@ import javax.annotation.Nonnull;
 public class DoorUtil {
 
     /**
-     * Open a door, with 1.12.x < and 1.13.x > support
+     * Open a door, with 1.12.x- and 1.13.x+ support
      * @param b The block (door)
      * @return true if opened, false if not opened
      */
@@ -51,7 +51,7 @@ public class DoorUtil {
     }
 
     /**
-     * Close a door, with 1.12.x < and 1.13.x > support
+     * Close a door, with 1.12.x- and 1.13.x+ support
      * @param b The block (door)
      * @return true if opened, false if not opened
      */

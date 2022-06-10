@@ -64,9 +64,9 @@ public class SQLiteDB {
     /**
      * Get the connection, to execute queries
      *
-     * CREATE TABLE -> execute()
-     * SELECT -> executeQuery()
-     * UPDATE -> executeUpdate()
+     * CREATE TABLE - execute()
+     * SELECT - executeQuery()
+     * UPDATE - executeUpdate()
      *
      * @return Connection
      */

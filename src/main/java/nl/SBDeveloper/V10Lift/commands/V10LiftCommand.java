@@ -2,6 +2,7 @@ package nl.SBDeveloper.V10Lift.commands;
 
 import com.cryptomorin.xseries.XMaterial;
 import nl.SBDeveloper.V10Lift.V10LiftPlugin;
+import nl.SBDeveloper.V10Lift.api.V10LiftAPI;
 import nl.SBDeveloper.V10Lift.api.objects.Floor;
 import nl.SBDeveloper.V10Lift.api.objects.Lift;
 import nl.SBDeveloper.V10Lift.api.objects.LiftBlock;
@@ -261,7 +262,7 @@ public class V10LiftCommand implements CommandExecutor {
             return true;
         }
 
-        V10LiftPlugin.getAPI().setDefective(liftName, true);
+        V10LiftAPI.getInstance().setDefective(liftName, true);
         ConfigUtil.sendMessage(sender, "Disable.Disabled");
         return true;
     }
@@ -271,7 +272,7 @@ public class V10LiftCommand implements CommandExecutor {
         if (args.length == 1 && sender instanceof Player) {
             //v10lift stop -> Get liftName from loc and floorName from sign
             Player p = (Player) sender;
-            liftName = V10LiftPlugin.getAPI().getLiftByLocation(p.getLocation());
+            liftName = V10LiftAPI.getInstance().getLiftByLocation(p.getLocation());
         } else if (args.length == 1) {
             ConfigUtil.sendMessage(sender, "Stop.NonPlayer");
             return true;
@@ -303,7 +304,7 @@ public class V10LiftCommand implements CommandExecutor {
         if (args.length == 1 && sender instanceof Player) {
             //v10lift start -> Get liftName from loc and floorName from sign
             Player p = (Player) sender;
-            liftName = V10LiftPlugin.getAPI().getLiftByLocation(p.getLocation());
+            liftName = V10LiftAPI.getInstance().getLiftByLocation(p.getLocation());
         } else if (args.length == 1) {
             ConfigUtil.sendMessage(sender, "Start.NonPlayer");
             return true;
@@ -341,7 +342,7 @@ public class V10LiftCommand implements CommandExecutor {
         }
 
         Floor f = lift.getFloors().get(floorName);
-        V10LiftPlugin.getAPI().addToQueue(liftName, f, floorName);
+        V10LiftAPI.getInstance().addToQueue(liftName, f, floorName);
         ConfigUtil.sendMessage(sender, "Start.Started", Collections.singletonMap("%Name%", liftName));
         return true;
     }
@@ -354,13 +355,13 @@ public class V10LiftCommand implements CommandExecutor {
             }
 
             e.getValue().setQueue(null);
-            V10LiftPlugin.getAPI().sortLiftBlocks(lift);
+            V10LiftAPI.getInstance().sortLiftBlocks(lift);
         }
 
         DataManager.clearMovingTasks();
         V10LiftPlugin.getSConfig().reloadConfig();
         try {
-            V10LiftPlugin.getDBManager().save();
+            V10LiftPlugin.getDBManager().save(true);
             V10LiftPlugin.getDBManager().load();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -406,7 +407,7 @@ public class V10LiftCommand implements CommandExecutor {
 
         if (DataManager.containsBuilderPlayer(p.getUniqueId())) {
             DataManager.removeBuilderPlayer(p.getUniqueId());
-            V10LiftPlugin.getAPI().sortLiftBlocks(DataManager.getEditPlayer(p.getUniqueId()));
+            V10LiftAPI.getInstance().sortLiftBlocks(DataManager.getEditPlayer(p.getUniqueId()));
             abort = true;
         }
 
@@ -473,7 +474,7 @@ public class V10LiftCommand implements CommandExecutor {
                 }
             }
         }
-        V10LiftPlugin.getAPI().setDefective(liftName, false);
+        V10LiftAPI.getInstance().setDefective(liftName, false);
         ConfigUtil.sendMessage(sender, "Repair.Repaired");
         return true;
     }
@@ -557,7 +558,7 @@ public class V10LiftCommand implements CommandExecutor {
             if (!DataManager.containsLift(liftName)) {
                 ConfigUtil.sendMessage(sender, "Whois.DoesntExists");
             } else {
-                V10LiftPlugin.getAPI().sendLiftInfo(sender, liftName);
+                V10LiftAPI.getInstance().sendLiftInfo(sender, liftName);
             }
         }
         return true;
@@ -731,7 +732,7 @@ public class V10LiftCommand implements CommandExecutor {
 
         if (DataManager.containsBuilderPlayer(p.getUniqueId())) {
             DataManager.removeBuilderPlayer(p.getUniqueId());
-            V10LiftPlugin.getAPI().sortLiftBlocks(DataManager.getEditPlayer(p.getUniqueId()));
+            V10LiftAPI.getInstance().sortLiftBlocks(DataManager.getEditPlayer(p.getUniqueId()));
             ConfigUtil.sendMessage(sender, "Build.Disabled");
         } else {
             DataManager.addBuilderPlayer(p.getUniqueId());
@@ -754,7 +755,7 @@ public class V10LiftCommand implements CommandExecutor {
         }
 
         Bukkit.dispatchCommand(sender, "v10lift edit");
-        V10LiftPlugin.getAPI().renameLift(liftName, args[1]);
+        V10LiftAPI.getInstance().renameLift(liftName, args[1]);
         Bukkit.dispatchCommand(sender, "v10lift edit " + args[1]);
 
         ConfigUtil.sendMessage(sender, "Rename.Renamed");
@@ -877,7 +878,7 @@ public class V10LiftCommand implements CommandExecutor {
         if (args[1].equalsIgnoreCase("add")) {
             Block b = p.getLocation().getBlock();
             String floorName = args[2];
-            int response = V10LiftPlugin.getAPI().addFloor(liftName, floorName, new Floor(b.getY() - 1, b.getWorld().getName()));
+            int response = V10LiftAPI.getInstance().addFloor(liftName, floorName, new Floor(b.getY() - 1, b.getWorld().getName()));
             switch (response) {
                 case 0:
                     ConfigUtil.sendMessage(sender, "Floor.Added");
@@ -894,7 +895,7 @@ public class V10LiftCommand implements CommandExecutor {
             }
         } else if (args[1].equalsIgnoreCase("del")) {
             String floorName = args[2];
-            if (!V10LiftPlugin.getAPI().removeFloor(liftName, floorName)) {
+            if (!V10LiftAPI.getInstance().removeFloor(liftName, floorName)) {
                 ConfigUtil.sendMessage(sender, "General.InternalError");
             } else {
                 ConfigUtil.sendMessage(sender, "Floor.Removed");
@@ -907,7 +908,7 @@ public class V10LiftCommand implements CommandExecutor {
 
             String floorName = args[2];
             String newFloorName = args[3];
-            int response = V10LiftPlugin.getAPI().renameFloor(liftName, floorName, newFloorName);
+            int response = V10LiftAPI.getInstance().renameFloor(liftName, floorName, newFloorName);
             switch (response) {
                 case 0:
                     ConfigUtil.sendMessage(sender, "Floor.Renamed");
@@ -948,7 +949,7 @@ public class V10LiftCommand implements CommandExecutor {
                 DataManager.removeOfflineRemovesPlayer(p.getUniqueId());
                 if (DataManager.containsBuilderPlayer(p.getUniqueId())) {
                     DataManager.removeBuilderPlayer(p.getUniqueId());
-                    V10LiftPlugin.getAPI().sortLiftBlocks(liftName);
+                    V10LiftAPI.getInstance().sortLiftBlocks(liftName);
                 }
                 DataManager.removeRopeEditPlayer(p.getUniqueId());
                 DataManager.removeRopeRemovesPlayer(p.getUniqueId());
@@ -1048,7 +1049,7 @@ public class V10LiftCommand implements CommandExecutor {
             return true;
         }
 
-        if (!V10LiftPlugin.getAPI().removeLift(args[1])) {
+        if (!V10LiftAPI.getInstance().removeLift(args[1])) {
             ConfigUtil.sendMessage(sender, "Delete.NotRemoved", Collections.singletonMap("%Name%", args[1]));
             return true;
         }
@@ -1072,15 +1073,15 @@ public class V10LiftCommand implements CommandExecutor {
                 return true;
             }
 
-            if (!V10LiftPlugin.getAPI().createLift(p, args[1])) {
+            if (!V10LiftAPI.getInstance().createLift(p, args[1])) {
                 ConfigUtil.sendMessage(sender, "General.AlreadyExists");
                 return true;
             }
 
             TreeSet<LiftBlock> blcks = DataManager.getLift(args[1]).getBlocks();
 
-            blocks.forEach(block -> V10LiftPlugin.getAPI().addBlockToLift(blcks, block));
-            V10LiftPlugin.getAPI().sortLiftBlocks(args[1]);
+            blocks.forEach(block -> V10LiftAPI.getInstance().addBlockToLift(blcks, block));
+            V10LiftAPI.getInstance().sortLiftBlocks(args[1]);
             DataManager.removePlayer(p.getUniqueId());
             ConfigUtil.sendMessage(p, "Create.Created", Collections.singletonMap("%Name%", args[1]));
             p.performCommand("v10lift edit " + args[1]);

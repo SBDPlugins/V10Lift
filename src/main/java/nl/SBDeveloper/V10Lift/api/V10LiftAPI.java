@@ -25,6 +25,15 @@ import java.util.*;
 
 /** The Main API class, for all the API methods */
 public class V10LiftAPI {
+    private static V10LiftAPI instance;
+
+    private V10LiftAPI() {}
+
+    public static V10LiftAPI getInstance() {
+        if (instance == null) instance = new V10LiftAPI();
+        return instance;
+    }
+
     /* Private API methods */
     private void sortFloors(@Nonnull Lift lift) {
         ArrayList<Map.Entry<String, Floor>> as = new ArrayList<>(lift.getFloors().entrySet());
@@ -101,7 +110,7 @@ public class V10LiftAPI {
         }
 
         DataManager.removeLift(liftName);
-        V10LiftPlugin.getDBManager().removeFromData(liftName);
+        V10LiftPlugin.getDBManager().remove(liftName);
         return true;
     }
 
