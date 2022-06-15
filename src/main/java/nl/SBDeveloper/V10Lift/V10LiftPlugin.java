@@ -123,7 +123,7 @@ public class V10LiftPlugin extends JavaPlugin {
 
     @Override
     public void onDisable() {
-        dbManager.save(true);
+        dbManager.save();
         dbManager.closeConnection();
 
         instance = null;

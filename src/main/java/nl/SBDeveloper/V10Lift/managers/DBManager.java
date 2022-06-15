@@ -93,27 +93,10 @@ public class DBManager {
 
     /**
      * Save all lifts to data
-     * This is done async
      */
     public void save() {
-        save(false);
-    }
-
-    /**
-     * Save all lifts to data
-     * @param force true if sync, false if async
-     */
-    public void save(boolean force) {
-        if (!force) {
-            Bukkit.getScheduler().runTaskAsynchronously(V10LiftPlugin.getInstance(), () -> {
-                for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
-                    saveLift(entry.getKey(), entry.getValue());
-                }
-            });
-        } else {
-            for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
-                saveLift(entry.getKey(), entry.getValue());
-            }
+        for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
+            saveLift(entry.getKey(), entry.getValue(), true);
         }
     }
 
@@ -123,11 +106,15 @@ public class DBManager {
      * @param liftName The name of the lift
      * @param lift The lift itself
      */
-    public void saveLift(String liftName, Lift lift) {
+    public void saveLift(String liftName, Lift lift, boolean sync) {
         Bukkit.getLogger().info("[V10Lift] Saving lift " + liftName + " to data...");
 
         byte[] blob = gson.toJson(lift).getBytes();
-        Bukkit.getScheduler().runTaskAsynchronously(V10LiftPlugin.getInstance(), () -> updateLift(liftName, blob));
+        if (sync) {
+            updateLift(liftName, blob);
+        } else {
+            Bukkit.getScheduler().runTaskAsynchronously(V10LiftPlugin.getInstance(), () -> updateLift(liftName, blob));
+        }
     }
 
     /**

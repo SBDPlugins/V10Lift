@@ -361,7 +361,7 @@ public class V10LiftCommand implements CommandExecutor {
         DataManager.clearMovingTasks();
         V10LiftPlugin.getSConfig().reloadConfig();
         try {
-            V10LiftPlugin.getDBManager().save(true);
+            V10LiftPlugin.getDBManager().save();
             V10LiftPlugin.getDBManager().load();
         } catch (SQLException e) {
             e.printStackTrace();
@@ -955,7 +955,7 @@ public class V10LiftCommand implements CommandExecutor {
                 DataManager.removeRopeRemovesPlayer(p.getUniqueId());
                 DataManager.removeDoorEditPlayer(p.getUniqueId());
 
-                V10LiftPlugin.getDBManager().saveLift(liftName, lift);
+                V10LiftPlugin.getDBManager().saveLift(liftName, lift, false);
 
                 BlockState bs;
                 Sign sign;
