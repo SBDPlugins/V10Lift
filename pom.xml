@@ -137,7 +137,7 @@
             <!-- SKIP the maven deploy -->
             <plugin>
                 <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.0.0-M2</version>
+                <version>3.1.1</version>
                 <configuration>
                     <skip>true</skip>
                 </configuration>
