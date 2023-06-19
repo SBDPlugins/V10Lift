@@ -37,7 +37,7 @@
             <!-- Shade JAR -->
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.5.0</version>
                 <configuration>
                     <relocations>
                         <relocation>
