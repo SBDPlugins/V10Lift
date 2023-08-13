@@ -233,7 +233,7 @@ public class PlayerInteractListener implements Listener {
                 LiftBlock start = DataManager.getRopeEditPlayer(p.getUniqueId());
                 Block now = e.getClickedBlock();
                 if (start == null) {
-                    ConfigUtil.sendMessage(e.getPlayer(), "Rope.Delete");
+                    ConfigUtil.sendMessage(e.getPlayer(), "Rope.ClickOnEnd");
                     DataManager.addRopeEditPlayer(p.getUniqueId(), new LiftBlock(now.getWorld().getName(), now.getX(), now.getY(), now.getZ(), (String) null));
                 } else if (start.equals(new LiftBlock(now.getWorld().getName(), now.getX(), now.getY(), now.getZ(), (String) null))) {
                     DataManager.addRopeEditPlayer(p.getUniqueId(), null);
@@ -283,12 +283,7 @@ public class PlayerInteractListener implements Listener {
                     ConfigUtil.sendMessage(e.getPlayer(), "Door.BlacklistedMaterial", Collections.singletonMap("%Name%", e.getClickedBlock().getType().toString().toLowerCase()));
                     return;
                 }
-                LiftBlock lb;
-                if (XMaterial.supports(13)) {
-                    lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getType());
-                } else {
-                    lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getType(), block.getState().getRawData());
-                }
+                LiftBlock lb = new LiftBlock(block);
                 Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
                 Floor floor = lift.getFloors().get(DataManager.getDoorEditPlayer(p.getUniqueId()));
                 if (DoorUtil.isOpenable(block)) {

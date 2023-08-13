@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 import java.util.Objects;
@@ -18,7 +19,10 @@ import java.util.Objects;
 @ToString
 public class LiftRope {
     private Material type;
+    //If it's Directional
     private BlockFace face;
+    //If it's Openable
+    private boolean open;
     private String world;
     private int x;
     private int minY;
@@ -29,23 +33,24 @@ public class LiftRope {
     /**
      * Construct a new liftrope
      *
-     * @param type  The material of the rope
-     * @param face  The face of the rope
-     * @param world The world
-     * @param x     The x-pos
+     * @param block The block
      * @param minY  The starting x-pos
      * @param maxY  The stopping x-pos
-     * @param z     The z-pos
      */
-    public LiftRope(Material type, BlockFace face, String world, int x, int minY, int maxY, int z) {
-        this.type = type;
-        this.face = face;
-        this.world = world;
-        this.x = x;
+    public LiftRope(Block block, int minY, int maxY) {
+        this.type = block.getType();
+        this.world = block.getWorld().getName();
+        this.x = block.getX();
         this.minY = minY;
         this.maxY = maxY;
-        this.z = z;
-        this.currently = minY;
+        this.z = block.getZ();
+        this.currently = block.getY();
+        if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
+            this.face = ((org.bukkit.block.data.Directional) block.getBlockData()).getFacing();
+        }
+        if (block.getBlockData() instanceof org.bukkit.block.data.Openable) {
+            this.open = ((org.bukkit.block.data.Openable) block.getBlockData()).isOpen();
+        }
     }
 
     @Override

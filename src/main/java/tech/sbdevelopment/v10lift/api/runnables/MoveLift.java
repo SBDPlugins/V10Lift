@@ -18,7 +18,7 @@ import tech.sbdevelopment.v10lift.managers.AntiCopyBlockManager;
 import tech.sbdevelopment.v10lift.managers.DataManager;
 import tech.sbdevelopment.v10lift.sbutils.LocationSerializer;
 import tech.sbdevelopment.v10lift.utils.ConfigUtil;
-import tech.sbdevelopment.v10lift.utils.DirectionUtil;
+import tech.sbdevelopment.v10lift.utils.BlockStateUtil;
 
 import java.lang.reflect.Method;
 import java.util.*;
@@ -153,7 +153,6 @@ public class MoveLift implements Runnable {
                         Bukkit.getLogger().info("[V10Lift] Lift " + liftName + " reaches the upper rope end but won't stop!!");
 
                         V10LiftAPI.getInstance().setDefective(liftName, true);
-                        lift.getToMove().clear();
                         queueIterator.remove();
                         return;
                     }
@@ -214,22 +213,17 @@ public class MoveLift implements Runnable {
 
                 BlockState state = nextBlock.getState();
                 state.setType(lib.getMat());
-                if (!XMaterial.supports(13)) {
-                    state.setRawData(lib.getData());
-                }
                 state.update(true);
 
                 if (XMaterial.supports(13)) {
-                    DirectionUtil.setDirection(nextBlock, lib.getFace());
-                    DirectionUtil.setBisected(nextBlock, lib.getBisected());
-                    DirectionUtil.setSlabType(nextBlock, lib.getSlabtype());
+                    BlockStateUtil.setDirection(nextBlock, lib.getFace());
+                    BlockStateUtil.setBisected(nextBlock, lib.getBisected());
+                    BlockStateUtil.setSlabType(nextBlock, lib.getSlabType());
+                    BlockStateUtil.setOpen(nextBlock, lib.getOpen());
                 }
 
                 if (direction == LiftDirection.UP) { //Teleportation is only required if we go up, for down gravity works fine. ;)
                     for (Entity ent : nextBlock.getChunk().getEntities()) {
-                        V10Entity v10ent = new V10Entity(ent.getUniqueId(), null, 0, 0, 0, 0);
-                        if (lift.getToMove().contains(v10ent)) continue;
-
                         Location entLoc = ent.getLocation();
                         if ((entLoc.getBlockY() == lib.getY() || entLoc.getBlockY() + 1 == lib.getY()) && entLoc.getBlockX() == lib.getX() && entLoc.getBlockZ() == lib.getZ()) {
                             entLoc.setY(entLoc.getY() + 1);
@@ -247,36 +241,17 @@ public class MoveLift implements Runnable {
                 }
             }
 
-            Iterator<V10Entity> toMoveIterator = lift.getToMove().iterator();
-            while (toMoveIterator.hasNext()) {
-                V10Entity v10ent = toMoveIterator.next();
-                if (v10ent.getStep() > 0) {
-                    if (direction == LiftDirection.UP) v10ent.moveUp();
-                    else v10ent.moveDown();
-                    if (v10ent.getStep() > 16) {
-                        toMoveIterator.remove();
-                    }
-                }
-                v10ent.setStep((short) (v10ent.getStep() + 1));
-            }
-
             for (LiftBlock lib : antiCopyBlocks) {
                 Block block = Bukkit.getWorld(lib.getWorld()).getBlockAt(lib.getX(), lib.getY(), lib.getZ());
                 if (lib.getMat() == null) lib.setMat(Material.AIR);
 
                 BlockState state = block.getState();
                 state.setType(lib.getMat());
-                if (!XMaterial.supports(13)) {
-                    state.setRawData(lib.getData());
-                }
                 state.update(true);
-
-                if (XMaterial.supports(13)) {
-                    DirectionUtil.setDirection(block, lib.getFace());
-                    DirectionUtil.setBisected(block, lib.getBisected());
-                    DirectionUtil.setSlabType(block, lib.getSlabtype());
-                }
-
+                BlockStateUtil.setDirection(block, lib.getFace());
+                BlockStateUtil.setBisected(block, lib.getBisected());
+                BlockStateUtil.setSlabType(block, lib.getSlabType());
+                BlockStateUtil.setOpen(block, lib.getOpen());
                 lift.getBlocks().add(lib);
 
                 if (lib.getSignLines() != null) {
@@ -333,7 +308,6 @@ public class MoveLift implements Runnable {
                         Bukkit.getLogger().info("[V10Lift] Lift " + liftName + " reaches the upper rope end but won't stop!!");
 
                         V10LiftAPI.getInstance().setDefective(liftName, true);
-                        lift.getToMove().clear();
                         queueIterator.remove();
 
                         stopAfter = true;
@@ -345,21 +319,13 @@ public class MoveLift implements Runnable {
                     if (rope.getType() == null) rope.setType(Material.AIR);
 
                     block.setType(rope.getType());
-                    if (XMaterial.supports(13)) {
-                        DirectionUtil.setDirection(block, rope.getFace());
-                    } else {
-                        BlockState state = block.getState();
-                        org.bukkit.material.Ladder ladder = new org.bukkit.material.Ladder(rope.getType());
-                        ladder.setFacingDirection(rope.getFace());
-                        state.setData(ladder);
-                        state.update(true);
-                    }
+                    BlockStateUtil.setDirection(block, rope.getFace());
+                    BlockStateUtil.setOpen(block, rope.isOpen());
 
                     if (stopAfter) return;
                 }
             }
         } else {
-            lift.getToMove().clear();
             queueIterator.remove();
 
             for (LiftBlock lib : lift.getBlocks()) {

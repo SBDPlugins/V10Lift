@@ -28,7 +28,6 @@ public class Lift {
     @Setter
     private LinkedHashMap<String, Floor> queue = null;
     private final HashSet<LiftRope> ropes = new HashSet<>();
-    private transient final ArrayList<V10Entity> toMove = new ArrayList<>();
     @Setter
     private int speed;
     @Setter

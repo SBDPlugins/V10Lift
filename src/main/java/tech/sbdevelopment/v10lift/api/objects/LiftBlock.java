@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 import javax.annotation.Nonnull;
@@ -26,11 +27,16 @@ public class LiftBlock implements Comparable<LiftBlock> {
     //Only used for cabine blocks, because those need caching!
     @Setter
     private Material mat;
-    private byte data;
+    @Setter
     private BlockFace face;
+    @Setter
     private String bisected;
-    private String slabtype;
+    @Setter
+    private String slabType;
+    @Setter
     private String[] signLines;
+    @Setter
+    private Boolean open;
 
     //Only used for inputs!
     private String floor;
@@ -41,7 +47,7 @@ public class LiftBlock implements Comparable<LiftBlock> {
     public Map<String, Object>[] serializedItemStacks = null;
 
     /**
-     * A floor based liftblock, without material (no caching)
+     * Create a floor based liftblock, without material (no caching)
      *
      * @param world The world
      * @param x     The x-pos
@@ -55,182 +61,40 @@ public class LiftBlock implements Comparable<LiftBlock> {
         this.y = y;
         this.z = z;
         this.mat = null;
-        this.data = 0;
         this.face = null;
         this.signLines = null;
         this.floor = floor;
         this.bisected = null;
-        this.slabtype = null;
+        this.slabType = null;
+        this.open = null;
     }
 
     /**
-     * 1.12 liftblock, with material and data [NO SIGN]
+     * Create a new liftblock from a block
      *
-     * @param world The world
-     * @param x     The x-pos
-     * @param y     The y-pos
-     * @param z     The z-pos
-     * @param mat   The Material of the block
-     * @param data  The data of the block
+     * @param block The block
      */
-    public LiftBlock(String world, int x, int y, int z, Material mat, byte data) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.mat = mat;
-        this.face = null;
-        this.data = data;
-        this.signLines = null;
-        this.floor = null;
-        this.bisected = null;
-        this.slabtype = null;
-    }
-
-    /**
-     * 1.12 liftblock (signs)
-     *
-     * @param world     The world
-     * @param x         The x-pos
-     * @param y         The y-pos
-     * @param z         The z-pos
-     * @param mat       The Material of the block
-     * @param data      The data of the block
-     * @param signLines The lines of the sign
-     */
-    public LiftBlock(String world, int x, int y, int z, Material mat, byte data, String[] signLines) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.mat = mat;
-        this.face = null;
-        this.data = data;
-        this.signLines = signLines;
-        this.floor = null;
-        this.bisected = null;
-        this.slabtype = null;
-    }
-
-    /**
-     * 1.13 liftblock, without a direction
-     *
-     * @param world The world
-     * @param x     The x-pos
-     * @param y     The y-pos
-     * @param z     The z-pos
-     * @param mat   The Material of the block
-     */
-    public LiftBlock(String world, int x, int y, int z, Material mat) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.mat = mat;
-        this.face = null;
-        this.data = 0;
-        this.signLines = null;
-        this.floor = null;
-        this.bisected = null;
-        this.slabtype = null;
-    }
-
-    /**
-     * 1.13 liftblock with a direction
-     *
-     * @param world The world
-     * @param x     The x-pos
-     * @param y     The y-pos
-     * @param z     The z-pos
-     * @param mat   The Material of the block
-     * @param face  The blockface of the block
-     */
-    public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.mat = mat;
-        this.face = face;
-        this.data = 0;
-        this.signLines = null;
-        this.floor = null;
-        this.bisected = null;
-        this.slabtype = null;
-    }
-
-    /**
-     * 1.13 liftblock, with a direction and a bisected
-     *
-     * @param world    The world
-     * @param x        The x-pos
-     * @param y        The y-pos
-     * @param z        The z-pos
-     * @param mat      The Material of the block
-     * @param face     The blockface of the block
-     * @param bisected The bisected of the block
-     */
-    public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face, String bisected) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.mat = mat;
-        this.face = face;
-        this.data = 0;
-        this.signLines = null;
-        this.floor = null;
-        this.bisected = bisected;
-        this.slabtype = null;
-    }
-
-    /**
-     * 1/13 liftblock (sign)
-     *
-     * @param world     The world
-     * @param x         The x-pos
-     * @param y         The y-pos
-     * @param z         The z-pos
-     * @param mat       The Material of the block
-     * @param face      The blockface of the block
-     * @param signLines The lines of the sign
-     */
-    public LiftBlock(String world, int x, int y, int z, Material mat, BlockFace face, String[] signLines) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.mat = mat;
-        this.face = face;
-        this.data = 0;
-        this.signLines = signLines;
-        this.floor = null;
-        this.bisected = null;
-        this.slabtype = null;
-    }
-
-    /**
-     * 1.13 liftblock (slab)
-     *
-     * @param world    The world
-     * @param x        The x-pos
-     * @param y        The y-pos
-     * @param z        The z-pos
-     * @param mat      The Material of the block
-     * @param slabtype The typ of slab (low, high, double)
-     */
-    public LiftBlock(String world, int x, int y, int z, Material mat, String slabtype) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.mat = mat;
-        this.face = null;
-        this.data = 0;
-        this.signLines = null;
-        this.floor = null;
-        this.bisected = null;
-        this.slabtype = slabtype;
+    public LiftBlock(Block block) {
+        this.world = block.getWorld().getName();
+        this.x = block.getX();
+        this.y = block.getY();
+        this.z = block.getZ();
+        this.mat = block.getType();
+        if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
+            this.face = ((org.bukkit.block.data.Directional) block.getBlockData()).getFacing();
+        }
+        if (block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
+            this.bisected = ((org.bukkit.block.data.Bisected) block.getBlockData()).getHalf().name();
+        }
+        if (block.getBlockData() instanceof org.bukkit.block.data.type.Slab) {
+            this.slabType = ((org.bukkit.block.data.type.Slab) block.getBlockData()).getType().name();
+        }
+        if (block.getState() instanceof org.bukkit.block.Sign) {
+            this.signLines = ((org.bukkit.block.Sign) block.getState()).getLines();
+        }
+        if (block.getBlockData() instanceof org.bukkit.block.data.Openable) {
+            this.open = ((org.bukkit.block.data.Openable) block.getBlockData()).isOpen();
+        }
     }
 
     @Override
