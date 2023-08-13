@@ -15,7 +15,9 @@ import org.bukkit.inventory.ItemStack;
 import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import tech.sbdevelopment.v10lift.api.V10LiftAPI;
 import tech.sbdevelopment.v10lift.api.objects.*;
+import tech.sbdevelopment.v10lift.managers.AntiCopyBlockManager;
 import tech.sbdevelopment.v10lift.managers.DataManager;
+import tech.sbdevelopment.v10lift.managers.ForbiddenBlockManager;
 import tech.sbdevelopment.v10lift.managers.VaultManager;
 import tech.sbdevelopment.v10lift.sbutils.LocationSerializer;
 import tech.sbdevelopment.v10lift.utils.ConfigUtil;
@@ -422,6 +424,9 @@ public class V10LiftCommand implements CommandExecutor {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+
+        AntiCopyBlockManager.reinit();
+        ForbiddenBlockManager.reinit();
 
         ConfigUtil.sendMessage(sender, "Reload.Reloaded");
         return true;

@@ -11,9 +11,7 @@ import tech.sbdevelopment.v10lift.listeners.BlockBreakListener;
 import tech.sbdevelopment.v10lift.listeners.EntityDamageListener;
 import tech.sbdevelopment.v10lift.listeners.PlayerInteractListener;
 import tech.sbdevelopment.v10lift.listeners.SignChangeListener;
-import tech.sbdevelopment.v10lift.managers.DBManager;
-import tech.sbdevelopment.v10lift.managers.DataManager;
-import tech.sbdevelopment.v10lift.managers.VaultManager;
+import tech.sbdevelopment.v10lift.managers.*;
 import tech.sbdevelopment.v10lift.sbutils.ConfigUpdater;
 import tech.sbdevelopment.v10lift.sbutils.UpdateManager;
 import tech.sbdevelopment.v10lift.sbutils.YamlFile;
@@ -29,6 +27,8 @@ public class V10LiftPlugin extends JavaPlugin {
     private static DBManager dbManager;
     @Getter
     private static YamlFile messages;
+    @Getter
+    private static YamlFile items;
     private static boolean vault = false;
 
     @Override
@@ -50,6 +50,12 @@ public class V10LiftPlugin extends JavaPlugin {
         //Load the messages
         messages = new YamlFile("messages");
         messages.loadDefaults();
+
+        //Load the items
+        items = new YamlFile("items");
+        items.loadDefaults();
+        AntiCopyBlockManager.init();
+        ForbiddenBlockManager.init();
 
         //Load the database
         dbManager = new DBManager("data");

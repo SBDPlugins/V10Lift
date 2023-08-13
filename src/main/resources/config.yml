@@ -1,4 +1,4 @@
-#General sign texts
+# Generic sign texts
 SignText: "[v10lift]"
 DefectText: "&kDefect!"
 DisabledText: "&cDisabled"
@@ -6,30 +6,30 @@ MaintenanceText: "&cMaintenance"
 UpText: "&aup"
 DownText: "&adown"
 
-#The change for a lift to get defective. Disabled by default.
+# The change for a lift to get defective. Disabled by default.
 DefectRate: 0.0
 
-#The repair item and amount required
+# The repair item and amount required
 RepairItem: REDSTONE
 RepairAmount: 5
 
-#The master repair item and amount required
+# The master repair item and amount required
 MasterRepairItem: DIAMOND
 MasterRepairAmount: 10
 
-#The default speed of a lift
+# The default speed of a lift
 DefaultSpeed: 16
 
-#Create lifts with realistic mode enabled default?
+# Create lifts with realistic mode enabled default?
 DefaultRealistic: true
 
-#The time for the door to close, in ticks. 20 ticks = 1 sec
+# The time for the door to close, in ticks. 20 ticks = 1 sec
 DoorCloseTime: 100
 
-#Teleport with packets (no Bukkit events will be fired then)
+# Teleport with packets (no Bukkit events will be fired then)
 PacketTeleport: false
 
-#The updater checker - It will check for new versions, and install automatically if found.
+# The updater checker - It will check for new versions, and install automatically if found.
 UpdateChecker:
   Enabled: true
   DownloadOnUpdate: true
