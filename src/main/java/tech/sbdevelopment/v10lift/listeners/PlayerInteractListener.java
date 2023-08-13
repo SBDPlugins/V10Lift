@@ -8,6 +8,8 @@ import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Powerable;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
@@ -22,6 +24,7 @@ import tech.sbdevelopment.v10lift.api.V10LiftAPI;
 import tech.sbdevelopment.v10lift.api.objects.Floor;
 import tech.sbdevelopment.v10lift.api.objects.Lift;
 import tech.sbdevelopment.v10lift.api.objects.LiftBlock;
+import tech.sbdevelopment.v10lift.api.objects.LiftInput;
 import tech.sbdevelopment.v10lift.managers.DataManager;
 import tech.sbdevelopment.v10lift.managers.ForbiddenBlockManager;
 import tech.sbdevelopment.v10lift.managers.VaultManager;
@@ -42,31 +45,47 @@ public class PlayerInteractListener implements Listener {
         Material button = block.getType();
 
         if (action == Action.RIGHT_CLICK_BLOCK
-                && e.getHand() != EquipmentSlot.OFF_HAND
-                && (button.toString().contains("BUTTON") || button == XMaterial.LEVER.parseMaterial())) {
+                && e.getHand() != EquipmentSlot.OFF_HAND) {
             String world = block.getWorld().getName();
             int x = block.getX();
             int y = block.getY();
             int z = block.getZ();
+
             for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
                 Lift lift = entry.getValue();
-                for (LiftBlock lb : lift.getOfflineInputs()) {
-                    if (world.equals(lb.getWorld()) && x == lb.getX() && y == lb.getY() && z == lb.getZ()) {
-                        lb.setActive(!lb.isActive());
-                        V10LiftAPI.getInstance().setOffline(entry.getKey(), lb.isActive());
-                        return;
+
+                for (LiftInput lbi : lift.getOfflineInputs()) {
+                    if (world.equals(lbi.getWorld()) && x == lbi.getX() && y == lbi.getY() && z == lbi.getZ()) {
+                        boolean newState = !lift.isOffline();
+                        V10LiftAPI.getInstance().setOffline(entry.getKey(), newState);
+
+                        //Update all offline inputs
+                        for (LiftInput li : lift.getOfflineInputs()) {
+                            Block b = Bukkit.getWorld(li.getWorld()).getBlockAt(li.getX(), li.getY(), li.getZ());
+                            BlockData bd = b.getBlockData();
+                            if (!(bd instanceof Powerable)) {
+                                Bukkit.getLogger().warning("[V10Lift] Block at " + li.getX() + ", " + li.getY() + ", " + li.getZ() + " is not powerable, while it should be an offline input of " + entry.getKey() + "!");
+                                continue;
+                            }
+                            ((Powerable) bd).setPowered(newState);
+                            b.setBlockData(bd);
+                        }
+
+                        break;
                     }
                 }
 
-                if (lift.isOffline()) return;
+                if (lift.isOffline()) break;
 
-                for (LiftBlock lb : lift.getInputs()) {
-                    if (world.equals(lb.getWorld()) && x == lb.getX() && y == lb.getY() && z == lb.getZ()) {
-                        V10LiftAPI.getInstance().addToQueue(entry.getKey(), lift.getFloors().get(lb.getFloor()), lb.getFloor());
+                for (LiftInput lbi : lift.getInputs()) {
+                    if (world.equals(lbi.getWorld()) && x == lbi.getX() && y == lbi.getY() && z == lbi.getZ()) {
+                        V10LiftAPI.getInstance().addToQueue(entry.getKey(), lift.getFloors().get(lbi.getFloor()), lbi.getFloor());
                         e.setCancelled(true);
-                        return;
+                        break;
                     }
                 }
+
+                break;
             }
         }
     }
@@ -104,7 +123,7 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        if (!lift.getBlocks().contains(new LiftBlock(sign.getWorld().getName(), sign.getX(), sign.getY(), sign.getZ(), (String) null)))
+        if (!lift.getBlocks().contains(new LiftBlock(sign.getBlock())))
             return;
         if (DataManager.containsEditLift(liftName)) return;
         e.setCancelled(true);
@@ -160,7 +179,7 @@ public class PlayerInteractListener implements Listener {
             } else if (DataManager.containsInputEditsPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 Block block = e.getClickedBlock();
-                LiftBlock tlb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), DataManager.getInputEditsPlayer(p.getUniqueId()));
+                LiftInput tlb = new LiftInput(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), DataManager.getInputEditsPlayer(p.getUniqueId()));
                 Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
                 e.setCancelled(true);
                 if (lift.getInputs().contains(tlb)) {
@@ -173,7 +192,7 @@ public class PlayerInteractListener implements Listener {
             } else if (DataManager.containsOfflineEditsPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 Block block = e.getClickedBlock();
-                LiftBlock tlb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), (String) null);
+                LiftInput tlb = new LiftInput(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), null);
                 Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
                 e.setCancelled(true);
                 if (lift.getOfflineInputs().contains(tlb)) {
@@ -186,7 +205,7 @@ public class PlayerInteractListener implements Listener {
             } else if (DataManager.containsInputRemovesPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 Block block = e.getClickedBlock();
-                LiftBlock tlb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), (String) null);
+                LiftInput tlb = new LiftInput(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), null);
                 Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
                 e.setCancelled(true);
                 if (lift.getInputs().contains(tlb)) {
@@ -199,7 +218,7 @@ public class PlayerInteractListener implements Listener {
             } else if (DataManager.containsOfflineRemovesPlayer(p.getUniqueId())) {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 Block block = e.getClickedBlock();
-                LiftBlock tlb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), (String) null);
+                LiftInput tlb = new LiftInput(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), null);
                 Lift lift = DataManager.getLift(DataManager.getEditPlayer(p.getUniqueId()));
                 e.setCancelled(true);
                 if (lift.getOfflineInputs().contains(tlb)) {
@@ -234,8 +253,8 @@ public class PlayerInteractListener implements Listener {
                 Block now = e.getClickedBlock();
                 if (start == null) {
                     ConfigUtil.sendMessage(e.getPlayer(), "Rope.ClickOnEnd");
-                    DataManager.addRopeEditPlayer(p.getUniqueId(), new LiftBlock(now.getWorld().getName(), now.getX(), now.getY(), now.getZ(), (String) null));
-                } else if (start.equals(new LiftBlock(now.getWorld().getName(), now.getX(), now.getY(), now.getZ(), (String) null))) {
+                    DataManager.addRopeEditPlayer(p.getUniqueId(), new LiftBlock(now));
+                } else if (start.equals(new LiftBlock(now))) {
                     DataManager.addRopeEditPlayer(p.getUniqueId(), null);
                     ConfigUtil.sendMessage(e.getPlayer(), "Rope.PartRemoved");
                 } else {
@@ -306,7 +325,7 @@ public class PlayerInteractListener implements Listener {
                 if (e.getAction() != Action.RIGHT_CLICK_BLOCK) return;
                 e.setCancelled(true);
                 Block block = e.getClickedBlock();
-                LiftBlock lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), (String) null);
+                LiftBlock lb = new LiftBlock(block);
                 DataManager.removeWhoisREQPlayer(p.getUniqueId());
                 for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
                     Lift lift = entry.getValue();
@@ -363,7 +382,7 @@ public class PlayerInteractListener implements Listener {
                     return;
                 }
 
-                if (!lift.getBlocks().contains(new LiftBlock(sign.getWorld().getName(), sign.getX(), sign.getY(), sign.getZ(), (String) null)))
+                if (!lift.getBlocks().contains(new LiftBlock(sign.getBlock())))
                     return;
                 if (DataManager.containsEditLift(liftName)) return;
                 e.setCancelled(true);

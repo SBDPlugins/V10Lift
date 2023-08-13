@@ -37,37 +37,8 @@ public class LiftBlock implements Comparable<LiftBlock> {
     private String[] signLines;
     @Setter
     private Boolean open;
-
-    //Only used for inputs!
-    private String floor;
-    @Setter
-    private boolean active = false;
-
-    //Only used for chests
-    public Map<String, Object>[] serializedItemStacks = null;
-
-    /**
-     * Create a floor based liftblock, without material (no caching)
-     *
-     * @param world The world
-     * @param x     The x-pos
-     * @param y     The y-pos
-     * @param z     The z-pos
-     * @param floor The floorname of the block
-     */
-    public LiftBlock(String world, int x, int y, int z, String floor) {
-        this.world = world;
-        this.x = x;
-        this.y = y;
-        this.z = z;
-        this.mat = null;
-        this.face = null;
-        this.signLines = null;
-        this.floor = floor;
-        this.bisected = null;
-        this.slabType = null;
-        this.open = null;
-    }
+    //Used for chests
+    public Map<String, Object>[] serializedItemStacks;
 
     /**
      * Create a new liftblock from a block

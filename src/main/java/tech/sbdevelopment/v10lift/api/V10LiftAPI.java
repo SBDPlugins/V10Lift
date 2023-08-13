@@ -470,14 +470,14 @@ public class V10LiftAPI {
         lift.getFloors().remove(oldName);
         lift.getFloors().put(newName, f);
         sortFloors(lift);
-        Iterator<LiftBlock> liter = lift.getInputs().iterator();
-        LiftBlock lb;
-        ArrayList<LiftBlock> newBlocks = new ArrayList<>();
+        Iterator<LiftInput> liter = lift.getInputs().iterator();
+        LiftInput lb;
+        ArrayList<LiftInput> newBlocks = new ArrayList<>();
         while (liter.hasNext()) {
             lb = liter.next();
             if (lb.getFloor().equals(oldName)) {
                 liter.remove();
-                newBlocks.add(new LiftBlock(lb.getWorld(), lb.getX(), lb.getY(), lb.getZ(), newName));
+                newBlocks.add(new LiftInput(lb.getWorld(), lb.getX(), lb.getY(), lb.getZ(), newName));
             }
         }
         newBlocks.forEach(nlb -> lift.getInputs().add(nlb));

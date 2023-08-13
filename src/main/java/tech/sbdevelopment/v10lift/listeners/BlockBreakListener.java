@@ -11,6 +11,7 @@ import tech.sbdevelopment.v10lift.api.V10LiftAPI;
 import tech.sbdevelopment.v10lift.api.objects.Floor;
 import tech.sbdevelopment.v10lift.api.objects.Lift;
 import tech.sbdevelopment.v10lift.api.objects.LiftBlock;
+import tech.sbdevelopment.v10lift.api.objects.LiftInput;
 import tech.sbdevelopment.v10lift.managers.DataManager;
 import tech.sbdevelopment.v10lift.utils.ConfigUtil;
 import tech.sbdevelopment.v10lift.utils.DoorUtil;
@@ -28,7 +29,7 @@ public class BlockBreakListener implements Listener {
             return;
         }
 
-        LiftBlock tlb = new LiftBlock(b.getWorld().getName(), b.getX(), b.getY(), b.getZ(), (String) null);
+        LiftBlock tlb = new LiftBlock(b);
         for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
             Lift lift = entry.getValue();
             if (lift.getBlocks().contains(tlb)) {

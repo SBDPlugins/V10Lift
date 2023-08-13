@@ -23,8 +23,8 @@ public class Lift {
     private final TreeSet<LiftBlock> blocks = new TreeSet<>();
     private final LinkedHashMap<String, Floor> floors = new LinkedHashMap<>();
     private final HashSet<LiftSign> signs = new HashSet<>();
-    private final HashSet<LiftBlock> inputs = new HashSet<>();
-    private final HashSet<LiftBlock> offlineInputs = new HashSet<>();
+    private final HashSet<LiftInput> inputs = new HashSet<>();
+    private final HashSet<LiftInput> offlineInputs = new HashSet<>();
     @Setter
     private LinkedHashMap<String, Floor> queue = null;
     private final HashSet<LiftRope> ropes = new HashSet<>();
