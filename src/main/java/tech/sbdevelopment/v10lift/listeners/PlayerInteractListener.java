@@ -63,10 +63,7 @@ public class PlayerInteractListener implements Listener {
                         for (LiftInput li : lift.getOfflineInputs()) {
                             Block b = Bukkit.getWorld(li.getWorld()).getBlockAt(li.getX(), li.getY(), li.getZ());
                             BlockData bd = b.getBlockData();
-                            if (!(bd instanceof Powerable)) {
-                                Bukkit.getLogger().warning("[V10Lift] Block at " + li.getX() + ", " + li.getY() + ", " + li.getZ() + " is not powerable, while it should be an offline input of " + entry.getKey() + "!");
-                                continue;
-                            }
+                            if (!(bd instanceof Powerable)) continue;
                             ((Powerable) bd).setPowered(newState);
                             b.setBlockData(bd);
                         }
