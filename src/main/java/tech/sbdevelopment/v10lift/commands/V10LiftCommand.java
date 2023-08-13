@@ -35,6 +35,9 @@ public class V10LiftCommand implements CommandExecutor {
         } else if (args[0].equalsIgnoreCase("info") && args.length == 1) {
             //v10lift info
             return infoCommand(sender);
+        } else if (args[0].equalsIgnoreCase("list") && args.length == 1) {
+            //v10lift list
+            return listCommand(sender);
         } else if (args[0].equalsIgnoreCase("create") && (args.length == 1 || args.length == 2)) {
             //v10lift create || v10lift create <Name>
             if (!(sender instanceof Player)) {
@@ -244,6 +247,20 @@ public class V10LiftCommand implements CommandExecutor {
             }
         } else {
             return helpCommand(sender);
+        }
+        return true;
+    }
+
+    private boolean listCommand(CommandSender sender) {
+        //Send list of all lifts
+        Map<String, Lift> lifts = DataManager.getLifts();
+        if (lifts.isEmpty()) {
+            ConfigUtil.sendMessage(sender, "List.NoLifts");
+            return true;
+        }
+        ConfigUtil.sendMessage(sender, "List.Header");
+        for (String liftName : lifts.keySet()) {
+            ConfigUtil.sendMessage(sender, "List.Lift", Map.of("%Name%", liftName));
         }
         return true;
     }

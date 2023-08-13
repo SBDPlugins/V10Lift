@@ -159,3 +159,8 @@ LiftSign:
   NoName: '&cNo lift name given!'
   Created: '&aLift sign created!'
   Removed: '&6Lift sign removed!'
+
+List:
+  NoLifts: '&cThere are no lifts!'
+  Header: '&6Lifts:'
+  Lift: '&6- %Name%'
