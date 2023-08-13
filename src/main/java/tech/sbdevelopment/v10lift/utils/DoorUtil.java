@@ -21,7 +21,7 @@ public class DoorUtil {
         if (b.getType() == XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_IRON_DOOR_OPEN.play(b.getLocation());
         if (b.getType().toString().contains("DOOR") && b.getType() != XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_WOODEN_DOOR_OPEN.play(b.getLocation());
         if (b.getType().toString().contains("GATE")) XSound.BLOCK_FENCE_GATE_OPEN.play(b.getLocation());
-        if (XMaterial.isNewVersion()) {
+        if (XMaterial.supports(13)) {
             //1.13+
             org.bukkit.block.data.BlockData blockData = b.getBlockData();
             if (isOpenable(b)) {
@@ -59,7 +59,7 @@ public class DoorUtil {
         if (b.getType() == XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_IRON_DOOR_CLOSE.play(b.getLocation());
         if (b.getType().toString().contains("DOOR") && b.getType() != XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_WOODEN_DOOR_CLOSE.play(b.getLocation());
         if (b.getType().toString().contains("GATE")) XSound.BLOCK_FENCE_GATE_CLOSE.play(b.getLocation());
-        if (XMaterial.isNewVersion()) {
+        if (XMaterial.supports(13)) {
             //1.13+
             org.bukkit.block.data.BlockData blockData = b.getBlockData();
             if (isOpenable(b)) {
@@ -98,7 +98,7 @@ public class DoorUtil {
         if (b == null) {
             return false;
         }
-        if (XMaterial.isNewVersion()) {
+        if (XMaterial.supports(13)) {
             //1.13+
             return b.getBlockData() instanceof org.bukkit.block.data.Openable;
         } else {
@@ -116,7 +116,7 @@ public class DoorUtil {
     public static Location getLowerLocationOfDoor(@Nonnull Block block) {
         if (!isDoor(block)) return block.getLocation();
 
-        if (XMaterial.isNewVersion()) {
+        if (XMaterial.supports(13)) {
             //1.13+
             org.bukkit.block.data.type.Door door = (org.bukkit.block.data.type.Door) block.getBlockData();
             Location lower;
@@ -161,7 +161,7 @@ public class DoorUtil {
         if (b == null) {
             return false;
         }
-        if (XMaterial.isNewVersion()) {
+        if (XMaterial.supports(13)) {
             //1.13+
             return b.getBlockData() instanceof org.bukkit.block.data.type.Door;
         } else {

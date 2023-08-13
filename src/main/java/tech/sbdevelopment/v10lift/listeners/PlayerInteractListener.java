@@ -283,7 +283,7 @@ public class PlayerInteractListener implements Listener {
                     return;
                 }
                 LiftBlock lb;
-                if (XMaterial.isNewVersion()) {
+                if (XMaterial.supports(13)) {
                     lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getType());
                 } else {
                     lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), block.getType(), block.getState().getRawData());

@@ -2,7 +2,7 @@ package tech.sbdevelopment.v10lift.api;
 
 import com.cryptomorin.xseries.XMaterial;
 import tech.sbdevelopment.v10lift.V10LiftPlugin;
-import nl.SBDeveloper.V10Lift.api.objects.*;
+import tech.sbdevelopment.v10lift.api.objects.*;
 import tech.sbdevelopment.v10lift.api.runnables.DoorCloser;
 import tech.sbdevelopment.v10lift.api.runnables.MoveLift;
 import tech.sbdevelopment.v10lift.managers.DataManager;
@@ -180,7 +180,7 @@ public class V10LiftAPI {
     public int addBlockToLift(Set<LiftBlock> blocks, @Nonnull Block block) {
         Material type = block.getType();
         LiftBlock lb;
-        if (XMaterial.isNewVersion()) {
+        if (XMaterial.supports(13)) {
             if (type.toString().contains("SIGN")) {
                 Bukkit.getLogger().info("Block instanceof Dir 1.13 & is sign");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
@@ -237,7 +237,7 @@ public class V10LiftAPI {
         Lift lift = DataManager.getLift(liftName);
         Material type = block.getType();
         LiftBlock lb;
-        if (XMaterial.isNewVersion()) {
+        if (XMaterial.supports(13)) {
             if (type.toString().contains("SIGN")) {
                 Bukkit.getLogger().info("Block instanceof Dir 1.13 & is sign");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
@@ -294,7 +294,7 @@ public class V10LiftAPI {
         Material type = block.getType();
         if (ForbiddenBlockManager.isForbidden(type)) return -2;
         LiftBlock lb;
-        if (XMaterial.isNewVersion()) {
+        if (XMaterial.supports(13)) {
             if (type.toString().contains("SIGN")) {
                 Bukkit.getLogger().info("Block instanceof Dir 1.13 & is sign");
                 lb = new LiftBlock(block.getWorld().getName(), block.getX(), block.getY(), block.getZ(), type, DirectionUtil.getDirection(block), ((Sign) block.getState()).getLines());
@@ -467,7 +467,7 @@ public class V10LiftAPI {
                 Block block = Objects.requireNonNull(Bukkit.getWorld(lb.getWorld()), "World is null at closeDoor").getBlockAt(lb.getX(), lb.getY(), lb.getZ());
                 BlockState state = block.getState();
                 state.setType(lb.getMat());
-                if (!XMaterial.isNewVersion()) {
+                if (!XMaterial.supports(13)) {
                     state.setRawData(lb.getData());
                 }
                 state.update(true);
@@ -897,7 +897,7 @@ public class V10LiftAPI {
         }
 
         BlockFace face;
-        if (XMaterial.isNewVersion()) {
+        if (XMaterial.supports(13)) {
             face = DirectionUtil.getDirection(block);
         } else {
             BlockState state = block.getState();

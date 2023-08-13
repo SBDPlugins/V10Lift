@@ -5,7 +5,7 @@ import com.cryptomorin.xseries.XSound;
 import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import tech.sbdevelopment.v10lift.api.V10LiftAPI;
 import tech.sbdevelopment.v10lift.api.enums.LiftDirection;
-import nl.SBDeveloper.V10Lift.api.objects.*;
+import tech.sbdevelopment.v10lift.api.objects.*;
 import tech.sbdevelopment.v10lift.managers.AntiCopyBlockManager;
 import tech.sbdevelopment.v10lift.managers.DataManager;
 import tech.sbdevelopment.v10lift.sbutils.LocationSerializer;
@@ -213,12 +213,12 @@ public class MoveLift implements Runnable {
 
                 BlockState state = nextBlock.getState();
                 state.setType(lib.getMat());
-                if (!XMaterial.isNewVersion()) {
+                if (!XMaterial.supports(13)) {
                     state.setRawData(lib.getData());
                 }
                 state.update(true);
 
-                if (XMaterial.isNewVersion()) {
+                if (XMaterial.supports(13)) {
                     DirectionUtil.setDirection(nextBlock, lib.getFace());
                     DirectionUtil.setBisected(nextBlock, lib.getBisected());
                     DirectionUtil.setSlabType(nextBlock, lib.getSlabtype());
@@ -264,12 +264,12 @@ public class MoveLift implements Runnable {
 
                 BlockState state = block.getState();
                 state.setType(lib.getMat());
-                if (!XMaterial.isNewVersion()) {
+                if (!XMaterial.supports(13)) {
                     state.setRawData(lib.getData());
                 }
                 state.update(true);
 
-                if (XMaterial.isNewVersion()) {
+                if (XMaterial.supports(13)) {
                     DirectionUtil.setDirection(block, lib.getFace());
                     DirectionUtil.setBisected(block, lib.getBisected());
                     DirectionUtil.setSlabType(block, lib.getSlabtype());
@@ -343,7 +343,7 @@ public class MoveLift implements Runnable {
                     if (rope.getType() == null) rope.setType(Material.AIR);
 
                     block.setType(rope.getType());
-                    if (XMaterial.isNewVersion()) {
+                    if (XMaterial.supports(13)) {
                         DirectionUtil.setDirection(block, rope.getFace());
                     } else {
                         BlockState state = block.getState();

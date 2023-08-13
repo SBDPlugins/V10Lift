@@ -11,7 +11,7 @@ public class DirectionUtil {
 
     @Nullable
     public static BlockFace getDirection(@Nonnull Block block) {
-        if (!XMaterial.isNewVersion()) return null;
+        if (!XMaterial.supports(13)) return null;
         if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
             org.bukkit.block.data.Directional dir = (org.bukkit.block.data.Directional) block.getBlockData();
             return dir.getFacing();
@@ -20,7 +20,7 @@ public class DirectionUtil {
     }
 
     public static void setDirection(@Nonnull Block block, BlockFace blockFace) {
-        if (!XMaterial.isNewVersion()) return;
+        if (!XMaterial.supports(13)) return;
         if (blockFace != null && block.getBlockData() instanceof org.bukkit.block.data.Directional) {
             org.bukkit.block.data.BlockData bd = block.getBlockData();
             org.bukkit.block.data.Directional dir = (org.bukkit.block.data.Directional) bd;
@@ -31,7 +31,7 @@ public class DirectionUtil {
 
     @Nullable
     public static String getBisected(@Nonnull Block block) {
-        if (!XMaterial.isNewVersion()) return null;
+        if (!XMaterial.supports(13)) return null;
         if (block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
             org.bukkit.block.data.Bisected bis = (org.bukkit.block.data.Bisected) block.getBlockData();
             return bis.getHalf().toString();
@@ -40,7 +40,7 @@ public class DirectionUtil {
     }
 
     public static void setBisected(@Nonnull Block block, String bisected) {
-        if (!XMaterial.isNewVersion()) return;
+        if (!XMaterial.supports(13)) return;
         if (bisected != null && block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
 
             org.bukkit.block.data.Bisected.Half half;
@@ -60,7 +60,7 @@ public class DirectionUtil {
 
     @Nullable
     public static String getSlabType(@Nonnull Block block) {
-        if (!XMaterial.isNewVersion()) return null;
+        if (!XMaterial.supports(13)) return null;
         if (block.getBlockData() instanceof org.bukkit.block.data.type.Slab) {
             org.bukkit.block.data.type.Slab slab = (org.bukkit.block.data.type.Slab) block.getBlockData();
             return slab.getType().toString();
@@ -69,7 +69,7 @@ public class DirectionUtil {
     }
 
     public static void setSlabType(@Nonnull Block block, String slabtype) {
-        if (!XMaterial.isNewVersion()) return;
+        if (!XMaterial.supports(13)) return;
         if (slabtype != null && block.getBlockData() instanceof org.bukkit.block.data.type.Slab) {
 
             org.bukkit.block.data.type.Slab.Type type;
