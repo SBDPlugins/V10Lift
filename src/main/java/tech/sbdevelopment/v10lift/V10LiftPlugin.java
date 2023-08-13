@@ -23,7 +23,6 @@ import java.sql.SQLException;
 import java.util.Collections;
 
 public class V10LiftPlugin extends JavaPlugin {
-
     @Getter
     private static V10LiftPlugin instance;
     private static YamlFile config;

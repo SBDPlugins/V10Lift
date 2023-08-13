@@ -215,12 +215,10 @@ public class MoveLift implements Runnable {
                 state.setType(lib.getMat());
                 state.update(true);
 
-                if (XMaterial.supports(13)) {
-                    BlockStateUtil.setDirection(nextBlock, lib.getFace());
-                    BlockStateUtil.setBisected(nextBlock, lib.getBisected());
-                    BlockStateUtil.setSlabType(nextBlock, lib.getSlabType());
-                    BlockStateUtil.setOpen(nextBlock, lib.getOpen());
-                }
+                BlockStateUtil.setDirection(nextBlock, lib.getFace());
+                BlockStateUtil.setBisected(nextBlock, lib.getBisected());
+                BlockStateUtil.setSlabType(nextBlock, lib.getSlabType());
+                BlockStateUtil.setOpen(nextBlock, lib.getOpen());
 
                 if (direction == LiftDirection.UP) { //Teleportation is only required if we go up, for down gravity works fine. ;)
                     for (Entity ent : nextBlock.getChunk().getEntities()) {
