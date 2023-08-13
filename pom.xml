@@ -5,7 +5,7 @@
 
     <groupId>tech.sbdevelopment</groupId>
     <artifactId>V10Lift</artifactId>
-    <version>0.7.5</version>
+    <version>0.8</version>
     <packaging>jar</packaging>
 
     <name>V10Lift</name>
