@@ -164,3 +164,7 @@ List:
   NoLifts: '&cThere are no lifts!'
   Header: '&6Lifts:'
   Lift: '&6- %Name%'
+
+SetOffline:
+  Disabled: '&aThe lift is now offline!'
+  Enabled: '&aThe lift is now online!'

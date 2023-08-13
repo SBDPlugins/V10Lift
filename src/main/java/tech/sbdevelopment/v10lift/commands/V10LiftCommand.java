@@ -5,6 +5,8 @@ import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
 import org.bukkit.block.Sign;
+import org.bukkit.block.data.BlockData;
+import org.bukkit.block.data.Powerable;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
@@ -12,10 +14,7 @@ import org.bukkit.entity.Player;
 import org.bukkit.inventory.ItemStack;
 import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import tech.sbdevelopment.v10lift.api.V10LiftAPI;
-import tech.sbdevelopment.v10lift.api.objects.Floor;
-import tech.sbdevelopment.v10lift.api.objects.Lift;
-import tech.sbdevelopment.v10lift.api.objects.LiftBlock;
-import tech.sbdevelopment.v10lift.api.objects.LiftSign;
+import tech.sbdevelopment.v10lift.api.objects.*;
 import tech.sbdevelopment.v10lift.managers.DataManager;
 import tech.sbdevelopment.v10lift.managers.VaultManager;
 import tech.sbdevelopment.v10lift.sbutils.LocationSerializer;
@@ -37,7 +36,11 @@ public class V10LiftCommand implements CommandExecutor {
             return infoCommand(sender);
         } else if (args[0].equalsIgnoreCase("list") && args.length == 1) {
             //v10lift list
-            return listCommand(sender);
+            if (sender.hasPermission("v10lift.list") || sender.hasPermission("v10lift.admin")) {
+                return listCommand(sender);
+            } else {
+                ConfigUtil.sendMessage(sender, "General.NoPermission");
+            }
         } else if (args[0].equalsIgnoreCase("create") && (args.length == 1 || args.length == 2)) {
             //v10lift create || v10lift create <Name>
             if (!(sender instanceof Player)) {
@@ -231,6 +234,13 @@ public class V10LiftCommand implements CommandExecutor {
             } else {
                 ConfigUtil.sendMessage(sender, "General.NoPermission");
             }
+        } else if (args[0].equalsIgnoreCase("setoffline") && args.length == 3) {
+            //v10lift setoffline <Name> <State>
+            if (sender.hasPermission("v10lift.setoffline") || sender.hasPermission("v10lift.admin")) {
+                return setOfflineCommand(sender, args);
+            } else {
+                ConfigUtil.sendMessage(sender, "General.NoPermission");
+            }
         } else if (args[0].equalsIgnoreCase("start")) {
             //v10lift start <Name> <Floor>
             if (sender.hasPermission("v10lift.start") || sender.hasPermission("v10lift.admin")) {
@@ -261,6 +271,35 @@ public class V10LiftCommand implements CommandExecutor {
         ConfigUtil.sendMessage(sender, "List.Header");
         for (String liftName : lifts.keySet()) {
             ConfigUtil.sendMessage(sender, "List.Lift", Map.of("%Name%", liftName));
+        }
+        return true;
+    }
+
+    private boolean setOfflineCommand(CommandSender sender, @Nonnull String[] args) {
+        String liftName = args[1];
+        boolean newState = Boolean.parseBoolean(args[2]);
+        if (!DataManager.containsLift(liftName)) {
+            ConfigUtil.sendMessage(sender, "General.DoesntExists");
+            return true;
+        }
+
+        Lift lift = DataManager.getLift(liftName);
+
+        lift.setOffline(newState);
+
+        //Update all offline inputs
+        for (LiftInput li : lift.getOfflineInputs()) {
+            Block b = Bukkit.getWorld(li.getWorld()).getBlockAt(li.getX(), li.getY(), li.getZ());
+            BlockData bd = b.getBlockData();
+            if (!(bd instanceof Powerable)) continue;
+            ((Powerable) bd).setPowered(newState);
+            b.setBlockData(bd);
+        }
+
+        if (lift.isOffline()) {
+            ConfigUtil.sendMessage(sender, "SetOffline.Disabled");
+        } else {
+            ConfigUtil.sendMessage(sender, "SetOffline.Enabled");
         }
         return true;
     }

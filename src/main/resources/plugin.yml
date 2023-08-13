@@ -23,3 +23,7 @@ permissions:
     description: Start a lift
   v10lift.stop:
     description: Stop a lift
+  v10lift.list:
+    description: List all lifts
+  v10lift.setoffline:
+    description: Set a lift offline / online
