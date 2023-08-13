@@ -1,6 +1,15 @@
 package tech.sbdevelopment.v10lift.commands;
 
 import com.cryptomorin.xseries.XMaterial;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Sign;
+import org.bukkit.command.Command;
+import org.bukkit.command.CommandExecutor;
+import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.ItemStack;
 import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import tech.sbdevelopment.v10lift.api.V10LiftAPI;
 import tech.sbdevelopment.v10lift.api.objects.Floor;
@@ -11,15 +20,6 @@ import tech.sbdevelopment.v10lift.managers.DataManager;
 import tech.sbdevelopment.v10lift.managers.VaultManager;
 import tech.sbdevelopment.v10lift.sbutils.LocationSerializer;
 import tech.sbdevelopment.v10lift.utils.ConfigUtil;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Sign;
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandExecutor;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
-import org.bukkit.inventory.ItemStack;
 
 import javax.annotation.Nonnull;
 import java.sql.SQLException;

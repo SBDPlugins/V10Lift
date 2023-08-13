@@ -1,15 +1,15 @@
 package tech.sbdevelopment.v10lift.commands;
 
-import tech.sbdevelopment.v10lift.api.objects.Lift;
-import tech.sbdevelopment.v10lift.managers.DataManager;
-import tech.sbdevelopment.v10lift.managers.VaultManager;
-import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.command.Command;
 import org.bukkit.command.CommandSender;
 import org.bukkit.command.TabCompleter;
 import org.bukkit.entity.Player;
 import org.bukkit.util.StringUtil;
+import tech.sbdevelopment.v10lift.V10LiftPlugin;
+import tech.sbdevelopment.v10lift.api.objects.Lift;
+import tech.sbdevelopment.v10lift.managers.DataManager;
+import tech.sbdevelopment.v10lift.managers.VaultManager;
 
 import javax.annotation.Nonnull;
 import java.util.ArrayList;
@@ -21,6 +21,7 @@ public class V10LiftTabCompleter implements TabCompleter {
     private static final List<String> COMMANDS = Arrays.asList("create", "delete", "rename", "abort", "whois", "edit", "floor", "input", "build", "rope", "door", "speed", "realistic", "repair", "disable", "whitelist", "reload", "help", "start", "stop", "offline");
     private static final List<String> SUBRENAME = Arrays.asList("add", "del", "rename");
     private static final List<String> SUB = Arrays.asList("add", "del");
+
     @Override
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
         if (label.equalsIgnoreCase("v10lift")) {

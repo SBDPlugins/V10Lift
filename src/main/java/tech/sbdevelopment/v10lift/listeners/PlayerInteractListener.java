@@ -1,16 +1,6 @@
 package tech.sbdevelopment.v10lift.listeners;
 
 import com.cryptomorin.xseries.XMaterial;
-import tech.sbdevelopment.v10lift.V10LiftPlugin;
-import tech.sbdevelopment.v10lift.api.V10LiftAPI;
-import tech.sbdevelopment.v10lift.api.objects.Floor;
-import tech.sbdevelopment.v10lift.api.objects.Lift;
-import tech.sbdevelopment.v10lift.api.objects.LiftBlock;
-import tech.sbdevelopment.v10lift.managers.DataManager;
-import tech.sbdevelopment.v10lift.managers.ForbiddenBlockManager;
-import tech.sbdevelopment.v10lift.managers.VaultManager;
-import tech.sbdevelopment.v10lift.utils.ConfigUtil;
-import tech.sbdevelopment.v10lift.utils.DoorUtil;
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
 import org.bukkit.GameMode;
@@ -27,6 +17,16 @@ import org.bukkit.event.player.PlayerAnimationEvent;
 import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
+import tech.sbdevelopment.v10lift.V10LiftPlugin;
+import tech.sbdevelopment.v10lift.api.V10LiftAPI;
+import tech.sbdevelopment.v10lift.api.objects.Floor;
+import tech.sbdevelopment.v10lift.api.objects.Lift;
+import tech.sbdevelopment.v10lift.api.objects.LiftBlock;
+import tech.sbdevelopment.v10lift.managers.DataManager;
+import tech.sbdevelopment.v10lift.managers.ForbiddenBlockManager;
+import tech.sbdevelopment.v10lift.managers.VaultManager;
+import tech.sbdevelopment.v10lift.utils.ConfigUtil;
+import tech.sbdevelopment.v10lift.utils.DoorUtil;
 
 import java.util.*;
 
@@ -42,8 +42,8 @@ public class PlayerInteractListener implements Listener {
         Material button = block.getType();
 
         if (action == Action.RIGHT_CLICK_BLOCK
-            && e.getHand() != EquipmentSlot.OFF_HAND
-            && (button.toString().contains("BUTTON") || button == XMaterial.LEVER.parseMaterial())) {
+                && e.getHand() != EquipmentSlot.OFF_HAND
+                && (button.toString().contains("BUTTON") || button == XMaterial.LEVER.parseMaterial())) {
             String world = block.getWorld().getName();
             int x = block.getX();
             int y = block.getY();
@@ -104,7 +104,8 @@ public class PlayerInteractListener implements Listener {
             return;
         }
 
-        if (!lift.getBlocks().contains(new LiftBlock(sign.getWorld().getName(), sign.getX(), sign.getY(), sign.getZ(), (String) null))) return;
+        if (!lift.getBlocks().contains(new LiftBlock(sign.getWorld().getName(), sign.getX(), sign.getY(), sign.getZ(), (String) null)))
+            return;
         if (DataManager.containsEditLift(liftName)) return;
         e.setCancelled(true);
         if (lift.isDefective()) return;
@@ -367,7 +368,8 @@ public class PlayerInteractListener implements Listener {
                     return;
                 }
 
-                if (!lift.getBlocks().contains(new LiftBlock(sign.getWorld().getName(), sign.getX(), sign.getY(), sign.getZ(), (String) null))) return;
+                if (!lift.getBlocks().contains(new LiftBlock(sign.getWorld().getName(), sign.getX(), sign.getY(), sign.getZ(), (String) null)))
+                    return;
                 if (DataManager.containsEditLift(liftName)) return;
                 e.setCancelled(true);
                 if (lift.isDefective()) return;

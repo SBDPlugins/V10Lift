@@ -1,8 +1,5 @@
 package tech.sbdevelopment.v10lift.listeners;
 
-import tech.sbdevelopment.v10lift.api.objects.Lift;
-import tech.sbdevelopment.v10lift.api.objects.LiftBlock;
-import tech.sbdevelopment.v10lift.managers.DataManager;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 import org.bukkit.entity.LivingEntity;
@@ -10,6 +7,9 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.EntityDamageEvent;
+import tech.sbdevelopment.v10lift.api.objects.Lift;
+import tech.sbdevelopment.v10lift.api.objects.LiftBlock;
+import tech.sbdevelopment.v10lift.managers.DataManager;
 
 public class EntityDamageListener implements Listener {
     @EventHandler(priority = EventPriority.HIGHEST, ignoreCancelled = true)

@@ -9,8 +9,13 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
 
-/** A floor object, for a floor in the lift. */
-@Getter @Setter @NoArgsConstructor @ToString
+/**
+ * A floor object, for a floor in the lift.
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class Floor {
     private String world;
     private int y;
@@ -22,7 +27,7 @@ public class Floor {
     /**
      * Construct a new Floor
      *
-     * @param y The y/height of the floor
+     * @param y     The y/height of the floor
      * @param world The world of the floor
      */
     public Floor(int y, String world) {

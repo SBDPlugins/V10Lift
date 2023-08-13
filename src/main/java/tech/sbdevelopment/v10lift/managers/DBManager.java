@@ -1,10 +1,10 @@
 package tech.sbdevelopment.v10lift.managers;
 
 import com.google.gson.Gson;
+import org.bukkit.Bukkit;
 import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import tech.sbdevelopment.v10lift.api.objects.Lift;
 import tech.sbdevelopment.v10lift.sbutils.SQLiteDB;
-import org.bukkit.Bukkit;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -104,7 +104,7 @@ public class DBManager {
      * Save a lift to data
      *
      * @param liftName The name of the lift
-     * @param lift The lift itself
+     * @param lift     The lift itself
      */
     public void saveLift(String liftName, Lift lift, boolean sync) {
         Bukkit.getLogger().info("[V10Lift] Saving lift " + liftName + " to data...");
@@ -130,7 +130,8 @@ public class DBManager {
             statement.setString(1, liftName);
             statement.setBytes(2, liftData);
             statement.executeUpdate();
-        } catch (SQLException ignored) {}
+        } catch (SQLException ignored) {
+        }
 
         try {
             String query2 = "UPDATE lifts SET liftData = ? WHERE liftName = ?";

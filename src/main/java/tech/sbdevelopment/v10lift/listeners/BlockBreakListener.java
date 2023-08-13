@@ -1,12 +1,5 @@
 package tech.sbdevelopment.v10lift.listeners;
 
-import tech.sbdevelopment.v10lift.api.V10LiftAPI;
-import tech.sbdevelopment.v10lift.api.objects.Floor;
-import tech.sbdevelopment.v10lift.api.objects.Lift;
-import tech.sbdevelopment.v10lift.api.objects.LiftBlock;
-import tech.sbdevelopment.v10lift.managers.DataManager;
-import tech.sbdevelopment.v10lift.utils.ConfigUtil;
-import tech.sbdevelopment.v10lift.utils.DoorUtil;
 import org.bukkit.Location;
 import org.bukkit.block.Block;
 import org.bukkit.block.Sign;
@@ -14,6 +7,13 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockBreakEvent;
+import tech.sbdevelopment.v10lift.api.V10LiftAPI;
+import tech.sbdevelopment.v10lift.api.objects.Floor;
+import tech.sbdevelopment.v10lift.api.objects.Lift;
+import tech.sbdevelopment.v10lift.api.objects.LiftBlock;
+import tech.sbdevelopment.v10lift.managers.DataManager;
+import tech.sbdevelopment.v10lift.utils.ConfigUtil;
+import tech.sbdevelopment.v10lift.utils.DoorUtil;
 
 import java.util.Map;
 import java.util.Objects;

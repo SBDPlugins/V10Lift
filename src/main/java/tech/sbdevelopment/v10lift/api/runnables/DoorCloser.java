@@ -1,11 +1,13 @@
 package tech.sbdevelopment.v10lift.api.runnables;
 
+import org.bukkit.Bukkit;
 import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import tech.sbdevelopment.v10lift.api.V10LiftAPI;
 import tech.sbdevelopment.v10lift.managers.DataManager;
-import org.bukkit.Bukkit;
 
-/** The DoorCloser runnable, used for checking if the door can be closed. */
+/**
+ * The DoorCloser runnable, used for checking if the door can be closed.
+ */
 public class DoorCloser implements Runnable {
     private final String liftName;
     private final int taskID;

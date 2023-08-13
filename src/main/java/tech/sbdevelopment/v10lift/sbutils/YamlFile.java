@@ -1,9 +1,9 @@
 package tech.sbdevelopment.v10lift.sbutils;
 
-import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
+import tech.sbdevelopment.v10lift.V10LiftPlugin;
 
 import java.io.File;
 import java.io.IOException;

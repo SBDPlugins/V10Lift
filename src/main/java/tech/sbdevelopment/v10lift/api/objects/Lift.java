@@ -8,35 +8,51 @@ import tech.sbdevelopment.v10lift.api.runnables.DoorCloser;
 
 import java.util.*;
 
-/** A lift object, to create a lift. */
-@NoArgsConstructor @ToString
+/**
+ * A lift object, to create a lift.
+ */
+@Getter
+@NoArgsConstructor
+@ToString
 public class Lift {
-    @Getter @Setter private String worldName;
-    @Getter @Setter private int y;
-    @Getter private HashSet<UUID> owners;
-    @Getter private final TreeSet<LiftBlock> blocks = new TreeSet<>();
-    @Getter private final LinkedHashMap<String, Floor> floors = new LinkedHashMap<>();
-    @Getter private final HashSet<LiftSign> signs = new HashSet<>();
-    @Getter private final HashSet<LiftBlock> inputs = new HashSet<>();
-    @Getter private final HashSet<LiftBlock> offlineInputs = new HashSet<>();
-    @Getter @Setter private LinkedHashMap<String, Floor> queue = null;
-    @Getter private final HashSet<LiftRope> ropes = new HashSet<>();
-    @Getter private transient final ArrayList<V10Entity> toMove = new ArrayList<>();
-    @Getter @Setter private int speed;
-    @Getter @Setter private boolean realistic;
-    @Getter @Setter private boolean offline = false;
-    @Getter @Setter private boolean sound = true;
-    @Getter @Setter private boolean defective = false;
-    @Getter @Setter private String signText = null;
-    @Getter @Setter private int counter = 0;
-    @Getter @Setter private Floor doorOpen = null;
-    @Getter @Setter private DoorCloser doorCloser = null;
+    @Setter
+    private String worldName;
+    @Setter
+    private int y;
+    private HashSet<UUID> owners;
+    private final TreeSet<LiftBlock> blocks = new TreeSet<>();
+    private final LinkedHashMap<String, Floor> floors = new LinkedHashMap<>();
+    private final HashSet<LiftSign> signs = new HashSet<>();
+    private final HashSet<LiftBlock> inputs = new HashSet<>();
+    private final HashSet<LiftBlock> offlineInputs = new HashSet<>();
+    @Setter
+    private LinkedHashMap<String, Floor> queue = null;
+    private final HashSet<LiftRope> ropes = new HashSet<>();
+    private transient final ArrayList<V10Entity> toMove = new ArrayList<>();
+    @Setter
+    private int speed;
+    @Setter
+    private boolean realistic;
+    @Setter
+    private boolean offline = false;
+    @Setter
+    private boolean sound = true;
+    @Setter
+    private boolean defective = false;
+    @Setter
+    private String signText = null;
+    @Setter
+    private int counter = 0;
+    @Setter
+    private Floor doorOpen = null;
+    @Setter
+    private DoorCloser doorCloser = null;
 
     /**
      * Construct a new Lift with multiple owners
      *
-     * @param owners The owners, by uuid
-     * @param speed The speed, 1 is slowest, higher is faster
+     * @param owners    The owners, by uuid
+     * @param speed     The speed, 1 is slowest, higher is faster
      * @param realistic Realistic lift, or not
      */
     public Lift(HashSet<UUID> owners, int speed, boolean realistic) {
@@ -48,8 +64,8 @@ public class Lift {
     /**
      * Construct a new Lift with one owners
      *
-     * @param owner The owner, by uuid
-     * @param speed The speed, 1 is slowest, higher is faster
+     * @param owner     The owner, by uuid
+     * @param speed     The speed, 1 is slowest, higher is faster
      * @param realistic Realistic lift, or not
      */
     public Lift(UUID owner, int speed, boolean realistic) {

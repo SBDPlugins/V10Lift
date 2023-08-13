@@ -1,9 +1,5 @@
 package tech.sbdevelopment.v10lift.listeners;
 
-import tech.sbdevelopment.v10lift.api.objects.Lift;
-import tech.sbdevelopment.v10lift.api.objects.LiftSign;
-import tech.sbdevelopment.v10lift.managers.DataManager;
-import tech.sbdevelopment.v10lift.utils.ConfigUtil;
 import org.bukkit.ChatColor;
 import org.bukkit.block.Block;
 import org.bukkit.entity.Player;
@@ -11,6 +7,10 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 import org.bukkit.event.block.SignChangeEvent;
+import tech.sbdevelopment.v10lift.api.objects.Lift;
+import tech.sbdevelopment.v10lift.api.objects.LiftSign;
+import tech.sbdevelopment.v10lift.managers.DataManager;
+import tech.sbdevelopment.v10lift.utils.ConfigUtil;
 
 public class SignChangeListener implements Listener {
 

@@ -1,8 +1,8 @@
 package tech.sbdevelopment.v10lift.utils;
 
-import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import org.bukkit.ChatColor;
 import org.bukkit.command.CommandSender;
+import tech.sbdevelopment.v10lift.V10LiftPlugin;
 
 import javax.annotation.Nonnull;
 import java.util.HashMap;
@@ -28,7 +28,7 @@ public class ConfigUtil {
     /**
      * Send a message from the messages.yml without variables
      *
-     * @param p The commandsender to send it to
+     * @param p    The commandsender to send it to
      * @param path The path to look for
      */
     public static void sendMessage(CommandSender p, @Nonnull String path) {
@@ -50,8 +50,8 @@ public class ConfigUtil {
     /**
      * Get a message from the messages.yml with variables
      *
-     * @param p The commandsender to send it to
-     * @param path The path to look for
+     * @param p           The commandsender to send it to
+     * @param path        The path to look for
      * @param replacement The replacements - key: %Name% = value: TheName
      */
     public static void sendMessage(CommandSender p, @Nonnull String path, Map<String, String> replacement) {

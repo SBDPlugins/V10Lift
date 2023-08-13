@@ -1,10 +1,10 @@
 package tech.sbdevelopment.v10lift.managers;
 
 import net.milkbowl.vault.permission.Permission;
-import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import org.bukkit.Bukkit;
 import org.bukkit.entity.Player;
 import org.bukkit.plugin.RegisteredServiceProvider;
+import tech.sbdevelopment.v10lift.V10LiftPlugin;
 
 import java.util.Arrays;
 import java.util.HashSet;

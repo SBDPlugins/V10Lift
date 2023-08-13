@@ -2,8 +2,8 @@ package tech.sbdevelopment.v10lift.sbutils;
 
 import com.zaxxer.hikari.HikariConfig;
 import com.zaxxer.hikari.HikariDataSource;
-import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import org.bukkit.Bukkit;
+import tech.sbdevelopment.v10lift.V10LiftPlugin;
 
 import java.io.File;
 import java.io.IOException;
@@ -63,7 +63,7 @@ public class SQLiteDB {
 
     /**
      * Get the connection, to execute queries
-     *
+     * <p>
      * CREATE TABLE - execute()
      * SELECT - executeQuery()
      * UPDATE - executeUpdate()

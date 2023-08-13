@@ -11,7 +11,6 @@ public class LocationSerializer {
      * Deserialize a serialized location, without {@link Location#getYaw()} and {@link Location#getPitch()}
      *
      * @param string The location string
-     *
      * @return The location or null if error
      */
     @Nullable
@@ -33,7 +32,6 @@ public class LocationSerializer {
      * Deserialize a serialized location, with {@link Location#getYaw()} and {@link Location#getPitch()}
      *
      * @param string The location string
-     *
      * @return The location or null if error
      */
     @Nonnull
@@ -55,7 +53,6 @@ public class LocationSerializer {
      * Serialize a location, without {@link Location#getYaw()} and {@link Location#getPitch()}
      *
      * @param loc The location
-     *
      * @return The serialized string
      */
     @Nullable
@@ -68,7 +65,6 @@ public class LocationSerializer {
      * Serialize a location, with {@link Location#getYaw()} and {@link Location#getPitch()}
      *
      * @param loc The location
-     *
      * @return The serialized string
      */
     @Nullable

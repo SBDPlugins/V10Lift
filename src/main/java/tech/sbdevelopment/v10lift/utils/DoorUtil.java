@@ -14,12 +14,14 @@ public class DoorUtil {
 
     /**
      * Open a door, with 1.12.x- and 1.13.x+ support
+     *
      * @param b The block (door)
      * @return true if opened, false if not opened
      */
     public static boolean openDoor(@Nonnull Block b) {
         if (b.getType() == XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_IRON_DOOR_OPEN.play(b.getLocation());
-        if (b.getType().toString().contains("DOOR") && b.getType() != XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_WOODEN_DOOR_OPEN.play(b.getLocation());
+        if (b.getType().toString().contains("DOOR") && b.getType() != XMaterial.IRON_DOOR.parseMaterial())
+            XSound.BLOCK_WOODEN_DOOR_OPEN.play(b.getLocation());
         if (b.getType().toString().contains("GATE")) XSound.BLOCK_FENCE_GATE_OPEN.play(b.getLocation());
         if (XMaterial.supports(13)) {
             //1.13+
@@ -52,12 +54,14 @@ public class DoorUtil {
 
     /**
      * Close a door, with 1.12.x- and 1.13.x+ support
+     *
      * @param b The block (door)
      * @return true if opened, false if not opened
      */
     public static boolean closeDoor(@Nonnull Block b) {
         if (b.getType() == XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_IRON_DOOR_CLOSE.play(b.getLocation());
-        if (b.getType().toString().contains("DOOR") && b.getType() != XMaterial.IRON_DOOR.parseMaterial()) XSound.BLOCK_WOODEN_DOOR_CLOSE.play(b.getLocation());
+        if (b.getType().toString().contains("DOOR") && b.getType() != XMaterial.IRON_DOOR.parseMaterial())
+            XSound.BLOCK_WOODEN_DOOR_CLOSE.play(b.getLocation());
         if (b.getType().toString().contains("GATE")) XSound.BLOCK_FENCE_GATE_CLOSE.play(b.getLocation());
         if (XMaterial.supports(13)) {
             //1.13+

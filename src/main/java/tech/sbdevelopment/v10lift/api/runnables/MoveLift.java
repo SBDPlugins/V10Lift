@@ -2,6 +2,14 @@ package tech.sbdevelopment.v10lift.api.runnables;
 
 import com.cryptomorin.xseries.XMaterial;
 import com.cryptomorin.xseries.XSound;
+import org.bukkit.*;
+import org.bukkit.block.Block;
+import org.bukkit.block.BlockState;
+import org.bukkit.block.Chest;
+import org.bukkit.block.Sign;
+import org.bukkit.entity.Entity;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.inventory.ItemStack;
 import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import tech.sbdevelopment.v10lift.api.V10LiftAPI;
 import tech.sbdevelopment.v10lift.api.enums.LiftDirection;
@@ -11,33 +19,26 @@ import tech.sbdevelopment.v10lift.managers.DataManager;
 import tech.sbdevelopment.v10lift.sbutils.LocationSerializer;
 import tech.sbdevelopment.v10lift.utils.ConfigUtil;
 import tech.sbdevelopment.v10lift.utils.DirectionUtil;
-import org.bukkit.*;
-import org.bukkit.block.Block;
-import org.bukkit.block.BlockState;
-import org.bukkit.block.Chest;
-import org.bukkit.block.Sign;
-import org.bukkit.entity.Entity;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import tech.sbdevelopment.v10lift.api.objects.*;
 
 import java.lang.reflect.Method;
 import java.util.*;
 import java.util.concurrent.ThreadLocalRandom;
 import java.util.function.Supplier;
 
-/** The MoveLift runnable, used for moving a lift. */
+/**
+ * The MoveLift runnable, used for moving a lift.
+ */
 public class MoveLift implements Runnable {
     /* Packet teleportation method */
     private final Method[] methods = ((Supplier<Method[]>) () -> {
-       try {
-           Method getHandle = Class.forName(Bukkit.getServer().getClass().getPackage().getName() + ".entity.CraftEntity").getDeclaredMethod("getHandle");
-           return new Method[] {
-                   getHandle, getHandle.getReturnType().getDeclaredMethod("setPositionRotation", double.class, double.class, double.class, float.class, float.class)
-           };
-       } catch (Exception ex) {
-           return null;
-       }
+        try {
+            Method getHandle = Class.forName(Bukkit.getServer().getClass().getPackage().getName() + ".entity.CraftEntity").getDeclaredMethod("getHandle");
+            return new Method[]{
+                    getHandle, getHandle.getReturnType().getDeclaredMethod("setPositionRotation", double.class, double.class, double.class, float.class, float.class)
+            };
+        } catch (Exception ex) {
+            return null;
+        }
     }).get();
 
     private final String liftName;
@@ -250,7 +251,8 @@ public class MoveLift implements Runnable {
             while (toMoveIterator.hasNext()) {
                 V10Entity v10ent = toMoveIterator.next();
                 if (v10ent.getStep() > 0) {
-                    if (direction == LiftDirection.UP) v10ent.moveUp(); else v10ent.moveDown();
+                    if (direction == LiftDirection.UP) v10ent.moveUp();
+                    else v10ent.moveDown();
                     if (v10ent.getStep() > 16) {
                         toMoveIterator.remove();
                     }
@@ -426,7 +428,8 @@ public class MoveLift implements Runnable {
 
             if (lift.isRealistic()) lift.setCounter(ft);
 
-            if (lift.isSound() && block != null) XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(block.getLocation(), 2.0F, 63.0F);
+            if (lift.isSound() && block != null)
+                XSound.ENTITY_EXPERIENCE_ORB_PICKUP.play(block.getLocation(), 2.0F, 63.0F);
         }
     }
 

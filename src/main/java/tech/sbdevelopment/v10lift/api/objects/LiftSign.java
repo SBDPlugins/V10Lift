@@ -3,9 +3,15 @@ package tech.sbdevelopment.v10lift.api.objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 
-/** A liftsign object, for a info sign for the lift. */
-@Getter @Setter @NoArgsConstructor
+/**
+ * A liftsign object, for an info sign for the lift.
+ */
+@Getter
+@Setter
+@NoArgsConstructor
+@ToString
 public class LiftSign {
     private String world;
     private int x;
@@ -19,10 +25,10 @@ public class LiftSign {
      * Construct a new liftsign
      *
      * @param world The world
-     * @param x The x-pos
-     * @param y The y-pos
-     * @param z The z-pos
-     * @param type The type of the sign
+     * @param x     The x-pos
+     * @param y     The y-pos
+     * @param z     The z-pos
+     * @param type  The type of the sign
      * @param state The state of the sign
      */
     public LiftSign(String world, int x, int y, int z, byte type, byte state) {
@@ -62,18 +68,5 @@ public class LiftSign {
         result = prime * result + y;
         result = prime * result + z;
         return result;
-    }
-
-    @Override
-    public String toString() {
-        return "LiftSign{" +
-                "world='" + world + '\'' +
-                ", x=" + x +
-                ", z=" + z +
-                ", y=" + y +
-                ", oldText='" + oldText + '\'' +
-                ", type=" + type +
-                ", state=" + state +
-                '}';
     }
 }

@@ -1,5 +1,10 @@
 package tech.sbdevelopment.v10lift;
 
+import lombok.Getter;
+import org.bstats.bukkit.Metrics;
+import org.bstats.charts.SingleLineChart;
+import org.bukkit.Bukkit;
+import org.bukkit.plugin.java.JavaPlugin;
 import tech.sbdevelopment.v10lift.commands.V10LiftCommand;
 import tech.sbdevelopment.v10lift.commands.V10LiftTabCompleter;
 import tech.sbdevelopment.v10lift.listeners.BlockBreakListener;
@@ -12,10 +17,6 @@ import tech.sbdevelopment.v10lift.managers.VaultManager;
 import tech.sbdevelopment.v10lift.sbutils.ConfigUpdater;
 import tech.sbdevelopment.v10lift.sbutils.UpdateManager;
 import tech.sbdevelopment.v10lift.sbutils.YamlFile;
-import org.bstats.bukkit.Metrics;
-import org.bstats.charts.SingleLineChart;
-import org.bukkit.Bukkit;
-import org.bukkit.plugin.java.JavaPlugin;
 
 import java.io.IOException;
 import java.sql.SQLException;
@@ -23,9 +24,11 @@ import java.util.Collections;
 
 public class V10LiftPlugin extends JavaPlugin {
 
+    @Getter
     private static V10LiftPlugin instance;
     private static YamlFile config;
     private static DBManager dbManager;
+    @Getter
     private static YamlFile messages;
     private static boolean vault = false;
 
@@ -129,20 +132,12 @@ public class V10LiftPlugin extends JavaPlugin {
         instance = null;
     }
 
-    public static V10LiftPlugin getInstance() {
-        return instance;
-    }
-
     public static YamlFile getSConfig() {
         return config;
     }
 
     public static DBManager getDBManager() {
         return dbManager;
-    }
-
-    public static YamlFile getMessages() {
-        return messages;
     }
 
     public static boolean isVaultEnabled() {

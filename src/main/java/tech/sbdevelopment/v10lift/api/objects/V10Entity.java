@@ -3,14 +3,19 @@ package tech.sbdevelopment.v10lift.api.objects;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import lombok.ToString;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.entity.Entity;
 
 import java.util.UUID;
 
-/** A v10entity object, for a entity in the lift. */
-@Getter @NoArgsConstructor
+/**
+ * A v10entity object, for an entity in the lift.
+ */
+@Getter
+@NoArgsConstructor
+@ToString
 public class V10Entity {
     private UUID entityUUID;
     private String world;
@@ -18,17 +23,18 @@ public class V10Entity {
     private int locY;
     private int locZ;
     private int y;
-    @Setter private short step;
+    @Setter
+    private short step;
 
     /**
      * Construct a new V10LiftEntity
      *
      * @param entityUUID The UUID of the entity
-     * @param worldName The world
-     * @param x The x-pos
-     * @param y The y-pos
-     * @param z The z-pos
-     * @param cury The current y-pos
+     * @param worldName  The world
+     * @param x          The x-pos
+     * @param y          The y-pos
+     * @param z          The z-pos
+     * @param cury       The current y-pos
      */
     public V10Entity(UUID entityUUID, String worldName, int x, int y, int z, int cury) {
         this.entityUUID = entityUUID;
@@ -92,18 +98,5 @@ public class V10Entity {
     @Override
     public int hashCode() {
         return 31 + ((entityUUID == null) ? 0 : entityUUID.hashCode());
-    }
-
-    @Override
-    public String toString() {
-        return "V10Entity{" +
-                "entityUUID=" + entityUUID +
-                ", world='" + world + '\'' +
-                ", locX=" + locX +
-                ", locY=" + locY +
-                ", locZ=" + locZ +
-                ", y=" + y +
-                ", step=" + step +
-                '}';
     }
 }
