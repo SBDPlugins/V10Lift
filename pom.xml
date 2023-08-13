@@ -116,11 +116,11 @@
                     <release>11</release>
                     <sourcepath>${maven.lombok.delombok-target}</sourcepath>
                     <sourceFileExcludes>
-                        <exclude>nl/SBDeveloper/V10Lift/*.java</exclude>
-                        <exclude>nl/SBDeveloper/V10Lift/commands/*.java</exclude>
-                        <exclude>nl/SBDeveloper/V10Lift/listeners/*.java</exclude>
-                        <exclude>nl/SBDeveloper/V10Lift/sbutils/*.java</exclude>
-                        <exclude>nl/SBDeveloper/V10Lift/utils/*.java</exclude>
+                        <exclude>tech/sbdevelopment/v10lift/*.java</exclude>
+                        <exclude>tech/sbdevelopment/v10lift/commands/*.java</exclude>
+                        <exclude>tech/sbdevelopment/v10lift/listeners/*.java</exclude>
+                        <exclude>tech/sbdevelopment/v10lift/sbutils/*.java</exclude>
+                        <exclude>tech/sbdevelopment/v10lift/utils/*.java</exclude>
                     </sourceFileExcludes>
                 </configuration>
             </plugin>
