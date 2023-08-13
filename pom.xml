@@ -3,54 +3,46 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>nl.SBDeveloper</groupId>
-    <artifactId>V10Lift2</artifactId>
-    <version>0.7.4.1</version>
+    <groupId>tech.sbdevelopment</groupId>
+    <artifactId>V10Lift</artifactId>
+    <version>0.7.5</version>
     <packaging>jar</packaging>
 
     <name>V10Lift</name>
     <description>Realistic lifts in Minecraft!</description>
-    <url>sbdplugins.nl</url>
-
-    <distributionManagement>
-        <repository>
-            <id>iobyte-nexus</id>
-            <url>https://nexus.iobyte.nl/repository/maven-releases</url>
-        </repository>
-    </distributionManagement>
+    <url>https://sbdevelopment.tech</url>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <maven.lombok.delombok-target>${project.build.directory}/javadoc-delombok</maven.lombok.delombok-target>
     </properties>
 
+    <distributionManagement>
+        <repository>
+            <id>sbdevelopment-repo</id>
+            <url>https://repo.sbdevelopment.tech/releases</url>
+        </repository>
+    </distributionManagement>
+
     <build>
-        <defaultGoal>clean package</defaultGoal>
-        <!-- Include yml files -->
-        <resources>
-            <resource>
-                <directory>src/main/resources</directory>
-                <filtering>true</filtering>
-            </resource>
-        </resources>
-        <finalName>V10Lift v${project.version}</finalName>
         <plugins>
             <!-- Shade JAR -->
             <plugin>
                 <artifactId>maven-shade-plugin</artifactId>
-                <version>3.3.0</version>
+                <version>3.5.0</version>
                 <configuration>
                     <relocations>
                         <relocation>
                             <pattern>org.bstats</pattern>
-                            <shadedPattern>nl.SBDeveloper.V10Lift.libs.metrics</shadedPattern>
+                            <shadedPattern>tech.sbdevelopment.v10lift.libs.metrics</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.zaxxer.hikari</pattern>
-                            <shadedPattern>nl.SBDeveloper.V10Lift.libs.hikari</shadedPattern>
+                            <shadedPattern>tech.sbdevelopment.v10lift.libs.hikari</shadedPattern>
                         </relocation>
                         <relocation>
                             <pattern>com.cryptomorin.xseries</pattern>
-                            <shadedPattern>nl.SBDeveloper.V10Lift.libs.xseries</shadedPattern>
+                            <shadedPattern>tech.sbdevelopment.v10lift.libs.xseries</shadedPattern>
                         </relocation>
                     </relocations>
                     <filters>
@@ -102,7 +94,7 @@
                 <version>1.18.20.0</version>
                 <configuration>
                     <sourceDirectory>${project.basedir}/src/main/java</sourceDirectory>
-                    <outputDirectory>${project.build.directory}/delombok</outputDirectory>
+                    <outputDirectory>${maven.lombok.delombok-target}</outputDirectory>
                     <addOutputDirectory>false</addOutputDirectory>
                 </configuration>
                 <executions>
@@ -119,11 +111,10 @@
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-javadoc-plugin</artifactId>
-                <version>3.4.0</version>
+                <version>3.5.0</version>
                 <configuration>
-                    <sourcepath>${project.build.directory}/delombok</sourcepath>
-
-                    <!-- Exclude all non-API packages -->
+                    <release>11</release>
+                    <sourcepath>${maven.lombok.delombok-target}</sourcepath>
                     <sourceFileExcludes>
                         <exclude>nl/SBDeveloper/V10Lift/*.java</exclude>
                         <exclude>nl/SBDeveloper/V10Lift/commands/*.java</exclude>
@@ -133,37 +124,13 @@
                     </sourceFileExcludes>
                 </configuration>
             </plugin>
-
-            <!-- SKIP the maven deploy -->
-            <plugin>
-                <artifactId>maven-deploy-plugin</artifactId>
-                <version>3.1.1</version>
-                <configuration>
-                    <skip>true</skip>
-                </configuration>
-            </plugin>
-
-            <!-- Deploy to nexus -->
-            <plugin>
-                <groupId>org.sonatype.plugins</groupId>
-                <artifactId>nexus-staging-maven-plugin</artifactId>
-                <version>1.6.13</version>
-                <executions>
-                    <execution>
-                        <id>default-deploy</id>
-                        <phase>deploy</phase>
-                        <goals>
-                            <goal>deploy</goal>
-                        </goals>
-                    </execution>
-                </executions>
-                <configuration>
-                    <serverId>iobyte-nexus</serverId>
-                    <nexusUrl>https://nexus.iobyte.nl/</nexusUrl>
-                    <skipStaging>true</skipStaging>
-                </configuration>
-            </plugin>
         </plugins>
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
     <repositories>
@@ -186,7 +153,7 @@
         <dependency>
             <groupId>org.spigotmc</groupId>
             <artifactId>spigot-api</artifactId>
-            <version>1.19-R0.1-SNAPSHOT</version>
+            <version>1.20.1-R0.1-SNAPSHOT</version>
             <scope>provided</scope>
         </dependency>
 
@@ -202,7 +169,7 @@
         <dependency>
             <groupId>org.bstats</groupId>
             <artifactId>bstats-bukkit</artifactId>
-            <version>3.0.0</version>
+            <version>3.0.2</version>
             <scope>compile</scope>
         </dependency>
 
@@ -218,7 +185,7 @@
         <dependency>
             <groupId>com.github.cryptomorin</groupId>
             <artifactId>XSeries</artifactId>
-            <version>8.7.1</version>
+            <version>9.5.0</version>
             <scope>compile</scope>
         </dependency>
 

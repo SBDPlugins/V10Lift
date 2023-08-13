@@ -1,22 +1,19 @@
-# V10Lift2
-![Build status](https://travis-ci.org/stijnb1234/V10Lift2.svg?branch=master)
-
-The recode of the V10Lift plugin!
-
-*Original source: [Click here](https://github.com/shinyquagsire23/V10Lift)*
+# V10Lift
+The official recode of the original [V10Lift](https://github.com/shinyquagsire23/V10Lift) plugin.
 
 ## Maven
 ```xml
 <repository>
-  <id>iobyte-repo</id>
-  <url>https://nexus.iobyte.nl/repository/maven-public/</url>
+    <id>sbdevelopment-repo-releases</id>
+    <name>SBDevelopment Repository</name>
+    <url>https://repo.sbdevelopment.tech/releases</url>
 </repository>
 
 <dependency>
-  <groupId>nl.SBDeveloper</groupId>
-  <artifactId>V10Lift2</artifactId>
-  <version>0.6</version>
+  <groupId>tech.sbdevelopment</groupId>
+  <artifactId>V10Lift</artifactId>
+  <version>0.7.5</version>
 </dependency>
 ```
 
-© Stijn Bannink - 2019/2022
+© Stijn Bannink - 2023/2024
