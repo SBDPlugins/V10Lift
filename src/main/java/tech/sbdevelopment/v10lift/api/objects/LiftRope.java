@@ -34,8 +34,8 @@ public class LiftRope {
      * Construct a new liftrope
      *
      * @param block The block
-     * @param minY  The starting x-pos
-     * @param maxY  The stopping x-pos
+     * @param minY  The starting y-pos
+     * @param maxY  The stopping y-pos
      */
     public LiftRope(Block block, int minY, int maxY) {
         this.type = block.getType();
@@ -44,7 +44,7 @@ public class LiftRope {
         this.minY = minY;
         this.maxY = maxY;
         this.z = block.getZ();
-        this.currently = block.getY();
+        this.currently = minY;
         if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
             this.face = ((org.bukkit.block.data.Directional) block.getBlockData()).getFacing();
         }

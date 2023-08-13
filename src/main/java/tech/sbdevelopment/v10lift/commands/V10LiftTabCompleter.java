@@ -41,7 +41,8 @@ public class V10LiftTabCompleter implements TabCompleter {
                     return StringUtil.copyPartialMatches(args[1], SUBRENAME, new ArrayList<>());
                 } else if (args[0].equalsIgnoreCase("input")
                         || args[0].equalsIgnoreCase("offline")
-                        || args[0].equalsIgnoreCase("whitelist")) {
+                        || args[0].equalsIgnoreCase("whitelist")
+                        || args[0].equalsIgnoreCase("rope")) {
                     return StringUtil.copyPartialMatches(args[1], SUB, new ArrayList<>());
                 }
             } else if (args.length == 3) {

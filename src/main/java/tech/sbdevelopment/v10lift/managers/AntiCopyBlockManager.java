@@ -61,6 +61,24 @@ public class AntiCopyBlockManager {
         antiCopy.add(XMaterial.ACTIVATOR_RAIL);
         antiCopy.add(XMaterial.LADDER);
 
+        /* Causes duping */
+        antiCopy.add(XMaterial.WHITE_CARPET);
+        antiCopy.add(XMaterial.ORANGE_CARPET);
+        antiCopy.add(XMaterial.MAGENTA_CARPET);
+        antiCopy.add(XMaterial.LIGHT_BLUE_CARPET);
+        antiCopy.add(XMaterial.YELLOW_CARPET);
+        antiCopy.add(XMaterial.LIME_CARPET);
+        antiCopy.add(XMaterial.PINK_CARPET);
+        antiCopy.add(XMaterial.GRAY_CARPET);
+        antiCopy.add(XMaterial.LIGHT_GRAY_CARPET);
+        antiCopy.add(XMaterial.CYAN_CARPET);
+        antiCopy.add(XMaterial.PURPLE_CARPET);
+        antiCopy.add(XMaterial.BLUE_CARPET);
+        antiCopy.add(XMaterial.BROWN_CARPET);
+        antiCopy.add(XMaterial.GREEN_CARPET);
+        antiCopy.add(XMaterial.RED_CARPET);
+        antiCopy.add(XMaterial.BLACK_CARPET);
+
         /* Because of datatypes */
         antiCopy.add(XMaterial.BEEHIVE);
         antiCopy.add(XMaterial.BELL);

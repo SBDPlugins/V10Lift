@@ -4,19 +4,10 @@ import org.bukkit.block.Block;
 import org.bukkit.block.BlockFace;
 
 import javax.annotation.Nonnull;
-import javax.annotation.Nullable;
 
 public class BlockStateUtil {
-    @Nullable
-    public static BlockFace getDirection(@Nonnull Block block) {
-        if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
-            org.bukkit.block.data.Directional dir = (org.bukkit.block.data.Directional) block.getBlockData();
-            return dir.getFacing();
-        }
-        return null;
-    }
-
-    public static void setDirection(@Nonnull Block block, @Nonnull BlockFace blockFace) {
+    public static void setDirection(@Nonnull Block block, BlockFace blockFace) {
+        if (blockFace == null) return;
         if (block.getBlockData() instanceof org.bukkit.block.data.Directional) {
             org.bukkit.block.data.BlockData bd = block.getBlockData();
             org.bukkit.block.data.Directional dir = (org.bukkit.block.data.Directional) bd;
@@ -25,17 +16,9 @@ public class BlockStateUtil {
         }
     }
 
-    @Nullable
-    public static String getBisected(@Nonnull Block block) {
-        if (block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
-            org.bukkit.block.data.Bisected bis = (org.bukkit.block.data.Bisected) block.getBlockData();
-            return bis.getHalf().toString();
-        }
-        return null;
-    }
-
     public static void setBisected(@Nonnull Block block, String bisected) {
-        if (bisected != null && block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
+        if (bisected == null) return;
+        if (block.getBlockData() instanceof org.bukkit.block.data.Bisected) {
             org.bukkit.block.data.Bisected.Half half;
             try {
                 half = org.bukkit.block.data.Bisected.Half.valueOf(bisected);
@@ -51,16 +34,8 @@ public class BlockStateUtil {
         }
     }
 
-    @Nullable
-    public static String getSlabType(@Nonnull Block block) {
-        if (block.getBlockData() instanceof org.bukkit.block.data.type.Slab) {
-            org.bukkit.block.data.type.Slab slab = (org.bukkit.block.data.type.Slab) block.getBlockData();
-            return slab.getType().toString();
-        }
-        return null;
-    }
-
-    public static void setSlabType(@Nonnull Block block, @Nonnull String slabtype) {
+    public static void setSlabType(@Nonnull Block block, String slabtype) {
+        if (slabtype == null) return;
         if (block.getBlockData() instanceof org.bukkit.block.data.type.Slab) {
             org.bukkit.block.data.type.Slab.Type type;
             try {
@@ -77,19 +52,13 @@ public class BlockStateUtil {
         }
     }
 
-    @Nullable
-    public static Boolean isOpen(@Nonnull Block block) {
+    public static void setOpen(@Nonnull Block block, Boolean state) {
+        if (state == null) return;
         if (block.getBlockData() instanceof org.bukkit.block.data.Openable) {
-            org.bukkit.block.data.Openable trapdoor = (org.bukkit.block.data.Openable) block.getBlockData();
-            return trapdoor.isOpen();
-        }
-        return null;
-    }
-
-    public static void setOpen(@Nonnull Block block, boolean state) {
-        if (block.getBlockData() instanceof org.bukkit.block.data.Openable) {
-            org.bukkit.block.data.Openable trapdoor = (org.bukkit.block.data.Openable) block.getBlockData();
-            trapdoor.setOpen(state);
+            org.bukkit.block.data.BlockData bd = block.getBlockData();
+            org.bukkit.block.data.Openable openable = (org.bukkit.block.data.Openable) bd;
+            openable.setOpen(state);
+            block.setBlockData(bd);
         }
     }
 }
