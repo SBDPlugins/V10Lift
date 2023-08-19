@@ -18,9 +18,10 @@ import java.util.List;
 
 public class V10LiftTabCompleter implements TabCompleter {
 
-    private static final List<String> COMMANDS = Arrays.asList("create", "delete", "rename", "abort", "whois", "edit", "floor", "input", "build", "rope", "door", "speed", "realistic", "repair", "disable", "whitelist", "reload", "help", "start", "stop", "offline");
+    private static final List<String> COMMANDS = Arrays.asList("create", "delete", "rename", "abort", "whois", "edit", "floor", "input", "build", "rope", "door", "speed", "realistic", "repair", "disable", "whitelist", "reload", "help", "start", "stop", "offline", "list", "setoffline");
     private static final List<String> SUBRENAME = Arrays.asList("add", "del", "rename");
     private static final List<String> SUB = Arrays.asList("add", "del");
+    private static final List<String> BOOL = Arrays.asList("true", "false");
 
     @Override
     public List<String> onTabComplete(@Nonnull CommandSender commandSender, @Nonnull Command cmd, @Nonnull String label, @Nonnull String[] args) {
@@ -73,6 +74,8 @@ public class V10LiftTabCompleter implements TabCompleter {
                         playerOrGroupNames.addAll(VaultManager.getGroups());
                     }
                     return StringUtil.copyPartialMatches(args[2], playerOrGroupNames, new ArrayList<>());
+                } else if (args[0].equalsIgnoreCase("setoffline")) {
+                    return StringUtil.copyPartialMatches(args[2], BOOL, new ArrayList<>());
                 }
             } else if (args.length == 4) {
                 //Command based arguments
