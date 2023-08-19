@@ -76,7 +76,7 @@ public class V10LiftTabCompleter implements TabCompleter {
                     return StringUtil.copyPartialMatches(args[2], playerOrGroupNames, new ArrayList<>());
                 } else if (args[0].equalsIgnoreCase("setoffline")) {
                     return StringUtil.copyPartialMatches(args[2], BOOL, new ArrayList<>());
-                } else if (args[0].equalsIgnoreCase("build")) {
+                } else if (args[0].equalsIgnoreCase("build") && V10LiftPlugin.isWorldEditEnabled()) {
                     return StringUtil.copyPartialMatches(args[2], List.of("worldedit"), new ArrayList<>());
                 }
             } else if (args.length == 4) {
