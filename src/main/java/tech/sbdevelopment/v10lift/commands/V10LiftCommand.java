@@ -1,6 +1,14 @@
 package tech.sbdevelopment.v10lift.commands;
 
 import com.cryptomorin.xseries.XMaterial;
+import com.sk89q.worldedit.IncompleteRegionException;
+import com.sk89q.worldedit.LocalSession;
+import com.sk89q.worldedit.WorldEdit;
+import com.sk89q.worldedit.bukkit.BukkitAdapter;
+import com.sk89q.worldedit.math.BlockVector2;
+import com.sk89q.worldedit.regions.CuboidRegion;
+import com.sk89q.worldedit.regions.Polygonal2DRegion;
+import com.sk89q.worldedit.regions.Region;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -128,6 +136,17 @@ public class V10LiftCommand implements CommandExecutor {
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
                 return buildCommand(sender);
+            } else {
+                ConfigUtil.sendMessage(sender, "General.NoPermission");
+            }
+        } else if (args[0].equalsIgnoreCase("build") && args.length == 2 && args[1].equalsIgnoreCase("worldedit")) {
+            //v10lift build worldedit
+            if (!(sender instanceof Player)) {
+                ConfigUtil.sendMessage(sender, "General.PlayerOnly");
+                return true;
+            }
+            if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                return buildWorldEditCommand(sender);
             } else {
                 ConfigUtil.sendMessage(sender, "General.NoPermission");
             }
@@ -781,6 +800,86 @@ public class V10LiftCommand implements CommandExecutor {
             DataManager.addRopeRemovesPlayer(p.getUniqueId());
             ConfigUtil.sendMessage(sender, "Rope.Delete");
         }
+        return true;
+    }
+
+    private boolean buildWorldEditCommand(CommandSender sender) {
+        Player p = (Player) sender;
+        if (!DataManager.containsEditPlayer(p.getUniqueId())) {
+            ConfigUtil.sendMessage(sender, "General.SwitchOnEdit");
+            return true;
+        }
+
+        if (!DataManager.containsBuilderPlayer(p.getUniqueId())) {
+            DataManager.addBuilderPlayer(p.getUniqueId());
+        }
+
+        LocalSession ls = WorldEdit.getInstance().getSessionManager().get(BukkitAdapter.adapt(p));
+        Region region;
+        try {
+            region = ls.getSelection(BukkitAdapter.adapt(p.getWorld()));
+        } catch (IncompleteRegionException e) {
+            throw new RuntimeException(e);
+        }
+        if (region == null) {
+            ConfigUtil.sendMessage(sender, "Build.NoSelection");
+            return true;
+        }
+
+        List<Block> blocks = new ArrayList<>();
+        boolean success = true;
+        int failed = 0;
+        if (region instanceof Polygonal2DRegion) {
+            //Get all blocks in region
+            Polygonal2DRegion poly = (Polygonal2DRegion) region;
+            for (BlockVector2 bv : poly.getPoints()) {
+                for (int y = poly.getMinimumPoint().getBlockY(); y <= poly.getMaximumPoint().getBlockY(); y++) {
+                    Block b = p.getWorld().getBlockAt(bv.getBlockX(), y, bv.getBlockZ());
+                    if (b.getType() == Material.AIR) continue;
+
+                    if (V10LiftAPI.getInstance().switchBlockAtLift(DataManager.getEditPlayer(p.getUniqueId()), b) == 0) {
+                        blocks.add(b);
+                        continue;
+                    }
+                    success = false;
+                    failed++;
+                }
+            }
+        } else if (region instanceof CuboidRegion) {
+            //Get all blocks in region
+            CuboidRegion cuboid = (CuboidRegion) region;
+            for (int x = cuboid.getMinimumPoint().getBlockX(); x <= cuboid.getMaximumPoint().getBlockX(); x++) {
+                for (int y = cuboid.getMinimumPoint().getBlockY(); y <= cuboid.getMaximumPoint().getBlockY(); y++) {
+                    for (int z = cuboid.getMinimumPoint().getBlockZ(); z <= cuboid.getMaximumPoint().getBlockZ(); z++) {
+                        Block b = p.getWorld().getBlockAt(x, y, z);
+                        if (b.getType() == Material.AIR) continue;
+
+                        if (V10LiftAPI.getInstance().switchBlockAtLift(DataManager.getEditPlayer(p.getUniqueId()), b) == 0) {
+                            blocks.add(b);
+                            continue;
+                        }
+                        success = false;
+                        failed++;
+                    }
+                }
+            }
+        } else {
+            ConfigUtil.sendMessage(sender, "Build.UnsupportedSelection");
+            return true;
+        }
+
+        if (success) {
+            ConfigUtil.sendMessage(sender, "Build.BlocksAdded");
+        } else {
+            ConfigUtil.sendMessage(sender, "Build.BlocksFailed", Collections.singletonMap("%Failed%", String.valueOf(failed)));
+        }
+
+        if (DataManager.containsBuilderPlayer(p.getUniqueId())) {
+            DataManager.removeBuilderPlayer(p.getUniqueId());
+            V10LiftAPI.getInstance().sortLiftBlocks(DataManager.getEditPlayer(p.getUniqueId()));
+            ConfigUtil.sendMessage(sender, "Build.Disabled");
+        }
+
         return true;
     }
 

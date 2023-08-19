@@ -72,6 +72,10 @@ Build:
   BlockAdded: '&aBlock added to the elevator.'
   BlockRemoved: '&6Block removed from the elevator.'
   BlacklistedMaterial: '&cThe material %Name% cannot be used!'
+  NoSelection: '&cYou must select a region with the WorldEdit wand first!'
+  UnsupportedSelection: '&cThe selection must be cuboid or polygonal!'
+  BlocksAdded: '&aBlocks added to the elevator.'
+  BlocksFailed: '&cNot all blocks could be added to the elevator. Failure amount: %Failed%'
 
 Rope:
   StillAdjusting: '&cYou are still adjusting a rope.'

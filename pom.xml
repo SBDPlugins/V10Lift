@@ -5,7 +5,7 @@
 
     <groupId>tech.sbdevelopment</groupId>
     <artifactId>V10Lift</artifactId>
-    <version>0.8</version>
+    <version>0.9</version>
     <packaging>jar</packaging>
 
     <name>V10Lift</name>
@@ -146,6 +146,10 @@
             <id>jitpack.io</id>
             <url>https://jitpack.io</url>
         </repository>
+        <repository>
+            <id>enginehub-maven</id>
+            <url>https://maven.enginehub.org/repo/</url>
+        </repository>
     </repositories>
 
     <dependencies>
@@ -195,6 +199,14 @@
             <artifactId>HikariCP</artifactId>
             <version>5.0.1</version>
             <scope>compile</scope>
+        </dependency>
+
+        <!-- WorldEdit, optional for creating lifts -->
+        <dependency>
+            <groupId>com.sk89q.worldedit</groupId>
+            <artifactId>worldedit-bukkit</artifactId>
+            <version>7.2.9</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 </project>
