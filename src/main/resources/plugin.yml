@@ -3,7 +3,7 @@ main: tech.sbdevelopment.v10lift.V10LiftPlugin
 version: ${project.version}
 api-version: "1.13"
 author: SBDeveloper
-softdepend: ["Vault"]
+softdepend: ["Vault", "WorldEdit"]
 commands:
   v10lift:
     description: The V10Lift Command

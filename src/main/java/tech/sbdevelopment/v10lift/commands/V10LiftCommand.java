@@ -1,14 +1,7 @@
 package tech.sbdevelopment.v10lift.commands;
 
 import com.cryptomorin.xseries.XMaterial;
-import com.sk89q.worldedit.IncompleteRegionException;
-import com.sk89q.worldedit.LocalSession;
-import com.sk89q.worldedit.WorldEdit;
-import com.sk89q.worldedit.bukkit.BukkitAdapter;
-import com.sk89q.worldedit.math.BlockVector2;
-import com.sk89q.worldedit.regions.CuboidRegion;
-import com.sk89q.worldedit.regions.Polygonal2DRegion;
-import com.sk89q.worldedit.regions.Region;
+import com.ibm.icu.impl.Pair;
 import org.bukkit.*;
 import org.bukkit.block.Block;
 import org.bukkit.block.BlockState;
@@ -29,6 +22,7 @@ import tech.sbdevelopment.v10lift.managers.ForbiddenBlockManager;
 import tech.sbdevelopment.v10lift.managers.VaultManager;
 import tech.sbdevelopment.v10lift.sbutils.LocationSerializer;
 import tech.sbdevelopment.v10lift.utils.ConfigUtil;
+import tech.sbdevelopment.v10lift.utils.WorldEditUtil;
 
 import javax.annotation.Nonnull;
 import java.sql.SQLException;
@@ -146,6 +140,11 @@ public class V10LiftCommand implements CommandExecutor {
                 return true;
             }
             if (sender.hasPermission("v10lift.build") || sender.hasPermission("v10lift.admin")) {
+                if (!V10LiftPlugin.isWorldEditEnabled()) {
+                    ConfigUtil.sendMessage(sender, "Build.WorldEditNotEnabled");
+                    return true;
+                }
+
                 return buildWorldEditCommand(sender);
             } else {
                 ConfigUtil.sendMessage(sender, "General.NoPermission");
@@ -814,64 +813,15 @@ public class V10LiftCommand implements CommandExecutor {
             DataManager.addBuilderPlayer(p.getUniqueId());
         }
 
-        LocalSession ls = WorldEdit.getInstance().getSessionManager().get(BukkitAdapter.adapt(p));
-        Region region;
-        try {
-            region = ls.getSelection(BukkitAdapter.adapt(p.getWorld()));
-        } catch (IncompleteRegionException e) {
-            throw new RuntimeException(e);
-        }
-        if (region == null) {
+        Integer blocks = WorldEditUtil.getBlocksInSelection(p);
+        if (blocks == -1) {
             ConfigUtil.sendMessage(sender, "Build.NoSelection");
-            return true;
-        }
-
-        List<Block> blocks = new ArrayList<>();
-        boolean success = true;
-        int failed = 0;
-        if (region instanceof Polygonal2DRegion) {
-            //Get all blocks in region
-            Polygonal2DRegion poly = (Polygonal2DRegion) region;
-            for (BlockVector2 bv : poly.getPoints()) {
-                for (int y = poly.getMinimumPoint().getBlockY(); y <= poly.getMaximumPoint().getBlockY(); y++) {
-                    Block b = p.getWorld().getBlockAt(bv.getBlockX(), y, bv.getBlockZ());
-                    if (b.getType() == Material.AIR) continue;
-
-                    if (V10LiftAPI.getInstance().switchBlockAtLift(DataManager.getEditPlayer(p.getUniqueId()), b) == 0) {
-                        blocks.add(b);
-                        continue;
-                    }
-                    success = false;
-                    failed++;
-                }
-            }
-        } else if (region instanceof CuboidRegion) {
-            //Get all blocks in region
-            CuboidRegion cuboid = (CuboidRegion) region;
-            for (int x = cuboid.getMinimumPoint().getBlockX(); x <= cuboid.getMaximumPoint().getBlockX(); x++) {
-                for (int y = cuboid.getMinimumPoint().getBlockY(); y <= cuboid.getMaximumPoint().getBlockY(); y++) {
-                    for (int z = cuboid.getMinimumPoint().getBlockZ(); z <= cuboid.getMaximumPoint().getBlockZ(); z++) {
-                        Block b = p.getWorld().getBlockAt(x, y, z);
-                        if (b.getType() == Material.AIR) continue;
-
-                        if (V10LiftAPI.getInstance().switchBlockAtLift(DataManager.getEditPlayer(p.getUniqueId()), b) == 0) {
-                            blocks.add(b);
-                            continue;
-                        }
-                        success = false;
-                        failed++;
-                    }
-                }
-            }
-        } else {
+        } else if (blocks == -2) {
             ConfigUtil.sendMessage(sender, "Build.UnsupportedSelection");
-            return true;
-        }
-
-        if (success) {
+        } else if (blocks == 0) {
             ConfigUtil.sendMessage(sender, "Build.BlocksAdded");
         } else {
-            ConfigUtil.sendMessage(sender, "Build.BlocksFailed", Collections.singletonMap("%Failed%", String.valueOf(failed)));
+            ConfigUtil.sendMessage(sender, "Build.BlocksFailed", Collections.singletonMap("%Failed%", String.valueOf(blocks)));
         }
 
         if (DataManager.containsBuilderPlayer(p.getUniqueId())) {

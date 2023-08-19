@@ -30,6 +30,7 @@ public class V10LiftPlugin extends JavaPlugin {
     @Getter
     private static YamlFile items;
     private static boolean vault = false;
+    private static boolean worldEdit = false;
 
     @Override
     public void onEnable() {
@@ -70,6 +71,12 @@ public class V10LiftPlugin extends JavaPlugin {
         if (VaultManager.setupPermissions()) {
             Bukkit.getLogger().info("[V10Lift] Loading Vault hook for group whitelist support.");
             vault = true;
+        }
+
+        //Load worldedit if found
+        if (Bukkit.getPluginManager().getPlugin("WorldEdit") != null) {
+            Bukkit.getLogger().info("[V10Lift] Loading WorldEdit hook for selection support.");
+            worldEdit = true;
         }
 
         //Load the command
@@ -147,5 +154,9 @@ public class V10LiftPlugin extends JavaPlugin {
 
     public static boolean isVaultEnabled() {
         return vault;
+    }
+
+    public static boolean isWorldEditEnabled() {
+        return worldEdit;
     }
 }
