@@ -45,6 +45,10 @@ public class V10LiftTabCompleter implements TabCompleter {
                         || args[0].equalsIgnoreCase("whitelist")
                         || args[0].equalsIgnoreCase("rope")) {
                     return StringUtil.copyPartialMatches(args[1], SUB, new ArrayList<>());
+                } else if (args[0].equalsIgnoreCase("setoffline")) {
+                    return StringUtil.copyPartialMatches(args[1], BOOL, new ArrayList<>());
+                } else if (args[0].equalsIgnoreCase("build") && V10LiftPlugin.isWorldEditEnabled()) {
+                    return StringUtil.copyPartialMatches(args[1], List.of("worldedit"), new ArrayList<>());
                 }
             } else if (args.length == 3) {
                 //Command based arguments
@@ -74,10 +78,6 @@ public class V10LiftTabCompleter implements TabCompleter {
                         playerOrGroupNames.addAll(VaultManager.getGroups());
                     }
                     return StringUtil.copyPartialMatches(args[2], playerOrGroupNames, new ArrayList<>());
-                } else if (args[0].equalsIgnoreCase("setoffline")) {
-                    return StringUtil.copyPartialMatches(args[2], BOOL, new ArrayList<>());
-                } else if (args[0].equalsIgnoreCase("build") && V10LiftPlugin.isWorldEditEnabled()) {
-                    return StringUtil.copyPartialMatches(args[2], List.of("worldedit"), new ArrayList<>());
                 }
             } else if (args.length == 4) {
                 //Command based arguments

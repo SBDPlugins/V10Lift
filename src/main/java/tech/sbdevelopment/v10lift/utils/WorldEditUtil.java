@@ -21,7 +21,7 @@ public class WorldEditUtil {
         try {
             region = ls.getSelection(BukkitAdapter.adapt(p.getWorld()));
         } catch (IncompleteRegionException e) {
-            throw new RuntimeException(e);
+            return -1;
         }
         if (region == null) {
             return -1;
