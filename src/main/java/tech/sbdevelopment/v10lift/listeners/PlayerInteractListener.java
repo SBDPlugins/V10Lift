@@ -42,7 +42,6 @@ public class PlayerInteractListener implements Listener {
         Action action = e.getAction();
         Block block = e.getClickedBlock();
         if (block == null) return;
-        Material button = block.getType();
 
         if (action == Action.RIGHT_CLICK_BLOCK
                 && e.getHand() != EquipmentSlot.OFF_HAND) {
@@ -51,6 +50,7 @@ public class PlayerInteractListener implements Listener {
             int y = block.getY();
             int z = block.getZ();
 
+            outer:
             for (Map.Entry<String, Lift> entry : DataManager.getLifts().entrySet()) {
                 Lift lift = entry.getValue();
 
@@ -68,21 +68,17 @@ public class PlayerInteractListener implements Listener {
                             b.setBlockData(bd);
                         }
 
-                        break;
+                        break outer; //We handled an input, stop!
                     }
                 }
-
-                if (lift.isOffline()) break;
 
                 for (LiftInput lbi : lift.getInputs()) {
                     if (world.equals(lbi.getWorld()) && x == lbi.getX() && y == lbi.getY() && z == lbi.getZ()) {
                         V10LiftAPI.getInstance().addToQueue(entry.getKey(), lift.getFloors().get(lbi.getFloor()), lbi.getFloor());
                         e.setCancelled(true);
-                        break;
+                        break outer; //We handled an input, stop!
                     }
                 }
-
-                break;
             }
         }
     }
