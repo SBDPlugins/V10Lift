@@ -7,8 +7,6 @@ import tech.sbdevelopment.v10lift.api.objects.LiftBlock;
 import java.util.*;
 
 public class DataManager {
-    /* A manager for general HashMaps */
-    @Getter private static final Map<String, Lift> lifts = new LinkedHashMap<>();
     private static final Map<UUID, TreeSet<LiftBlock>> builds = new LinkedHashMap<>();
     @Getter private static final Map<UUID, String> editors = new LinkedHashMap<>();
     private static final Map<UUID, String> inputEdits = new LinkedHashMap<>();
@@ -22,26 +20,6 @@ public class DataManager {
     private static final List<UUID> whoisReq = new ArrayList<>();
     private static final Map<String, Integer> movingTasks = new HashMap<>();
 
-    /* HashMap methods */
-
-    // //
-    public static void addLift(String liftName, Lift lift) {
-        lifts.put(liftName, lift);
-    }
-
-    public static void removeLift(String liftName) {
-        lifts.remove(liftName);
-    }
-
-    public static boolean containsLift(String liftName) {
-        return lifts.containsKey(liftName);
-    }
-
-    public static Lift getLift(String liftName) {
-        return lifts.get(liftName);
-    }
-
-    // //
     public static boolean containsPlayer(UUID player) {
         return builds.containsKey(player);
     }

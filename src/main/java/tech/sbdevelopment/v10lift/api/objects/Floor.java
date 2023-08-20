@@ -5,6 +5,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 import lombok.ToString;
 
+import javax.annotation.Nonnull;
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.UUID;
@@ -17,6 +18,7 @@ import java.util.UUID;
 @NoArgsConstructor
 @ToString
 public class Floor {
+    @Nonnull
     private String world;
     private int y;
     private ArrayList<LiftBlock> doorBlocks = new ArrayList<>();

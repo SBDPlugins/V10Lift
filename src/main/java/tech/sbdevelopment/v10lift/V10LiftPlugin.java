@@ -5,6 +5,7 @@ import org.bstats.bukkit.Metrics;
 import org.bstats.charts.SingleLineChart;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
+import tech.sbdevelopment.v10lift.api.V10LiftAPI;
 import tech.sbdevelopment.v10lift.commands.V10LiftCommand;
 import tech.sbdevelopment.v10lift.commands.V10LiftTabCompleter;
 import tech.sbdevelopment.v10lift.listeners.BlockBreakListener;
@@ -23,6 +24,8 @@ import java.util.Collections;
 public class V10LiftPlugin extends JavaPlugin {
     @Getter
     private static V10LiftPlugin instance;
+    @Getter
+    private static V10LiftAPI api;
     private static YamlFile config;
     private static DBManager dbManager;
     @Getter
@@ -35,6 +38,9 @@ public class V10LiftPlugin extends JavaPlugin {
     @Override
     public void onEnable() {
         instance = this;
+
+        //Load the API
+        api = new V10LiftAPI();
 
         //Load the config
         config = new YamlFile("config");

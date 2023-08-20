@@ -3,17 +3,18 @@ package tech.sbdevelopment.v10lift.api.runnables;
 import org.bukkit.Bukkit;
 import tech.sbdevelopment.v10lift.V10LiftPlugin;
 import tech.sbdevelopment.v10lift.api.V10LiftAPI;
+import tech.sbdevelopment.v10lift.api.objects.Lift;
 import tech.sbdevelopment.v10lift.managers.DataManager;
 
 /**
  * The DoorCloser runnable, used for checking if the door can be closed.
  */
 public class DoorCloser implements Runnable {
-    private final String liftName;
+    private final Lift lift;
     private final int taskID;
 
-    public DoorCloser(String liftName) {
-        this.liftName = liftName;
+    public DoorCloser(Lift lift) {
+        this.lift = lift;
 
         final long doorCloseTime = V10LiftPlugin.getSConfig().getFile().getLong("DoorCloseTime");
         this.taskID = Bukkit.getScheduler().runTaskTimer(V10LiftPlugin.getInstance(), this, doorCloseTime, doorCloseTime).getTaskId();
@@ -21,11 +22,11 @@ public class DoorCloser implements Runnable {
 
     @Override
     public void run() {
-        if (V10LiftAPI.getInstance().closeDoor(liftName)) stop();
+        if (lift.closeDoor()) stop();
     }
 
     public void stop() {
         Bukkit.getScheduler().cancelTask(taskID);
-        if (DataManager.containsLift(liftName)) DataManager.getLift(liftName).setDoorCloser(null);
+        lift.setDoorCloser(null);
     }
 }
